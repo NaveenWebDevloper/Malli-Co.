@@ -11,9 +11,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
       clientId:
-        process.env.GOOGLE_CLIENT_ID || process.env.AUTH_GOOGLE_ID || "",
+        process.env.AUTH_GOOGLE_ID?.trim() ||
+        process.env.GOOGLE_CLIENT_ID?.trim() ||
+        "",
       clientSecret:
-        process.env.GOOGLE_CLIENT_SECRET || process.env.AUTH_GOOGLE_SECRET || "",
+        process.env.AUTH_GOOGLE_SECRET?.trim() ||
+        process.env.GOOGLE_CLIENT_SECRET?.trim() ||
+        "",
       allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
