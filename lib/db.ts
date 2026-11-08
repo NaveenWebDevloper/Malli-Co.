@@ -50,18 +50,11 @@ export async function connectDB(): Promise<typeof mongoose> {
     cached.promise = mongoose
       .connect(uri, opts)
       .catch(async (err: unknown) => {
-        const errorObj = err as { code?: string; syscall?: string; message?: string } | null;
-        // Fallback: If querySrv DNS error occurs (common with Node c-ares on macOS/local network)
-        // and direct URI exists, seamlessly retry with direct replica-set connection.
-        const isDnsSrvError =
-          errorObj?.code === "EBADRESP" ||
-          errorObj?.code === "ECONNREFUSED" ||
-          errorObj?.syscall === "querySrv" ||
-          errorObj?.message?.includes("querySrv");
-
-        if (isDnsSrvError && directUri && uri !== directUri) {
+        // Fallback: If primary connection fails (DNS querySrv, network timeout, etc.)
+        // and direct replica-set URI exists, seamlessly retry with direct connection.
+        if (directUri && uri !== directUri) {
           console.warn(
-            "[MongoDB] Local DNS querySrv error. Seamlessly connecting via direct replica-set...",
+            "[MongoDB] Primary connection failed. Seamlessly connecting via direct replica-set...",
           );
           return mongoose.connect(directUri, opts);
         }
