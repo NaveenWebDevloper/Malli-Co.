@@ -22,21 +22,27 @@ export const RemoveFromCartSchema = z.object({
 });
 
 export const CheckoutAddressSchema = z.object({
-  name: z.string().min(2, "Full name is required").trim(),
+  name: z.string().trim().min(2, "Full name is required"),
   phone: z
     .string()
-    .min(10, "Valid 10-digit phone number is required")
-    .max(15)
-    .trim(),
-  email: z.string().email("Valid email address is required").trim().toLowerCase(),
-  street: z.string().min(5, "Street address is required").trim(),
-  landmark: z.string().optional(),
-  city: z.string().min(2, "City is required").trim(),
-  state: z.string().min(2, "State is required").trim(),
+    .trim()
+    .transform((val) => val.replace(/[\s\-\(\)\.]/g, ""))
+    .refine((val) => /^(?:\+?91)?[6-9]\d{9}$/.test(val), {
+      message: "Please enter a valid 10-digit Indian mobile number",
+    })
+    .transform((val) => val.replace(/\D/g, "").slice(-10)),
+  email: z.string().trim().toLowerCase().email("Valid email address is required"),
+  street: z.string().trim().min(3, "Street address is required"),
+  landmark: z.string().optional().default(""),
+  city: z.string().trim().min(2, "City is required"),
+  state: z.string().trim().min(2, "State is required"),
   postalCode: z
     .string()
-    .regex(/^\d{6}$/, "Valid 6-digit Indian PIN code is required")
-    .trim(),
+    .trim()
+    .transform((val) => val.replace(/\s+/g, ""))
+    .refine((val) => /^\d{6}$/.test(val), {
+      message: "Valid 6-digit Indian PIN code is required",
+    }),
   country: z.string().default("IN"),
 });
 

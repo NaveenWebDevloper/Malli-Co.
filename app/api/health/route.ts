@@ -41,9 +41,6 @@ export async function GET() {
     hasMongoUri: Boolean(process.env.MONGODB_URI),
     hasMongoDirectUri: Boolean(process.env.MONGODB_DIRECT_URI),
     hasAuthSecret: Boolean(process.env.AUTH_SECRET),
-    hasGoogleAuth: Boolean(
-      process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID,
-    ),
   };
 
   try {

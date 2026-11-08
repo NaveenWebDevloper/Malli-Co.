@@ -182,6 +182,9 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
 
     try {
       // 1. Create Order on Server with server-side price, authentication, and stock validation (Rule 1 & Rule 3)
+      const sanitizedPhone = formData.phone.replace(/[\s\-\(\)\.]/g, "");
+      const cleanPhone10 = sanitizedPhone.slice(-10);
+
       const res = await fetch("/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -190,14 +193,35 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             variantId: i.variantId,
             quantity: i.quantity,
           })),
-          shippingAddress: formData,
+          shippingAddress: {
+            ...formData,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: cleanPhone10 || formData.phone.trim(),
+            street: formData.street.trim(),
+            city: formData.city.trim(),
+            state: formData.state.trim(),
+            postalCode: formData.postalCode.trim().replace(/\s+/g, ""),
+          },
           saveAddress: saveAddress,
         }),
       });
 
       const orderData = await res.json();
       if (!res.ok) {
-        throw new Error(orderData.error || "Order creation failed");
+        let errorMsg = orderData.error || "Order creation failed";
+        if (orderData.details) {
+          const detailStrings: string[] = [];
+          for (const [field, msgs] of Object.entries(orderData.details)) {
+            if (Array.isArray(msgs) && msgs.length > 0) {
+              detailStrings.push(`${field}: ${msgs.join(", ")}`);
+            }
+          }
+          if (detailStrings.length > 0) {
+            errorMsg = `${errorMsg} (${detailStrings.join("; ")})`;
+          }
+        }
+        throw new Error(errorMsg);
       }
 
       const { orderNumber, razorpayOrderId, amountPaise, keyId, customer } =
@@ -224,6 +248,19 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
         );
       }
 
+      // Format prefill strictly for mobile device compatibility
+      const prefillData: Record<string, string> = {};
+      if (customer?.name?.trim()) {
+        prefillData.name = customer.name.trim();
+      }
+      if (customer?.email?.trim()) {
+        prefillData.email = customer.email.trim();
+      }
+      const contactDigits = (customer?.phone || "").replace(/\D/g, "").slice(-10);
+      if (contactDigits.length === 10) {
+        prefillData.contact = contactDigits;
+      }
+
       const options = {
         key: keyId,
         amount: amountPaise,
@@ -231,13 +268,12 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
         name: "Malli & Co.",
         description: `Artisanal Garment Order #${orderNumber}`,
         order_id: razorpayOrderId,
-        prefill: {
-          name: customer.name,
-          email: customer.email,
-          contact: customer.phone,
-        },
+        prefill: prefillData,
         theme: {
           color: "#8C7A58",
+        },
+        retry: {
+          enabled: true,
         },
         modal: {
           ondismiss: () => {
