@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Product } from "@/models/Product";
-import { isR2Configured, getR2Config } from "@/lib/r2";
+import { isR2Configured, getR2Config, uploadToR2 } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
