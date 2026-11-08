@@ -3,6 +3,8 @@ import path from "path";
 import fs from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { connectDB } from "@/lib/db";
+import { Media } from "@/models/Media";
 import { getImageDimensions } from "@/lib/images";
 
 export const dynamic = "force-dynamic";
@@ -101,7 +103,8 @@ export async function POST(req: NextRequest) {
 
     // 4. Cloudinary Upload if credentials present
     if (cloudName && ((apiSecret && apiKey) || uploadPreset)) {
-      const timestamp = Math.round(Date.now() / 1000);
+      try {
+        const timestamp = Math.round(Date.now() / 1000);
       const base64Data = `data:${file.type};base64,${buffer.toString("base64")}`;
       const uploadFormData = new FormData();
       uploadFormData.append("file", base64Data);
@@ -148,26 +151,59 @@ export async function POST(req: NextRequest) {
         height: cldData.height || dimensions.height,
         format: cldData.format || dimensions.type,
       });
+      } catch (cldErr) {
+        console.warn("[POST /api/admin/banners/upload] Cloudinary error, falling back:", cldErr);
+      }
     }
 
-    // 5. Local File Storage Fallback (for local development and offline environments)
-    const uploadsDir = path.join(process.cwd(), "public", "uploads", "banners");
-    await fs.mkdir(uploadsDir, { recursive: true });
-
     const ext = dimensions.type === "jpeg" ? "jpg" : dimensions.type;
-    const filename = `banner-${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
-    const filePath = path.join(uploadsDir, filename);
 
-    await fs.writeFile(filePath, buffer);
+    // 5. Database Storage Fallback for Vercel / Serverless (read-only filesystem)
+    const saveBannerToMongoDB = async () => {
+      await connectDB();
+      const mediaDoc = await Media.create({
+        filename: file.name || `banner-${Date.now()}.${ext}`,
+        contentType: file.type || `image/${dimensions.type}`,
+        size: buffer.length,
+        data: buffer,
+      });
 
-    const relativeUrl = `/uploads/banners/${filename}`;
-    return NextResponse.json({
-      success: true,
-      url: relativeUrl,
-      width: dimensions.width,
-      height: dimensions.height,
-      format: dimensions.type,
-    });
+      return NextResponse.json({
+        success: true,
+        url: `/api/media/${mediaDoc._id}.${ext}`,
+        publicId: mediaDoc._id.toString(),
+        width: dimensions.width,
+        height: dimensions.height,
+        format: dimensions.type,
+      });
+    };
+
+    if (process.env.VERCEL) {
+      return await saveBannerToMongoDB();
+    }
+
+    // 6. Local File Storage Fallback (for local development with writable disk)
+    try {
+      const uploadsDir = path.join(process.cwd(), "public", "uploads", "banners");
+      await fs.mkdir(uploadsDir, { recursive: true });
+
+      const filename = `banner-${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
+      const filePath = path.join(uploadsDir, filename);
+
+      await fs.writeFile(filePath, buffer);
+
+      const relativeUrl = `/uploads/banners/${filename}`;
+      return NextResponse.json({
+        success: true,
+        url: relativeUrl,
+        width: dimensions.width,
+        height: dimensions.height,
+        format: dimensions.type,
+      });
+    } catch (fsErr) {
+      console.warn("Banner local disk write failed, falling back to MongoDB Media storage:", fsErr);
+      return await saveBannerToMongoDB();
+    }
   } catch (error) {
     console.error("[POST /api/admin/banners/upload] Error:", error);
     return NextResponse.json(

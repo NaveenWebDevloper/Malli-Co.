@@ -43,11 +43,12 @@ export default function ProductImageUploader({
           body: formData,
         });
 
+        const data = await res.json().catch(() => ({}));
+
         if (!res.ok) {
-          throw new Error(`Upload failed for ${file.name}`);
+          throw new Error(data.error || `Upload failed for ${file.name}`);
         }
 
-        const data = await res.json();
         if (data.url) {
           uploadedUrls.push(data.url);
         }
