@@ -14,6 +14,7 @@ import {
   STANDARD_SHIPPING_PAISE,
 } from "../../../../lib/cart.ts";
 import { getActiveCampaigns, resolvePrice } from "../../../../lib/pricing.ts";
+import { releaseExpiredOrders } from "../../../../lib/orders.ts";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -38,6 +39,11 @@ export async function POST(req: NextRequest) {
   }
 
   const { items: requestedItems, shippingAddress, saveAddress, notes } = parsed.data;
+
+  // Opportunistically release any expired held orders in the background
+  releaseExpiredOrders().catch((err) => {
+    console.warn("Background releaseExpiredOrders error:", err);
+  });
 
   // Rule 1: Never trust client prices — compute totals server-side using lib/pricing.ts!
   const now = new Date();
