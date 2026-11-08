@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import { Customer } from "@/models/Customer";
@@ -17,31 +18,32 @@ export const metadata: Metadata = {
 
 export default async function CheckoutPage() {
   const session = await auth();
-  let customerData = null;
 
-  if (session?.user?.id) {
-    await connectDB();
-    const customer = await Customer.findById(session.user.id).lean();
-    if (customer) {
-      customerData = {
-        id: customer._id.toString(),
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone || "",
-        addresses: (customer.addresses || []).map((a) => ({
-          name: a.name,
-          phone: a.phone,
-          street: a.street,
-          landmark: a.landmark || "",
-          city: a.city,
-          state: a.state,
-          postalCode: a.postalCode,
-          country: a.country || "IN",
-          isDefault: !!a.isDefault,
-        })),
-      };
-    }
+  // Authentication Required: Client must have an account to complete checkout
+  if (!session?.user?.id) {
+    redirect("/login?callbackUrl=/checkout");
   }
+
+  await connectDB();
+  const customer = await Customer.findById(session.user.id).lean();
+
+  const customerData = {
+    id: customer ? customer._id.toString() : session.user.id,
+    name: customer?.name || session.user.name || "",
+    email: customer?.email || session.user.email || "",
+    phone: customer?.phone || "",
+    addresses: (customer?.addresses || []).map((a) => ({
+      name: a.name,
+      phone: a.phone,
+      street: a.street,
+      landmark: a.landmark || "",
+      city: a.city,
+      state: a.state,
+      postalCode: a.postalCode,
+      country: a.country || "IN",
+      isDefault: !!a.isDefault,
+    })),
+  };
 
   return (
     <>

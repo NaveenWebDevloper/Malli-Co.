@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { formatCurrency } from "@/lib/currency";
+import { cn } from "@/lib/utils";
 
 const INDIAN_STATES = [
   "Telangana",
@@ -53,6 +54,15 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
   const router = useRouter();
   const { cart, refreshCart } = useCart();
 
+  const [savedAddresses, setSavedAddresses] = useState<CheckoutCustomerAddress[]>(
+    initialCustomer?.addresses || [],
+  );
+
+  // Default to index 0 if saved addresses exist, otherwise "new"
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number | "new">(
+    initialCustomer?.addresses && initialCustomer.addresses.length > 0 ? 0 : "new",
+  );
+
   const defaultAddress =
     initialCustomer?.addresses?.find((a) => a.isDefault) ||
     initialCustomer?.addresses?.[0];
@@ -68,6 +78,10 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
     postalCode: defaultAddress?.postalCode || "",
   });
 
+  const [saveAddress, setSaveAddress] = useState(true);
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -78,6 +92,82 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const selectSavedAddress = (index: number) => {
+    setSelectedAddressIndex(index);
+    const addr = savedAddresses[index];
+    if (addr) {
+      setFormData({
+        name: addr.name || initialCustomer?.name || "",
+        phone: addr.phone || initialCustomer?.phone || "",
+        email: initialCustomer?.email || "",
+        street: addr.street || "",
+        landmark: addr.landmark || "",
+        city: addr.city || "",
+        state: addr.state || "Telangana",
+        postalCode: addr.postalCode || "",
+      });
+      setSaveSuccessMsg(null);
+    }
+  };
+
+  const switchToNewAddress = () => {
+    setSelectedAddressIndex("new");
+    setFormData({
+      name: initialCustomer?.name || "",
+      phone: initialCustomer?.phone || "",
+      email: initialCustomer?.email || "",
+      street: "",
+      landmark: "",
+      city: "",
+      state: "Telangana",
+      postalCode: "",
+    });
+    setSaveSuccessMsg(null);
+  };
+
+  // Immediate "Save Address Now" button handler
+  const handleSaveAddressDirectly = async () => {
+    if (!formData.name || !formData.phone || !formData.street || !formData.city || !formData.postalCode) {
+      setErrorMessage("Please complete all required address fields before saving.");
+      return;
+    }
+
+    setIsSavingAddress(true);
+    setErrorMessage(null);
+    setSaveSuccessMsg(null);
+
+    try {
+      const res = await fetch("/api/account/addresses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          phone: formData.phone.trim(),
+          street: formData.street.trim(),
+          landmark: formData.landmark.trim(),
+          city: formData.city.trim(),
+          state: formData.state.trim(),
+          postalCode: formData.postalCode.trim(),
+          country: "IN",
+          isDefault: savedAddresses.length === 0,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to save address to account");
+      }
+
+      setSavedAddresses(data.addresses || []);
+      setSaveSuccessMsg("✓ Address saved to your account!");
+      setTimeout(() => setSaveSuccessMsg(null), 4000);
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : "Failed to save address");
+    } finally {
+      setIsSavingAddress(false);
+    }
   };
 
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
@@ -91,7 +181,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
     setErrorMessage(null);
 
     try {
-      // 1. Create Order on Server with server-side price and stock validation (Rule 1 & Rule 3)
+      // 1. Create Order on Server with server-side price, authentication, and stock validation (Rule 1 & Rule 3)
       const res = await fetch("/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,6 +191,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             quantity: i.quantity,
           })),
           shippingAddress: formData,
+          saveAddress: saveAddress,
         }),
       });
 
@@ -229,6 +320,30 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
     }
   };
 
+  if (!initialCustomer) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-20 text-center space-y-6">
+        <div className="w-16 h-16 mx-auto rounded-full bg-[#EAE3D4]/80 flex items-center justify-center text-2xl">
+          🔒
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-serif font-bold text-[#121212]">
+            Account Required for Checkout
+          </h1>
+          <p className="text-xs text-neutral-600 leading-relaxed">
+            To ensure secure transaction records, order tracking, and bespoke tailoring concierge, please sign in or create an account to proceed.
+          </p>
+        </div>
+        <Link
+          href="/login?callbackUrl=/checkout"
+          className="inline-block w-full py-3.5 rounded-full bg-[#121212] text-white text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow-md"
+        >
+          Sign In or Create Account
+        </Link>
+      </div>
+    );
+  }
+
   if (!cart && items.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
@@ -269,12 +384,115 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
               </div>
             )}
 
-            {/* Contact & Destination */}
-            <div className="rounded-2xl border border-[#EAE3D4] bg-white p-6 shadow-sm space-y-4">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-400">
-                1. Delivery Destination
-              </h2>
+            {/* Account Status Badge */}
+            <div className="p-3.5 rounded-xl border border-[#EAE3D4] bg-[#FBF9F5] flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-[#121212] text-white flex items-center justify-center text-[10px] font-bold">
+                  ✓
+                </span>
+                <div>
+                  <span className="text-neutral-500 text-[10px] uppercase font-bold tracking-wider block">
+                    Signed-In Client Account
+                  </span>
+                  <span className="font-semibold text-[#121212]">
+                    {initialCustomer.name} ({initialCustomer.email})
+                  </span>
+                </div>
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                Verified
+              </span>
+            </div>
 
+            {/* Contact & Destination */}
+            <div className="rounded-2xl border border-[#EAE3D4] bg-white p-6 shadow-sm space-y-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-400">
+                  1. Delivery Destination &amp; Billing Details
+                </h2>
+                {saveSuccessMsg && (
+                  <span className="text-xs font-bold text-emerald-700 animate-pulse">
+                    {saveSuccessMsg}
+                  </span>
+                )}
+              </div>
+
+              {/* Saved Addresses Selector (if user has saved addresses) */}
+              {savedAddresses.length > 0 && (
+                <div className="space-y-3 pb-4 border-b border-[#EAE3D4]">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-600">
+                    Saved Addresses ({savedAddresses.length})
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {savedAddresses.map((addr, idx) => {
+                      const isSelected = selectedAddressIndex === idx;
+                      return (
+                        <div
+                          key={idx}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => selectSavedAddress(idx)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              selectSavedAddress(idx);
+                            }
+                          }}
+                          className={cn(
+                            "p-3.5 rounded-xl border cursor-pointer transition-all text-xs relative text-left",
+                            isSelected
+                              ? "border-[#121212] bg-[#FBF9F5] ring-1 ring-[#121212] shadow-sm"
+                              : "border-[#EAE3D4] bg-white hover:border-neutral-400"
+                          )}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-bold text-[#121212]">{addr.name}</span>
+                            {addr.isDefault && (
+                              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#EAE3D4] text-[#121212]">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-neutral-600 line-clamp-2">
+                            {addr.street}
+                            {addr.landmark ? `, ${addr.landmark}` : ""}, {addr.city},{" "}
+                            {addr.state} - {addr.postalCode}
+                          </p>
+                          <p className="text-neutral-500 font-mono text-[11px] mt-1">
+                            📱 {addr.phone}
+                          </p>
+                        </div>
+                      );
+                    })}
+
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={switchToNewAddress}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          switchToNewAddress();
+                        }
+                      }}
+                      className={cn(
+                        "p-3.5 rounded-xl border border-dashed cursor-pointer transition-all text-xs flex flex-col items-center justify-center text-center gap-1 min-h-[90px]",
+                        selectedAddressIndex === "new"
+                          ? "border-[#121212] bg-[#FBF9F5] ring-1 ring-[#121212]"
+                          : "border-[#DDD4C1] bg-white hover:border-neutral-500 text-neutral-600"
+                      )}
+                    >
+                      <span className="text-sm font-bold text-[#8C7A58]">+</span>
+                      <span className="font-semibold text-[#121212]">
+                        Enter a New Address
+                      </span>
+                      <span className="text-[10px] text-neutral-400">
+                        Fill in details below
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Address Form Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-neutral-700 mb-1">
@@ -309,7 +527,8 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
 
               <div>
                 <label className="block text-xs font-medium text-neutral-700 mb-1">
-                  Email Address (for order tracking & invoice) <span className="text-red-500">*</span>
+                  Email Address (for order tracking &amp; invoice){" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -318,13 +537,14 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
                   placeholder="vikram@example.com"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-[#DDD4C1] px-3 py-2 text-xs text-[#121212] focus:border-black focus:outline-none"
+                  className="w-full rounded-xl border border-[#DDD4C1] px-3 py-2 text-xs text-[#121212] focus:border-black focus:outline-none bg-neutral-50/50"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-neutral-700 mb-1">
-                  Street Address & House / Flat No. <span className="text-red-500">*</span>
+                  Street Address &amp; House / Flat No.{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -400,6 +620,30 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Option to Save Billing Address */}
+              <div className="pt-3 border-t border-[#EAE3D4] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={saveAddress}
+                    onChange={(e) => setSaveAddress(e.target.checked)}
+                    className="w-4 h-4 rounded text-[#8C7A58] accent-[#8C7A58] border-[#DDD4C1] cursor-pointer"
+                  />
+                  <span className="text-xs font-medium text-neutral-800">
+                    Save this billing address to my account for future orders
+                  </span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={handleSaveAddressDirectly}
+                  disabled={isSavingAddress}
+                  className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A58] hover:text-[#121212] transition-colors self-start sm:self-auto"
+                >
+                  {isSavingAddress ? "Saving..." : saveSuccessMsg || "Save Address Now"}
+                </button>
               </div>
             </div>
 

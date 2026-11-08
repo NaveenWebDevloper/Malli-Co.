@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { items: requestedItems, shippingAddress, notes } = parsed.data;
+  const { items: requestedItems, shippingAddress, saveAddress, notes } = parsed.data;
 
   // Rule 1: Never trust client prices — compute totals server-side using lib/pricing.ts!
   const now = new Date();
@@ -159,6 +159,38 @@ export async function POST(req: NextRequest) {
 
   if (session?.user?.id && mongoose.Types.ObjectId.isValid(session.user.id)) {
     customerId = new mongoose.Types.ObjectId(session.user.id);
+
+    // Save billing & shipping address to Customer account if requested
+    if (saveAddress) {
+      try {
+        const customer = await Customer.findById(customerId);
+        if (customer) {
+          const addressMatches = customer.addresses.some(
+            (a) =>
+              a.street.toLowerCase().trim() === shippingAddress.street.toLowerCase().trim() &&
+              a.postalCode.trim() === shippingAddress.postalCode.trim() &&
+              a.city.toLowerCase().trim() === shippingAddress.city.toLowerCase().trim(),
+          );
+
+          if (!addressMatches) {
+            customer.addresses.push({
+              name: shippingAddress.name,
+              phone: shippingAddress.phone,
+              street: shippingAddress.street,
+              landmark: shippingAddress.landmark || "",
+              city: shippingAddress.city,
+              state: shippingAddress.state,
+              postalCode: shippingAddress.postalCode,
+              country: shippingAddress.country || "IN",
+              isDefault: customer.addresses.length === 0,
+            });
+            await customer.save();
+          }
+        }
+      } catch (addrErr) {
+        console.warn("Could not save address to customer profile:", addrErr);
+      }
+    }
   } else {
     const customerEmail = shippingAddress.email.toLowerCase().trim();
     try {

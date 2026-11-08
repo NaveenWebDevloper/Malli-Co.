@@ -50,6 +50,7 @@ export const CheckoutPayloadSchema = z.object({
     )
     .min(1, "Cart must contain at least one item"),
   shippingAddress: CheckoutAddressSchema,
+  saveAddress: z.boolean().optional(),
   notes: z.string().max(500).optional(),
 });
 
