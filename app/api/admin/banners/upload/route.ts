@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import { Media } from "@/models/Media";
 import { getImageDimensions } from "@/lib/images";
+import { isR2Configured, uploadToR2 } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
@@ -94,6 +95,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const ext = dimensions.type === "jpeg" ? "jpg" : dimensions.type;
+
+    // 4. Cloudflare R2 Upload (Top Priority)
+    if (isR2Configured()) {
+      const bannerKey = `banners/banner-${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
+      const r2Result = await uploadToR2({
+        buffer,
+        key: bannerKey,
+        contentType: file.type || `image/${dimensions.type}`,
+      });
+
+      if (r2Result.success) {
+        return NextResponse.json({
+          success: true,
+          url: r2Result.url,
+          publicId: r2Result.key,
+          width: dimensions.width,
+          height: dimensions.height,
+          format: dimensions.type,
+          provider: "cloudflare-r2",
+        });
+      }
+
+      console.warn("[POST /api/admin/banners/upload] R2 upload failed, falling back:", r2Result.error);
+    }
+
     const cloudName =
       process.env.CLOUDINARY_CLOUD_NAME ||
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
@@ -101,7 +128,7 @@ export async function POST(req: NextRequest) {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
 
-    // 4. Cloudinary Upload if credentials present
+    // 5. Cloudinary Upload if credentials present
     if (cloudName && ((apiSecret && apiKey) || uploadPreset)) {
       try {
         const timestamp = Math.round(Date.now() / 1000);
@@ -156,9 +183,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const ext = dimensions.type === "jpeg" ? "jpg" : dimensions.type;
-
-    // 5. Database Storage Fallback for Vercel / Serverless (read-only filesystem)
+    // 6. Database Storage Fallback for Vercel / Serverless (read-only filesystem)
     const saveBannerToMongoDB = async () => {
       await connectDB();
       const mediaDoc = await Media.create({

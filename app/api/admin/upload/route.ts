@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import { Media } from "@/models/Media";
+import { isR2Configured, uploadToR2 } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
@@ -35,17 +36,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const cloudName =
-      process.env.CLOUDINARY_CLOUD_NAME ||
-      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    const apiKey = process.env.CLOUDINARY_API_KEY;
-    const apiSecret = process.env.CLOUDINARY_API_SECRET;
-    const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
-
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const base64Data = `data:${file.type};base64,${buffer.toString("base64")}`;
 
     const ext =
       path.extname(file.name) ||
@@ -55,27 +48,41 @@ export async function POST(req: NextRequest) {
           ? ".webp"
           : ".jpg");
 
-    // Helper: Store image directly in MongoDB Media collection
-    const saveToMongoDB = async () => {
-      await connectDB();
-      const mediaDoc = await Media.create({
-        filename: file.name || `product_${Date.now()}${ext}`,
+    const rawBaseName = path.basename(file.name, ext);
+    const safeBaseName = rawBaseName.replace(/[^a-zA-Z0-9_-]/g, "_") || "img";
+
+    // 1. Cloudflare R2 Storage (Top Priority)
+    if (isR2Configured()) {
+      const r2Key = `products/${Date.now()}-${safeBaseName}${ext}`;
+      const r2Result = await uploadToR2({
+        buffer,
+        key: r2Key,
         contentType: file.type || "image/jpeg",
-        size: buffer.length,
-        data: buffer,
       });
 
-      return NextResponse.json({
-        url: `/api/media/${mediaDoc._id}${ext}`,
-        publicId: mediaDoc._id.toString(),
-        format: ext.replace(".", ""),
-        note: "Stored in MongoDB Media storage",
-      });
-    };
+      if (r2Result.success) {
+        return NextResponse.json({
+          url: r2Result.url,
+          publicId: r2Result.key,
+          format: ext.replace(".", ""),
+          provider: "cloudflare-r2",
+        });
+      }
 
-    // 1. Cloudinary upload if configured
+      console.warn("[Upload] Cloudflare R2 upload failed, falling back:", r2Result.error);
+    }
+
+    // 2. Cloudinary Upload (Secondary Option if configured)
+    const cloudName =
+      process.env.CLOUDINARY_CLOUD_NAME ||
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+    const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+
     if (cloudName && ((apiSecret && apiKey) || uploadPreset)) {
       try {
+        const base64Data = `data:${file.type};base64,${buffer.toString("base64")}`;
         const timestamp = Math.round(Date.now() / 1000);
         const uploadFormData = new FormData();
         uploadFormData.append("file", base64Data);
@@ -106,6 +113,7 @@ export async function POST(req: NextRequest) {
             url: result.secure_url || result.url,
             publicId: result.public_id,
             format: result.format,
+            provider: "cloudinary",
           });
         }
 
@@ -116,18 +124,35 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 2. Serverless environment (Vercel) has a read-only filesystem: store directly in MongoDB
+    // Helper: Store image directly in MongoDB Media collection
+    const saveToMongoDB = async () => {
+      await connectDB();
+      const mediaDoc = await Media.create({
+        filename: file.name || `product_${Date.now()}${ext}`,
+        contentType: file.type || "image/jpeg",
+        size: buffer.length,
+        data: buffer,
+      });
+
+      return NextResponse.json({
+        url: `/api/media/${mediaDoc._id}${ext}`,
+        publicId: mediaDoc._id.toString(),
+        format: ext.replace(".", ""),
+        provider: "mongodb-media",
+        note: "Stored in MongoDB Media storage",
+      });
+    };
+
+    // 3. Serverless environment (Vercel) has a read-only filesystem: store directly in MongoDB
     if (process.env.VERCEL) {
       return await saveToMongoDB();
     }
 
-    // 3. Local Storage (for local dev with writable disk)
+    // 4. Local Storage (for local dev with writable disk)
     try {
       const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
       await fs.mkdir(uploadDir, { recursive: true });
 
-      const rawBaseName = path.basename(file.name, ext);
-      const safeBaseName = rawBaseName.replace(/[^a-zA-Z0-9_-]/g, "_") || "img";
       const uniqueFileName = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${safeBaseName}${ext}`;
       const filePath = path.join(uploadDir, uniqueFileName);
 
@@ -139,6 +164,7 @@ export async function POST(req: NextRequest) {
         url: localUrl,
         publicId: `local_${Date.now()}`,
         format: ext.replace(".", ""),
+        provider: "local-fs",
         note: "Saved to local storage (/uploads/products/)",
       });
     } catch (fsErr) {
