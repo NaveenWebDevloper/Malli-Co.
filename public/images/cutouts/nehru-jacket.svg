@@ -1,0 +1,55 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="silkNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A273D"/>
+      <stop offset="45%" stop-color="#141E30"/>
+      <stop offset="100%" stop-color="#0E1624"/>
+    </linearGradient>
+    <linearGradient id="goldButton" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F2D06B"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#997A15"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Vest Silhouette (Sleeveless Nehru Jacket) -->
+    <path d="M 190 45 L 140 75 Q 115 150 145 220 L 145 560 Q 250 580 355 560 L 355 220 Q 385 150 360 75 L 310 45 Z" 
+          fill="url(#silkNavy)" stroke="#223350" stroke-width="2"/>
+
+    <!-- Armhole Linings -->
+    <path d="M 140 75 Q 115 150 145 220" stroke="#0B131D" stroke-width="3" fill="none"/>
+    <path d="M 360 75 Q 385 150 355 220" stroke="#0B131D" stroke-width="3" fill="none"/>
+
+    <!-- Center Fold & Placket -->
+    <path d="M 250 80 L 250 565" stroke="#0E1724" stroke-width="3"/>
+    <rect x="242" y="80" width="16" height="485" fill="#172338" opacity="0.6"/>
+
+    <!-- Royal Gold Buttons -->
+    <circle cx="250" cy="115" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="165" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="215" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="265" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="315" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="365" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="415" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="465" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+    <circle cx="250" cy="515" r="6" fill="url(#goldButton)" stroke="#59460B" stroke-width="1"/>
+
+    <!-- Welt Pockets -->
+    <rect x="165" y="175" width="55" height="10" rx="2" fill="#1F2F4A" stroke="#0B131E" stroke-width="1.5"/>
+    <!-- Red Pocket Square Accent -->
+    <polygon points="180,175 192,150 205,175" fill="#991B1B" stroke="#7F1D1D" stroke-width="1"/>
+    <rect x="160" y="410" width="60" height="12" rx="2" fill="#1F2F4A" stroke="#0B131E" stroke-width="1.5"/>
+    <rect x="280" y="410" width="60" height="12" rx="2" fill="#1F2F4A" stroke="#0B131E" stroke-width="1.5"/>
+
+    <!-- Mandarin Collar -->
+    <path d="M 195 45 Q 250 60 305 45 L 305 78 Q 250 92 195 78 Z" fill="#203049" stroke="#364E75" stroke-width="2"/>
+    <!-- Collar V-notch -->
+    <polygon points="244,78 250,68 256,78" fill="#141E30"/>
+  </g>
+</svg>
+

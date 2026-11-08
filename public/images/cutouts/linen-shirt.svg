@@ -1,0 +1,55 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="linenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7F4EB"/>
+      <stop offset="50%" stop-color="#EFE9DC"/>
+      <stop offset="100%" stop-color="#DFD6C3"/>
+    </linearGradient>
+    <linearGradient id="foldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#121212" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Main Body & Sleeves -->
+    <path d="M 180 50 L 130 90 L 50 200 L 90 230 L 140 160 L 140 600 Q 250 630 360 600 L 360 160 L 410 230 L 450 200 L 370 90 L 320 50 Z" 
+          fill="url(#linenGrad)" stroke="#C8BEAA" stroke-width="2"/>
+
+    <!-- Left & Right Sleeve Seams -->
+    <path d="M 140 160 Q 150 180 145 220" stroke="#C8BEAA" stroke-width="2" fill="none"/>
+    <path d="M 360 160 Q 350 180 355 220" stroke="#C8BEAA" stroke-width="2" fill="none"/>
+
+    <!-- Subtle Fabric Folds -->
+    <path d="M 180 160 Q 200 350 190 580" stroke="#D3C9B5" stroke-width="2.5" fill="none" opacity="0.6"/>
+    <path d="M 320 160 Q 300 350 310 580" stroke="#D3C9B5" stroke-width="2.5" fill="none" opacity="0.6"/>
+    <path d="M 220 220 Q 230 400 225 550" stroke="#D3C9B5" stroke-width="1.5" fill="none" opacity="0.4"/>
+    <path d="M 280 220 Q 270 400 275 550" stroke="#D3C9B5" stroke-width="1.5" fill="none" opacity="0.4"/>
+
+    <!-- Center Placket -->
+    <rect x="238" y="70" width="24" height="520" fill="#E6DEC9" stroke="#C8BEAA" stroke-width="1.5"/>
+
+    <!-- Mother of Pearl Buttons -->
+    <circle cx="250" cy="120" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="180" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="240" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="300" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="360" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="420" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="480" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+    <circle cx="250" cy="540" r="5" fill="#FAF8F5" stroke="#9A8E77" stroke-width="1.5"/>
+
+    <!-- Left Chest Pocket -->
+    <path d="M 165 210 L 215 210 L 215 270 L 190 285 L 165 270 Z" fill="#F4EFE2" stroke="#C8BEAA" stroke-width="1.5"/>
+
+    <!-- Collar -->
+    <path d="M 180 50 L 250 85 L 215 130 L 170 75 Z" fill="#EAE2CE" stroke="#B8AC96" stroke-width="2"/>
+    <path d="M 320 50 L 250 85 L 285 130 L 330 75 Z" fill="#EAE2CE" stroke="#B8AC96" stroke-width="2"/>
+    <!-- Collar inner neckband -->
+    <path d="M 215 50 Q 250 65 285 50" stroke="#8E826C" stroke-width="2" fill="none"/>
+  </g>
+</svg>
+

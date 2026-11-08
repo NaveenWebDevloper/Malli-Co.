@@ -1,0 +1,31 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="teeBurgundy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#581C28"/>
+      <stop offset="50%" stop-color="#48141F"/>
+      <stop offset="100%" stop-color="#350E17"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- T-Shirt Body & Short Sleeves -->
+    <path d="M 185 50 L 120 80 L 60 170 L 105 195 L 140 145 L 140 560 Q 250 575 360 560 L 360 145 L 395 195 L 440 170 L 380 80 L 315 50 Z" 
+          fill="url(#teeBurgundy)" stroke="#2B0A12" stroke-width="2"/>
+
+    <!-- Sleeve Stitch Lines -->
+    <path d="M 140 145 Q 148 165 142 195" stroke="#260810" stroke-width="2" fill="none"/>
+    <path d="M 360 145 Q 352 165 358 195" stroke="#260810" stroke-width="2" fill="none"/>
+
+    <!-- Soft Fabric Folds -->
+    <path d="M 175 160 Q 190 350 170 540" stroke="#3D101A" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 325 160 Q 310 350 330 540" stroke="#3D101A" stroke-width="2" fill="none" opacity="0.6"/>
+
+    <!-- Crewneck Ribbed Collar -->
+    <path d="M 185 50 Q 250 115 315 50 Q 250 90 185 50 Z" fill="#3B1019" stroke="#682130" stroke-width="2"/>
+    <path d="M 200 58 Q 250 102 300 58" stroke="#7A2939" stroke-width="1.5" fill="none"/>
+  </g>
+</svg>
+

@@ -1,0 +1,40 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="saffronGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E88220"/>
+      <stop offset="50%" stop-color="#D66B0D"/>
+      <stop offset="100%" stop-color="#B35205"/>
+    </linearGradient>
+    <linearGradient id="goldButton" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9C4"/>
+      <stop offset="50%" stop-color="#FBC02D"/>
+      <stop offset="100%" stop-color="#F57F17"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Kids Festive Kurta Body -->
+    <path d="M 190 55 L 140 85 L 60 215 L 100 240 L 145 165 L 140 590 Q 250 610 360 590 L 355 165 L 400 240 L 440 215 L 360 85 L 310 55 Z" 
+          fill="url(#saffronGrad)" stroke="#8C3F03" stroke-width="2"/>
+
+    <!-- Side Slits -->
+    <path d="M 140 430 L 140 590" stroke="#7A3602" stroke-width="2.5"/>
+    <path d="M 360 430 L 360 590" stroke="#7A3602" stroke-width="2.5"/>
+
+    <!-- Mandarin Collar -->
+    <path d="M 195 55 Q 250 68 305 55 L 305 85 Q 250 98 195 85 Z" fill="#D36408" stroke="#FBC02D" stroke-width="2"/>
+
+    <!-- Center Placket -->
+    <rect x="242" y="85" width="16" height="240" fill="#BF5704" stroke="#FBC02D" stroke-width="1.5"/>
+
+    <!-- Gold Button Studs -->
+    <circle cx="250" cy="115" r="4.5" fill="url(#goldButton)" stroke="#663E00" stroke-width="1"/>
+    <circle cx="250" cy="165" r="4.5" fill="url(#goldButton)" stroke="#663E00" stroke-width="1"/>
+    <circle cx="250" cy="215" r="4.5" fill="url(#goldButton)" stroke="#663E00" stroke-width="1"/>
+    <circle cx="250" cy="265" r="4.5" fill="url(#goldButton)" stroke="#663E00" stroke-width="1"/>
+  </g>
+</svg>
+

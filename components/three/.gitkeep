@@ -1,0 +1,3 @@
+# Dedicated 3D components directory (React Three Fiber, Drei)
+# Rule 8: All 3D code lives exclusively here, dynamically imported with ssr: false, with mandatory non-3D fallbacks.
+

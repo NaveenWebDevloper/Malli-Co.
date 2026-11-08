@@ -1,0 +1,5 @@
+# Mongoose models directory
+# Rule 2: Store monetary amounts as integer paise.
+# Rule 3: Atomic stock updates & inventory movements logging.
+# Rule 4: Define all unique and query indexes explicitly in schema definitions.
+

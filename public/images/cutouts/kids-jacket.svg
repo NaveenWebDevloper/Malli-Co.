@@ -1,0 +1,44 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brocadeMaroon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#801026"/>
+      <stop offset="50%" stop-color="#650C1D"/>
+      <stop offset="100%" stop-color="#4B0714"/>
+    </linearGradient>
+    <linearGradient id="zariButton" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF59D"/>
+      <stop offset="50%" stop-color="#FBC02D"/>
+      <stop offset="100%" stop-color="#C49000"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Kids Vest Silhouette -->
+    <path d="M 195 55 L 150 85 Q 125 150 150 210 L 150 540 Q 250 560 350 540 L 350 210 Q 375 150 350 85 L 305 55 Z" 
+          fill="url(#brocadeMaroon)" stroke="#38040E" stroke-width="2"/>
+
+    <!-- Gold Piped Borders -->
+    <path d="M 195 55 Q 250 70 305 55" stroke="url(#zariButton)" stroke-width="2.5" fill="none"/>
+    <path d="M 150 540 Q 250 560 350 540" stroke="url(#zariButton)" stroke-width="2.5" fill="none"/>
+
+    <!-- Center Placket -->
+    <rect x="242" y="85" width="16" height="455" fill="#520917" stroke="url(#zariButton)" stroke-width="1.5"/>
+
+    <!-- Gold Buttons -->
+    <circle cx="250" cy="120" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="170" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="220" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="270" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="320" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="370" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="420" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+    <circle cx="250" cy="470" r="5" fill="url(#zariButton)" stroke="#5E4000" stroke-width="1"/>
+
+    <!-- Mandarin Collar -->
+    <path d="M 195 55 Q 250 70 305 55 L 305 85 Q 250 100 195 85 Z" fill="#580C1A" stroke="url(#zariButton)" stroke-width="2"/>
+  </g>
+</svg>
+

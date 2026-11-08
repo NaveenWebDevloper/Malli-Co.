@@ -1,0 +1,45 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="kurtaIvory" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCFAF5"/>
+      <stop offset="50%" stop-color="#F5EFE1"/>
+      <stop offset="100%" stop-color="#EBE3D0"/>
+    </linearGradient>
+    <linearGradient id="goldTrim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5D77F"/>
+      <stop offset="100%" stop-color="#C59B27"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#121212" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Long Flowing Kurta Body -->
+    <path d="M 185 45 L 125 75 L 35 230 L 80 255 L 135 170 L 130 635 Q 250 655 370 635 L 365 170 L 420 255 L 465 230 L 375 75 L 315 45 Z" 
+          fill="url(#kurtaIvory)" stroke="#D6CBB8" stroke-width="2"/>
+
+    <!-- Side Slits Left & Right -->
+    <path d="M 130 450 L 130 635" stroke="#BAAA90" stroke-width="2.5"/>
+    <path d="M 370 450 L 370 635" stroke="#BAAA90" stroke-width="2.5"/>
+
+    <!-- Subtle Drapes -->
+    <path d="M 175 180 Q 185 400 160 620" stroke="#DFD4BE" stroke-width="2" fill="none"/>
+    <path d="M 325 180 Q 315 400 340 620" stroke="#DFD4BE" stroke-width="2" fill="none"/>
+
+    <!-- Mandarin Collar with Gold Trim -->
+    <path d="M 195 45 Q 250 58 305 45 L 305 75 Q 250 88 195 75 Z" fill="#F0E8D5" stroke="url(#goldTrim)" stroke-width="2.5"/>
+
+    <!-- Embroidered Center Placket -->
+    <rect x="242" y="75" width="16" height="260" fill="#EAE0C8" stroke="url(#goldTrim)" stroke-width="1.5"/>
+
+    <!-- Gold Button Studs -->
+    <circle cx="250" cy="100" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+    <circle cx="250" cy="140" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+    <circle cx="250" cy="180" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+    <circle cx="250" cy="220" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+    <circle cx="250" cy="260" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+    <circle cx="250" cy="300" r="4" fill="url(#goldTrim)" stroke="#8A6B17" stroke-width="1"/>
+  </g>
+</svg>
+

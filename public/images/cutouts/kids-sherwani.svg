@@ -1,0 +1,48 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="emeraldSilk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F4D3C"/>
+      <stop offset="50%" stop-color="#09382B"/>
+      <stop offset="100%" stop-color="#05261D"/>
+    </linearGradient>
+    <linearGradient id="zariGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082"/>
+      <stop offset="50%" stop-color="#FFC107"/>
+      <stop offset="100%" stop-color="#C79100"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Kids Sherwani Silhouette -->
+    <path d="M 190 55 L 145 85 L 65 210 L 105 235 L 150 160 L 145 580 Q 250 600 355 580 L 350 160 L 395 235 L 435 210 L 355 85 L 310 55 Z" 
+          fill="url(#emeraldSilk)" stroke="#06221A" stroke-width="2"/>
+
+    <!-- Gold Zari Border Trims on Hem & Sleeves -->
+    <path d="M 145 570 Q 250 590 355 570 L 355 580 Q 250 600 145 580 Z" fill="url(#zariGold)"/>
+    <polygon points="65,210 105,235 98,242 58,217" fill="url(#zariGold)"/>
+    <polygon points="435,210 395,235 402,242 442,217" fill="url(#zariGold)"/>
+
+    <!-- Mandarin Collar with Zari Trim -->
+    <path d="M 195 55 Q 250 70 305 55 L 305 85 Q 250 100 195 85 Z" fill="#0A3F31" stroke="url(#zariGold)" stroke-width="2.5"/>
+
+    <!-- Center Royal Zari Placket -->
+    <rect x="240" y="85" width="20" height="360" fill="#0C4838" stroke="url(#zariGold)" stroke-width="2"/>
+
+    <!-- Zari Button Studs -->
+    <circle cx="250" cy="115" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="165" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="215" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="265" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="315" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="365" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+    <circle cx="250" cy="415" r="5" fill="url(#zariGold)" stroke="#664600" stroke-width="1"/>
+
+    <!-- Pocket Square Brooch Accent -->
+    <rect x="170" y="165" width="45" height="8" rx="2" fill="url(#zariGold)"/>
+    <polygon points="182,165 192,145 202,165" fill="#D32F2F"/>
+  </g>
+</svg>
+

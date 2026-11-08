@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fdfdfd;
+  --foreground: #111111;
+
+  /* Top announcement & header spacing geometry (Full-Width Header) */
+  --announcement-height: 36px;
+  --header-top: var(--announcement-height);
+  --header-height: 82px;
+  --header-gap: 0px;
+  --header-offset: calc(var(--header-top) + var(--header-height));
+}
+
+@media (min-width: 640px) {
+  :root {
+    --announcement-height: 36px;
+    --header-top: var(--announcement-height);
+    --header-height: 88px;
+    --header-gap: 0px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --announcement-height: 36px;
+    --header-top: var(--announcement-height);
+    --header-height: 96px;
+    --header-gap: 0px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  min-height: 100vh;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s infinite linear;
+}
