@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import { Collection } from "@/models/Collection";
 import { CollectionCreateSchema } from "@/lib/validations/collection";
+import { sendNewCollectionBroadcastEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -104,6 +105,20 @@ export async function POST(req: NextRequest) {
       ...validation.data,
       productIds: validation.data.productIds || [],
     });
+
+    // Notify registered client accounts of the new Collection
+    try {
+      sendNewCollectionBroadcastEmail({
+        title: collection.title || collection.name,
+        subtitle: collection.subtitle,
+        slug: collection.slug,
+        description: collection.description,
+      }).catch((emailErr) => {
+        console.warn("Background collection broadcast email error:", emailErr);
+      });
+    } catch {
+      // Safe non-blocking email trigger
+    }
 
     try {
       revalidateTag("collections");

@@ -9,6 +9,7 @@ import {
   countAffectedProducts,
   detectCampaignOverlaps,
 } from "@/lib/campaigns";
+import { sendNewSaleBroadcastEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -149,6 +150,26 @@ export async function POST(req: NextRequest) {
     });
 
     const newCampaign = await Campaign.create(data);
+
+    // Notify registered client accounts of the new Sale
+    try {
+      const discountStr =
+        data.discount.kind === "PERCENT"
+          ? `${data.discount.value}% off`
+          : `Flat ₹${Math.round(data.discount.value / 100)} off`;
+      sendNewSaleBroadcastEmail({
+        name: newCampaign.name,
+        slug: newCampaign.slug,
+        discountSummary: `${discountStr} ${data.scope?.mode === "ALL" ? "Storewide" : "Special Curation"}`,
+        description: newCampaign.description,
+        startsAt: newCampaign.startsAt,
+        endsAt: newCampaign.endsAt,
+      }).catch((emailErr) => {
+        console.warn("Background sale broadcast email error:", emailErr);
+      });
+    } catch {
+      // Safe non-blocking email trigger
+    }
 
     // Revalidate storefront cache tag
     try {
