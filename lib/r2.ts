@@ -9,26 +9,38 @@ export interface R2Config {
 }
 
 export function getR2Config(): R2Config | null {
-  const accountId =
+  const accountId = (
     process.env.R2_ACCOUNT_ID ||
     process.env.CLOUDFLARE_ACCOUNT_ID ||
-    "82f82e50e85cd74b78420fa00122c226"; // Default provided by project
-  const bucketName =
+    "82f82e50e85cd74b78420fa00122c226"
+  ).trim();
+
+  const bucketName = (
     process.env.R2_BUCKET_NAME ||
     process.env.CLOUDFLARE_R2_BUCKET ||
-    "malli-and-co";
-  const accessKeyId =
+    "malli-and-co"
+  ).trim();
+
+  const accessKeyId = (
     process.env.R2_ACCESS_KEY_ID ||
     process.env.CLOUDFLARE_R2_ACCESS_KEY_ID ||
-    process.env.AWS_ACCESS_KEY_ID;
-  const secretAccessKey =
+    process.env.AWS_ACCESS_KEY_ID ||
+    ""
+  ).trim();
+
+  const secretAccessKey = (
     process.env.R2_SECRET_ACCESS_KEY ||
     process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ||
-    process.env.AWS_SECRET_ACCESS_KEY;
-  const publicUrl =
+    process.env.AWS_SECRET_ACCESS_KEY ||
+    ""
+  ).trim();
+
+  const publicUrl = (
     process.env.R2_PUBLIC_URL ||
     process.env.NEXT_PUBLIC_R2_PUBLIC_URL ||
-    process.env.CLOUDFLARE_R2_PUBLIC_URL;
+    process.env.CLOUDFLARE_R2_PUBLIC_URL ||
+    ""
+  ).trim();
 
   if (!accountId || !bucketName || !accessKeyId || !secretAccessKey) {
     return null;
@@ -39,7 +51,7 @@ export function getR2Config(): R2Config | null {
     bucketName,
     accessKeyId,
     secretAccessKey,
-    publicUrl: publicUrl?.replace(/\/$/, ""),
+    publicUrl: publicUrl ? publicUrl.replace(/\/$/, "") : undefined,
   };
 }
 
@@ -56,7 +68,8 @@ function sha256Hex(data: Buffer | string): string {
 }
 
 /**
- * Generate AWS Signature Version 4 headers for Cloudflare R2 S3-compatible API.
+ * Generate standard AWS Signature Version 4 headers for Cloudflare R2 S3-compatible API.
+ * Signs host, x-amz-content-sha256, and x-amz-date for maximum cross-runtime compatibility.
  */
 function generateSigV4Headers({
   method,
@@ -85,16 +98,12 @@ function generateSigV4Headers({
 
   const payloadHash = sha256Hex(payload);
 
-  // Headers to sign
+  // Sign host, x-amz-content-sha256, and x-amz-date ONLY
   const headersToSign: Record<string, string> = {
     host,
     "x-amz-content-sha256": payloadHash,
     "x-amz-date": amzDate,
   };
-
-  if (contentType) {
-    headersToSign["content-type"] = contentType;
-  }
 
   const sortedHeaderKeys = Object.keys(headersToSign).sort();
   const canonicalHeaders = sortedHeaderKeys
@@ -284,4 +293,3 @@ export async function getFromR2(key: string): Promise<{
     return { success: false, error: msg };
   }
 }
-

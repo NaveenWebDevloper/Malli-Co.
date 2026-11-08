@@ -30,6 +30,13 @@ export async function GET() {
     r2Configured: isR2Configured(),
     r2Bucket: r2Config?.bucketName || null,
     r2PublicUrl: r2Config?.publicUrl || null,
+    r2Diagnostics: r2Config
+      ? {
+          keyIdLength: r2Config.accessKeyId.length,
+          keyIdPrefix: r2Config.accessKeyId.slice(0, 6) + "...",
+          secretKeyLength: r2Config.secretAccessKey.length,
+        }
+      : null,
     r2LiveTest,
     cloudinaryConfigured: Boolean(
       process.env.CLOUDINARY_CLOUD_NAME ||
