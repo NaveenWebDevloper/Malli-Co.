@@ -200,11 +200,17 @@ export async function uploadToR2({
     }
 
     // Determine public URL:
-    // If user configured a public R2.dev or custom domain, use it directly (Cloudflare Edge CDN)
-    // Otherwise, route through the application proxy /api/media/r2/[...key]
-    const finalUrl = config.publicUrl
-      ? `${config.publicUrl}/${cleanKey}`
-      : `/api/media/r2/${cleanKey}`;
+    // If user configured a public R2.dev or custom domain, use it directly (Cloudflare Edge CDN).
+    // Note: If publicUrl points to the private S3 API endpoint (*.r2.cloudflarestorage.com),
+    // web browsers will get a 400 Bad Request without AWS SigV4, so route through /api/media/r2/ proxy instead.
+    const isPrivateEndpoint = Boolean(
+      config.publicUrl && config.publicUrl.includes(".r2.cloudflarestorage.com"),
+    );
+
+    const finalUrl =
+      config.publicUrl && !isPrivateEndpoint
+        ? `${config.publicUrl}/${cleanKey}`
+        : `/api/media/r2/${cleanKey}`;
 
     return {
       success: true,
@@ -278,3 +284,4 @@ export async function getFromR2(key: string): Promise<{
     return { success: false, error: msg };
   }
 }
+
