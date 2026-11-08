@@ -12,7 +12,7 @@ export const COMPANY_GST_INFO = {
   gstin: "36AAECM5544J1Z8",
   state: "Telangana",
   stateCode: "36",
-  address: "Road No. 36, Jubilee Hills, Hyderabad, Telangana - 500033",
+  address: "Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad, Telangana - 500090",
   cin: "U18101TG2024PTC188990",
   email: "care@malliandco.com",
   phone: "+91 40 2355 8899",

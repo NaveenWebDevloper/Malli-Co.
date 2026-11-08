@@ -50,10 +50,10 @@ describe("Pricing, Cart, Checkout & Orders Financial Integration", () => {
           name: "Venkata Raman",
           phone: "9876543210",
           email: "customer@example.com",
-          street: "Road No. 36, Jubilee Hills",
+          street: "Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally",
           city: "Hyderabad",
           state: "Telangana",
-          postalCode: "500033",
+          postalCode: "500090",
           country: "IN",
         },
       };

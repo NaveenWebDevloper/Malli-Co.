@@ -46,10 +46,10 @@ export default async function StoreHomePage() {
     url: "https://malliandco.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Road No. 36, Jubilee Hills",
+      streetAddress: "Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally",
       addressLocality: "Hyderabad",
       addressRegion: "Telangana",
-      postalCode: "500033",
+      postalCode: "500090",
       addressCountry: "IN",
     },
     currenciesAccepted: "INR",

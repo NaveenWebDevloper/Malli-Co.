@@ -586,7 +586,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
                   type="text"
                   name="street"
                   required
-                  placeholder="Plot 42, Road No. 36, Jubilee Hills"
+                  placeholder="Near Vikas Pre School, Govt High School Road, Mallampet"
                   value={formData.street}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-[#DDD4C1] px-3 py-2 text-xs text-[#121212] focus:border-black focus:outline-none"
@@ -632,7 +632,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
                     name="postalCode"
                     required
                     maxLength={6}
-                    placeholder="500033"
+                    placeholder="500090"
                     value={formData.postalCode}
                     onChange={handleChange}
                     className="w-full rounded-xl border border-[#DDD4C1] px-3 py-2 text-xs text-[#121212] focus:border-black focus:outline-none font-mono"

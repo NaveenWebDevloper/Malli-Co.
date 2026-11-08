@@ -100,7 +100,7 @@ export async function sendNewSaleBroadcastEmail(
           </tr>
           <tr>
             <td style="background-color: #F4EFE6; padding: 24px; text-align: center; font-size: 11px; color: #777; border-top: 1px solid #EAE3D4;">
-              <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Road No. 36, Jubilee Hills, Hyderabad</p>
+              <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad - 500090</p>
               <p style="margin: 0; color: #999;">You are receiving this private invitation as a registered client of Malli & Co.</p>
             </td>
           </tr>
@@ -195,7 +195,7 @@ export async function sendNewCollectionBroadcastEmail(
           </tr>
           <tr>
             <td style="background-color: #F4EFE6; padding: 24px; text-align: center; font-size: 11px; color: #777; border-top: 1px solid #EAE3D4;">
-              <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Road No. 36, Jubilee Hills, Hyderabad</p>
+              <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad - 500090</p>
               <p style="margin: 0; color: #999;">You are receiving this wardrobe update as an esteemed member of Malli & Co.</p>
             </td>
           </tr>
@@ -349,7 +349,7 @@ export async function sendOrderConfirmationEmail(
       <!-- Footer -->
       <tr>
         <td style="background-color: #F4EFE6; padding: 24px; text-align: center; font-size: 11px; color: #777; border-top: 1px solid #EAE3D4;">
-          <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Road No. 36, Jubilee Hills, Hyderabad</p>
+          <p style="margin: 0 0 4px 0;">Malli & Co. Luxury Apparel Pvt. Ltd. • Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad - 500090</p>
           <p style="margin: 0; color: #999;">GSTIN: 36AAECM5544J1Z8 • concierge@malliandco.com</p>
         </td>
       </tr>
