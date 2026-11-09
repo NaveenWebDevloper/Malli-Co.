@@ -89,3 +89,4 @@ export const AuditLog: Model<IAuditLog> =
   mongoose.model<IAuditLog>("AuditLog", AuditLogSchema);
 
 export default AuditLog;
+

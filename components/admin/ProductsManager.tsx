@@ -806,3 +806,4 @@ export function ProductsManager({
     </div>
   );
 }
+

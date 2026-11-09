@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { connectDB } from "@/lib/db";
+import { Order } from "@/models/Order";
+import { Product } from "@/models/Product";
+import { Variant } from "@/models/Variant";
+import { Brand } from "@/models/Brand";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const session = await auth();
@@ -19,14 +26,46 @@ export async function GET() {
     );
   }
 
+  await connectDB();
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const [
+    revenueAgg,
+    totalOrders,
+    todayOrders,
+    activeProducts,
+    lowStockAlerts,
+    activeBrandsCount,
+  ] = await Promise.all([
+    Order.aggregate([
+      { $match: { paymentStatus: "PAID" } },
+      { $group: { _id: null, totalPaise: { $sum: "$totals.totalPaise" } } },
+    ]),
+    Order.countDocuments({}),
+    Order.countDocuments({ createdAt: { $gte: startOfToday } }),
+    Product.countDocuments({ deletedAt: null, status: "ACTIVE" }),
+    Variant.countDocuments({
+      deletedAt: null,
+      status: "ACTIVE",
+      stock: { $lte: 5 },
+    }),
+    Brand.countDocuments({ isActive: true }),
+  ]);
+
+  const totalRevenuePaise = revenueAgg[0]?.totalPaise || 0;
+
   return NextResponse.json({
     status: "ok",
     data: {
       metrics: {
-        totalRevenuePaise: 12450000,
-        totalOrders: 48,
-        activeProducts: 26,
-        lowStockAlerts: 3,
+        totalRevenuePaise,
+        totalOrders,
+        todayOrders,
+        activeProducts,
+        lowStockAlerts,
+        activeBrandsCount,
       },
       user: {
         id: session.user.id,

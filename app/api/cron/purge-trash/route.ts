@@ -164,3 +164,4 @@ export async function GET(req: NextRequest) {
     skippedProductNames: skippedProducts.map((p) => p.name),
   });
 }
+
