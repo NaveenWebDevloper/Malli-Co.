@@ -153,12 +153,41 @@ export async function getCatalogProducts(
 
   // Filter by category slug
   if (categorySlug) {
-    const categoryDoc = await Category.findOne({ slug: categorySlug, isActive: true }).lean();
+    const normalized = categorySlug.toLowerCase().trim();
+    const categoryDoc = await Category.findOne({ slug: normalized, isActive: true }).lean();
     if (categoryDoc) {
       // Also include subcategories if parent
       const subcategories = await Category.find({ parentId: categoryDoc._id, isActive: true }).lean();
       const catIds = [categoryDoc._id, ...subcategories.map((c) => c._id)];
       query.categoryId = { $in: catIds };
+    } else {
+      // Smart umbrella/alias category resolution
+      let catRegex: RegExp | null = null;
+      if (/^(?:mens?[-_]?)?shirts?$/i.test(normalized)) {
+        catRegex = /shirt/i;
+      } else if (/^(?:mens?[-_]?)?t[-_]?shirts?$|^tshirts?$/i.test(normalized)) {
+        catRegex = /t[-_]?shirt|tee/i;
+      } else if (/^(?:mens?[-_]?)?jeans?$/i.test(normalized)) {
+        catRegex = /jean/i;
+      } else if (/^(?:mens?[-_]?)?pants?$|trousers?$/i.test(normalized)) {
+        catRegex = /pant|trouser/i;
+      }
+
+      if (catRegex) {
+        const matchingCategories = await Category.find({
+          $or: [{ slug: catRegex }, { name: catRegex }],
+          isActive: true,
+        }).lean();
+
+        if (matchingCategories.length > 0) {
+          query.categoryId = { $in: matchingCategories.map((c) => c._id) };
+        } else {
+          query.$or = [
+            { name: { $regex: normalized.replace(/[-_]/g, " "), $options: "i" } },
+            { description: { $regex: normalized.replace(/[-_]/g, " "), $options: "i" } },
+          ];
+        }
+      }
     }
   }
 

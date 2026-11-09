@@ -18,6 +18,76 @@ interface CategoryPageProps {
   }>;
 }
 
+interface ResolvedCategory {
+  _id?: unknown;
+  name: string;
+  slug: string;
+  description?: string;
+  gender: "MEN" | "KIDS" | "UNISEX";
+  isActive: boolean;
+}
+
+async function resolveCategory(slug: string): Promise<ResolvedCategory | null> {
+  const normalized = slug.toLowerCase().trim();
+
+  // 1. Exact match in database
+  const category = await Category.findOne({ slug: normalized, isActive: true }).lean();
+  if (category) {
+    return category as unknown as ResolvedCategory;
+  }
+
+  // 2. Umbrella / alias patterns (e.g. "mens-shirts", "shirts", "mens-t-shirts")
+  let regex: RegExp | null = null;
+  let defaultName = "";
+  let defaultGender: "MEN" | "KIDS" = "MEN";
+
+  if (/^(?:mens?[-_]?)?shirts?$/i.test(normalized)) {
+    regex = /shirt/i;
+    defaultName = "Men's Shirts";
+  } else if (/^(?:mens?[-_]?)?t[-_]?shirts?$|^tshirts?$/i.test(normalized)) {
+    regex = /t[-_]?shirt|tee/i;
+    defaultName = "Men's T-Shirts";
+  } else if (/^(?:kids?[-_]?)?shirts?$/i.test(normalized)) {
+    regex = /shirt/i;
+    defaultName = "Kids' Shirts";
+    defaultGender = "KIDS";
+  } else if (/^(?:mens?[-_]?)?jeans?$|^baggy[-_]?jeans?$/i.test(normalized)) {
+    regex = /jean/i;
+    defaultName = "Men's Jeans";
+  } else if (/^(?:mens?[-_]?)?pants?$|trousers?$/i.test(normalized)) {
+    regex = /pant|trouser/i;
+    defaultName = "Men's Pants & Trousers";
+  }
+
+  if (regex) {
+    const matched = await Category.find({
+      $or: [{ slug: regex }, { name: regex }],
+      isActive: true,
+    }).lean();
+
+    return {
+      _id: matched[0]?._id,
+      name: defaultName || (matched[0]?.name ?? "Category"),
+      slug: normalized,
+      description: matched[0]?.description || `Explore our handcrafted ${defaultName}.`,
+      gender: defaultGender,
+      isActive: true,
+    };
+  }
+
+  // 3. Fuzzy search by keywords in category name
+  const fuzzy = await Category.findOne({
+    name: { $regex: normalized.replace(/[-_]/g, " "), $options: "i" },
+    isActive: true,
+  }).lean();
+
+  if (fuzzy) {
+    return fuzzy as unknown as ResolvedCategory;
+  }
+
+  return null;
+}
+
 export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
@@ -28,7 +98,7 @@ export async function generateMetadata({
   }
   await connectDB();
   const { slug } = await params;
-  const category = await Category.findOne({ slug, isActive: true }).lean();
+  const category = await resolveCategory(slug);
 
   if (!category) {
     return {
@@ -69,7 +139,7 @@ export default async function CategoryPage({
   const { slug } = await params;
   const search = await searchParams;
 
-  const category = await Category.findOne({ slug, isActive: true }).lean();
+  const category = await resolveCategory(slug);
   if (!category) {
     notFound();
   }
