@@ -7,6 +7,7 @@ import { PriceTag } from "@/components/product/PriceTag";
 import { useCart } from "./CartContext";
 import type { DetailedProduct } from "@/lib/catalog";
 import { getColorHex, isLightColor } from "@/lib/colors";
+import { SizeGuideModal } from "./SizeGuideModal";
 
 export function ProductDetailView({ product }: { product: DetailedProduct }) {
   // Extract all distinct options from variants
@@ -48,6 +49,7 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [addedToast, setAddedToast] = useState(false);
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   // Active Variant based on selection
   const activeVariant = useMemo(() => {
@@ -368,9 +370,22 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
                 </span>
                 <button
                   type="button"
-                  onClick={() => alert("Size Chart: Standard tailored regular fit. Order your usual collar/chest size.")}
-                  className="text-neutral-500 hover:text-black underline underline-offset-2"
+                  onClick={() => setIsSizeGuideOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#8C7A58] hover:text-[#121212] font-semibold underline underline-offset-4 decoration-[#8C7A58]/50 hover:decoration-[#121212] transition-colors cursor-pointer"
                 >
+                  <svg
+                    className="w-3.5 h-3.5 text-[#8C7A58]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                    />
+                  </svg>
                   Size Guide
                 </button>
               </div>
@@ -491,6 +506,19 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
           </div>
         </div>
       </div>
+
+      {/* Interactive Bespoke Size Guide Modal */}
+      <SizeGuideModal
+        isOpen={isSizeGuideOpen}
+        onClose={() => setIsSizeGuideOpen(false)}
+        product={product}
+        selectedSize={selectedSize}
+        onSelectSize={(sz) => {
+          if (allSizes.includes(sz)) {
+            setSelectedSize(sz);
+          }
+        }}
+      />
     </div>
   );
 }
