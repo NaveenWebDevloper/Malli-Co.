@@ -4,7 +4,10 @@ import { Product, Category } from "@/models";
 import { activeStorefrontProductFilter } from "@/lib/catalog-query";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXTAUTH_URL || "https://malli-co-one.vercel.app";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXTAUTH_URL ||
+    "https://malliandco.com";
 
   try {
     await connectDB();

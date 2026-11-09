@@ -54,7 +54,14 @@ export function AuthForm({
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push(callbackUrl);
+        if (
+          signInEmail.trim().toLowerCase() === "admin@malliandco.com" &&
+          callbackUrl === "/account"
+        ) {
+          router.push("/admin");
+        } else {
+          router.push(callbackUrl);
+        }
         router.refresh();
       }
     } catch {

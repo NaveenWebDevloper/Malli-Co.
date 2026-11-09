@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
             <p>
               This Privacy Policy explains how we collect, use, store, process, and disclose your information when you visit our website (
               <Link href="/" className="text-[#8C7A58] underline hover:text-black">
-                https://malli-co-one.vercel.app
+                https://malliandco.com
               </Link>
               ), create an account, authenticate via Google Sign-In, or purchase our luxury garments.
             </p>
@@ -205,3 +205,4 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
+
