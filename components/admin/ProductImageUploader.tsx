@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { getColorHex, isLightColor } from "@/lib/colors";
 
 interface ProductImageUploaderProps {
   images: string[];
@@ -208,18 +209,27 @@ export default function ProductImageUploader({
                   <div className="flex flex-wrap gap-1">
                     {availableColors.map((color) => {
                       const isTagged = (colorImages[color] || []).includes(url);
+                      const hex = getColorHex(color);
+                      const isLight = isLightColor(hex);
                       return (
                         <button
                           key={color}
                           type="button"
                           onClick={() => handleToggleColorImage(color, url)}
-                          className={`rounded px-1 py-0.5 text-[9px] font-semibold transition ${
+                          className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-semibold transition ${
                             isTagged
-                              ? "bg-amber-400 text-black shadow"
-                              : "bg-white/80 text-black hover:bg-white"
+                              ? "bg-amber-400 text-black shadow ring-1 ring-amber-500"
+                              : "bg-white/90 text-black hover:bg-white"
                           }`}
                         >
-                          {color} {isTagged ? "✓" : "+"}
+                          <span
+                            className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                              isLight ? "border border-neutral-300" : "border border-black/20"
+                            }`}
+                            style={{ backgroundColor: hex }}
+                          />
+                          <span>{color}</span>
+                          <span>{isTagged ? "✓" : "+"}</span>
                         </button>
                       );
                     })}

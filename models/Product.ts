@@ -34,6 +34,9 @@ export interface IProduct extends Document {
   status: ProductStatus;
   images: string[];
   productAttributes: IProductAttribute[];
+  deletedAt: Date | null;
+  deletedBy: mongoose.Types.ObjectId | null;
+  deleteReason: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -91,12 +94,30 @@ const ProductSchema = new Schema<IProduct>(
       type: [ProductAttributeSchema],
       default: [],
     },
-
+    deletedAt: {
+      type: Date,
+      default: null,
+      index: true,
+    },
+    deletedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer",
+      default: null,
+    },
+    deleteReason: {
+      type: String,
+      trim: true,
+      maxlength: 200,
+      default: null,
+    },
   },
   { timestamps: true },
 );
 
 // Explicit schema indexes (Rule 4)
+ProductSchema.index({ deletedAt: 1, status: 1 });
+ProductSchema.index({ deletedAt: 1, categoryId: 1 });
+ProductSchema.index({ deletedAt: 1, brandId: 1 });
 ProductSchema.index({ status: 1, gender: 1 });
 ProductSchema.index({ categoryId: 1, status: 1 });
 ProductSchema.index({ brandId: 1, status: 1 });

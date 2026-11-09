@@ -52,41 +52,8 @@ export interface ResolvedCollectionResult {
   totalResolved: number;
 }
 
-const COLOR_HEX_MAP: Record<string, string> = {
-  "navy blue": "#1A2B4C",
-  navy: "#1A2B4C",
-  "olive green": "#556B2F",
-  olive: "#556B2F",
-  burgundy: "#800020",
-  white: "#FFFFFF",
-  black: "#111111",
-  charcoal: "#36454F",
-  grey: "#808080",
-  gray: "#808080",
-  beige: "#D4C4A8",
-  cream: "#F9F6EE",
-  sand: "#C2B280",
-  khaki: "#C3B091",
-  brown: "#5C4033",
-  terracotta: "#E2725B",
-  rust: "#B7410E",
-  "forest green": "#228B22",
-  sage: "#9CAF88",
-  "sky blue": "#87CEEB",
-  linen: "#FAF0E6",
-  natural: "#EFEBD9",
-  ivory: "#FFFFF0",
-  mustard: "#E1AD01",
-  emerald: "#50C878",
-  tan: "#D2B48C",
-  clay: "#B66A50",
-  espresso: "#362B28",
-};
-
-export function getColorHex(colorName: string): string {
-  const normalized = colorName.trim().toLowerCase();
-  return COLOR_HEX_MAP[normalized] || "#A39783";
-}
+import { getColorHex } from "./colors.ts";
+export { getColorHex };
 
 // In-memory cache for Bestsellers aggregation (TTL: 1 hour)
 interface BestsellerCacheEntry {
@@ -211,7 +178,10 @@ export async function resolveCollectionProducts(
     const autoRule = collection.autoRule || { type: "BESTSELLERS" };
     const ruleType: CollectionAutoRuleType = autoRule.type || "BESTSELLERS";
 
-    const baseFilter: Record<string, unknown> = { status: "ACTIVE" };
+    const baseFilter: Record<string, unknown> = {
+      status: "ACTIVE",
+      deletedAt: null,
+    };
     if (autoRule.gender) baseFilter.gender = autoRule.gender;
     if (autoRule.categoryId) baseFilter.categoryId = autoRule.categoryId;
 
@@ -284,6 +254,7 @@ export async function resolveCollectionProducts(
   const rawProducts = await Product.find({
     _id: { $in: validObjectIds },
     status: "ACTIVE", // Only ACTIVE products (skip DRAFT)
+    deletedAt: null,
   })
     .populate("brandId", "name slug")
     .populate("categoryId", "name slug")
@@ -505,7 +476,7 @@ export async function resolveCollectionProducts(
 
     // If filtering left fewer than 3 items, supplement from active catalog matching that filter
     if (filteredProducts.length < 3) {
-      const dbQuery: Record<string, unknown> = { status: "ACTIVE" };
+      const dbQuery: Record<string, unknown> = { status: "ACTIVE", deletedAt: null };
       if (f === "men" || f === "mens-wear") dbQuery.gender = "MEN";
       if (f === "kids" || f === "kids-wear") dbQuery.gender = "KIDS";
       if (f === "casual" || f === "casual-wear") {
@@ -530,7 +501,7 @@ export async function resolveCollectionProducts(
       for (const p of extraProducts) {
         const pId = p._id.toString();
         if (!filteredProducts.some((item) => item._id === pId)) {
-          const productVariants = await Variant.find({ productId: p._id }).lean();
+          const productVariants = await Variant.find({ productId: p._id, deletedAt: null, status: "ACTIVE" }).lean();
           const primaryVariant = productVariants[0];
           const pricing = resolvePrice(
             primaryVariant

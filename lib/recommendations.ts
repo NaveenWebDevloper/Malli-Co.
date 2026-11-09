@@ -303,6 +303,7 @@ export async function getPersonalizedSimilarProducts(
       const recentProducts = await Product.find({
         slug: { $in: filteredRecentSlugs },
         status: "ACTIVE",
+        deletedAt: null,
       })
         .select("categoryId gender")
         .lean();
@@ -322,7 +323,7 @@ export async function getPersonalizedSimilarProducts(
   }
 
   // 3. Fetch candidate products from catalog excluding current product
-  const query: Record<string, unknown> = { status: "ACTIVE" };
+  const query: Record<string, unknown> = { status: "ACTIVE", deletedAt: null };
   if (currentProductId && mongoose.Types.ObjectId.isValid(currentProductId)) {
     query._id = { $ne: new mongoose.Types.ObjectId(currentProductId) };
   } else if (currentSlug) {
@@ -497,6 +498,7 @@ export async function getRecentlyViewedProducts(options: {
   const rawProducts = await Product.find({
     slug: { $in: orderedSlugs },
     status: "ACTIVE",
+    deletedAt: null,
   })
     .populate("brandId", "name slug")
     .populate("categoryId", "name slug")

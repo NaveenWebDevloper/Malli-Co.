@@ -52,9 +52,8 @@ export async function POST(req: NextRequest) {
   const variantIds = requestedItems.map((i) => i.variantId);
   const variants = await Variant.find({
     _id: { $in: variantIds },
-    status: "ACTIVE",
   })
-    .populate("productId", "name slug images status categoryId brandId gender basePricePaise")
+    .populate("productId", "name slug images status categoryId brandId gender basePricePaise deletedAt")
     .lean();
 
   const variantMap = new Map<string, (typeof variants)[0]>();
@@ -71,6 +70,36 @@ export async function POST(req: NextRequest) {
     if (!v) {
       return NextResponse.json(
         { error: `Item with variant ID ${item.variantId} is not available.` },
+        { status: 400 },
+      );
+    }
+
+    const p = v.productId as unknown as {
+      _id?: mongoose.Types.ObjectId;
+      name?: string;
+      slug?: string;
+      images?: string[];
+      status?: string;
+      deletedAt?: Date | null;
+      categoryId?: unknown;
+      brandId?: unknown;
+      gender?: string;
+      basePricePaise?: number;
+    } | null;
+
+    // Reject checkout if product or variant has been soft-deleted or archived
+    if (
+      v.deletedAt ||
+      v.status === "ARCHIVED" ||
+      p?.deletedAt ||
+      p?.status !== "ACTIVE"
+    ) {
+      return NextResponse.json(
+        {
+          error: `Item '${p?.name || v.sku}' is no longer available. Please remove it from your bag before checking out.`,
+          variantId: item.variantId,
+          sku: v.sku,
+        },
         { status: 400 },
       );
     }
@@ -103,17 +132,6 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-
-    const p = v.productId as unknown as {
-      _id?: mongoose.Types.ObjectId;
-      name?: string;
-      slug?: string;
-      images?: string[];
-      categoryId?: unknown;
-      brandId?: unknown;
-      gender?: string;
-      basePricePaise?: number;
-    } | null;
 
     const displayImage =
       (v.images && v.images[0]) || (p?.images && p.images[0]) || "";

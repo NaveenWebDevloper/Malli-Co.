@@ -24,6 +24,7 @@ export interface PopulatedCartItem {
   quantity: number;
   stockAvailable: number;
   isAvailable: boolean;
+  unavailableReason?: string;
   lineTotalPaise: number;
 }
 
@@ -189,9 +190,8 @@ export async function enrichCart(cartDoc: ICart): Promise<EnrichedCart> {
   const variantIds = cartDoc.items.map((i) => i.variantId);
   const variants = await Variant.find({
     _id: { $in: variantIds },
-    status: "ACTIVE",
   })
-    .populate("productId", "name slug images status categoryId brandId gender basePricePaise")
+    .populate("productId", "name slug images status categoryId brandId gender basePricePaise deletedAt")
     .lean();
 
   const variantMap = new Map<string, (typeof variants)[0]>();
@@ -210,7 +210,24 @@ export async function enrichCart(cartDoc: ICart): Promise<EnrichedCart> {
     const v = variantMap.get(vId);
 
     if (!v) {
-      // Variant no longer active or exists
+      // Flag unavailable instead of silently dropping
+      populatedItems.push({
+        variantId: vId,
+        productId: "",
+        productName: "Unavailable Item",
+        productSlug: "",
+        sku: "UNAVAILABLE",
+        pricePaise: 0,
+        options: {},
+        image: "/images/placeholder.jpg",
+        quantity: item.quantity,
+        stockAvailable: 0,
+        isAvailable: false,
+        unavailableReason: "This item is no longer available",
+        lineTotalPaise: 0,
+      });
+      hasOutOfStock = true;
+      notices.push("An item in your cart is no longer available.");
       continue;
     }
 
@@ -219,11 +236,38 @@ export async function enrichCart(cartDoc: ICart): Promise<EnrichedCart> {
       name: string;
       slug: string;
       images: string[];
+      status?: string;
+      deletedAt?: Date | null;
       categoryId?: unknown;
       brandId?: unknown;
       gender?: string;
       basePricePaise?: number;
-    };
+    } | null;
+
+    // Check if product or variant is soft-deleted or archived
+    const isProductSoftDeleted = Boolean(p?.deletedAt) || p?.status !== "ACTIVE";
+    const isVariantArchived = Boolean(v.deletedAt) || v.status === "ARCHIVED";
+
+    if (isProductSoftDeleted || isVariantArchived) {
+      populatedItems.push({
+        variantId: vId,
+        productId: p?._id?.toString() || "",
+        productName: p?.name || "Archived Apparel Item",
+        productSlug: p?.slug || "",
+        sku: v.sku,
+        pricePaise: 0,
+        options: v.options instanceof Map ? Object.fromEntries(v.options) : (v.options as Record<string, string>) || {},
+        image: (v.images && v.images[0]) || (p?.images && p.images[0]) || "/images/placeholder.jpg",
+        quantity: item.quantity,
+        stockAvailable: 0,
+        isAvailable: false,
+        unavailableReason: "This item is no longer available",
+        lineTotalPaise: 0,
+      });
+      hasOutOfStock = true;
+      notices.push("This item is no longer available.");
+      continue;
+    }
 
     // Canonical dynamic price resolution against active campaigns (Rule 1 & Rule 2)
     const resolved = resolvePrice(v, p, activeCampaigns, now);

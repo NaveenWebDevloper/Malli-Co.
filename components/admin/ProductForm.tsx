@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ProductImageUploader from "./ProductImageUploader";
+import { ProductDeleteModal } from "./ProductDeleteModal";
+import { getColorHex, isLightColor } from "@/lib/colors";
 import {
   generateVariantsFromAttributes,
   parseCommaSeparatedAttributeValues,
@@ -56,12 +58,14 @@ interface AttributeValueInputProps {
   values: string[];
   onChange: (newValues: string[]) => void;
   placeholder?: string;
+  isColorAttribute?: boolean;
 }
 
 function AttributeValueInput({
   values,
   onChange,
   placeholder = "S, M, L, XL or 28, 30, 32, 34, 36",
+  isColorAttribute = false,
 }: AttributeValueInputProps) {
   const [rawText, setRawText] = useState(() => values.join(", "));
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null);
@@ -80,6 +84,17 @@ function AttributeValueInput({
     } else {
       setDuplicateWarning(null);
     }
+  };
+
+  const handleCustomColorChange = (index: number, newHex: string) => {
+    const currentName = values[index];
+    if (!currentName) return;
+    const baseName = currentName.replace(/\s*\(#[0-9a-fA-F]{3,8}\)/, "").trim();
+    const updatedName = `${baseName} (${newHex.toUpperCase()})`;
+    const updatedValues = [...values];
+    updatedValues[index] = updatedName;
+    onChange(updatedValues);
+    setRawText(updatedValues.join(", "));
   };
 
   return (
@@ -108,6 +123,62 @@ function AttributeValueInput({
           ⚠️ {duplicateWarning}
         </p>
       )}
+
+      {/* Live Color Swatches Preview for Color Attributes */}
+      {isColorAttribute && values.length > 0 && (
+        <div className="mt-2.5 rounded-lg border border-neutral-200/80 bg-neutral-50/80 p-2.5 dark:border-neutral-700/80 dark:bg-neutral-800/60">
+          <div className="mb-2 flex items-center justify-between text-[11px]">
+            <span className="font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 flex items-center gap-1.5">
+              <span>🎨 Live Color Swatches ({values.length})</span>
+            </span>
+            <span className="text-[10px] text-neutral-400">
+              Click dot to customize shade
+            </span>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {values.map((colName, cIdx) => {
+              const hex = getColorHex(colName);
+              const isLight = isLightColor(hex);
+              return (
+                <div
+                  key={`${colName}-${cIdx}`}
+                  className="group relative inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-xs font-medium text-neutral-800 shadow-2xs transition-all hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200"
+                >
+                  {/* Interactive Swatch with Color Picker */}
+                  <label
+                    className="relative flex h-4 w-4 cursor-pointer items-center justify-center flex-shrink-0"
+                    title={`Click to customize ${colName} (${hex})`}
+                  >
+                    <span
+                      className={`h-4 w-4 rounded-full transition-transform group-hover:scale-110 ${
+                        isLight
+                          ? "border border-neutral-300 shadow-2xs"
+                          : "border border-black/20 shadow-2xs"
+                      }`}
+                      style={{ backgroundColor: hex }}
+                    />
+                    <input
+                      type="color"
+                      value={hex.startsWith("#") && hex.length === 7 ? hex : "#111111"}
+                      onChange={(e) => handleCustomColorChange(cIdx, e.target.value)}
+                      className="absolute inset-0 h-4 w-4 cursor-pointer opacity-0"
+                      title="Choose exact color hex"
+                    />
+                  </label>
+
+                  <span className="font-semibold text-neutral-900 dark:text-neutral-100">
+                    {colName}
+                  </span>
+                  <span className="font-mono text-[10px] text-neutral-400">
+                    {hex}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -119,6 +190,7 @@ export default function ProductForm({
 }: ProductFormProps) {
   const router = useRouter();
   const isEditing = Boolean(initialData?._id);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Form State
   const [name, setName] = useState(initialData?.name || "");
@@ -621,10 +693,17 @@ export default function ProductForm({
 
                         <div className="flex-1">
                           <label className="block text-[11px] font-medium text-neutral-500">
-                            Comma-Separated Values
+                            {attr.name.toLowerCase() === "color" ||
+                            attr.name.toLowerCase() === "colour"
+                              ? "Color Values (e.g. Black, Charcoal Grey, Taupe Brown, Dark Olive Green, Navy Blue, White, Mustard Khaki)"
+                              : "Comma-Separated Values"}
                           </label>
                           <AttributeValueInput
                             values={attr.values}
+                            isColorAttribute={
+                              attr.name.toLowerCase() === "color" ||
+                              attr.name.toLowerCase() === "colour"
+                            }
                             onChange={(newValues) => {
                               setAttributes((prev) =>
                                 prev.map((a, i) =>
@@ -632,7 +711,12 @@ export default function ProductForm({
                                 ),
                               );
                             }}
-                            placeholder="e.g. 28, 30, 32 or 32x34, 34x34 or 2-3Y, 3-4Y or S, M, L"
+                            placeholder={
+                              attr.name.toLowerCase() === "color" ||
+                              attr.name.toLowerCase() === "colour"
+                                ? "e.g. Black, Charcoal Grey, Taupe Brown, Dark Olive Green, Navy Blue, White, Mustard Khaki"
+                                : "e.g. 28, 30, 32 or 32x34, 34x34 or 2-3Y, 3-4Y or S, M, L"
+                            }
                           />
                         </div>
 
@@ -704,6 +788,9 @@ export default function ProductForm({
                             const optionStr = Object.entries(v.options)
                               .map(([k, val]) => `${k}: ${val}`)
                               .join(" / ");
+                            const colorName = v.options.Color || v.options.color;
+                            const colorHex = colorName ? getColorHex(colorName) : null;
+                            const isLight = colorHex ? isLightColor(colorHex) : false;
 
                             return (
                               <tr
@@ -711,7 +798,18 @@ export default function ProductForm({
                                 className="transition hover:bg-neutral-50/50 dark:hover:bg-neutral-800/40"
                               >
                                 <td className="py-2.5 px-3 font-medium text-neutral-900 dark:text-neutral-100">
-                                  {optionStr || "Default Variant"}
+                                  <div className="flex items-center gap-2">
+                                    {colorHex && (
+                                      <span
+                                        className={`inline-block w-3.5 h-3.5 rounded-full flex-shrink-0 ${
+                                          isLight ? "border border-neutral-300" : "border border-black/20"
+                                        }`}
+                                        style={{ backgroundColor: colorHex }}
+                                        title={`${colorName} (${colorHex})`}
+                                      />
+                                    )}
+                                    <span>{optionStr || "Default Variant"}</span>
+                                  </div>
                                 </td>
                                 <td className="py-2.5 px-3">
                                   <input
@@ -868,8 +966,55 @@ export default function ProductForm({
               </select>
             </div>
           </div>
+
+          {/* Danger Zone (Edit Mode Only) */}
+          {isEditing && initialData?._id && (
+            <div className="rounded-xl border border-red-200 bg-red-50/50 p-4 shadow-xs dark:border-red-950 dark:bg-red-950/20">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-red-700 dark:text-red-400">
+                Danger Zone
+              </h2>
+              <p className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-400">
+                Moving this product to Trash will hide it from the storefront and archive all its variants.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(true)}
+                className="mt-3 w-full rounded-lg border border-red-300 bg-white px-3 py-2 text-xs font-semibold text-red-600 shadow-2xs hover:bg-red-50 transition dark:border-red-900 dark:bg-neutral-800 dark:text-red-400 dark:hover:bg-red-950/40 cursor-pointer"
+              >
+                🗑️ Move to Trash
+              </button>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && initialData?._id && (
+        <ProductDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          products={[
+            {
+              _id: initialData._id,
+              name: name || initialData.name,
+              slug: slug || initialData.slug,
+              image: images[0] || initialData.images?.[0],
+            },
+          ]}
+          onConfirm={async (reason: string) => {
+            const res = await fetch(`/api/admin/products/${initialData._id}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ reason }),
+            });
+            if (!res.ok) {
+              const err = await res.json();
+              throw new Error(err.error || "Failed to move product to Trash");
+            }
+            router.push("/admin/products");
+          }}
+        />
+      )}
     </form>
   );
 }

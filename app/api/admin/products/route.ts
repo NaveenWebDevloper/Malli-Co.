@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { connectDB } from "../../../../lib/db.ts";
 import { Product, type IProduct } from "../../../../models/Product.ts";
 import { Variant } from "../../../../models/Variant.ts";
+import { Order } from "../../../../models/Order.ts";
 import { InventoryMovement } from "../../../../models/InventoryMovement.ts";
 import { Brand } from "../../../../models/Brand.ts";
 import { Category } from "../../../../models/Category.ts";
@@ -22,6 +23,11 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const { searchParams } = new URL(req.url);
+  const view = (searchParams.get("view")?.trim().toLowerCase() || "active") as
+    | "active"
+    | "draft"
+    | "trash"
+    | "all";
   const search = searchParams.get("search")?.trim() || "";
   const categoryId = searchParams.get("categoryId")?.trim();
   const brandId = searchParams.get("brandId")?.trim();
@@ -36,6 +42,20 @@ export async function GET(req: NextRequest) {
   const skip = (page - 1) * limit;
 
   const query: mongoose.FilterQuery<IProduct> = {};
+
+  // Tab view filtering
+  if (view === "trash") {
+    query.deletedAt = { $ne: null };
+  } else if (view === "draft") {
+    query.deletedAt = null;
+    query.status = "DRAFT";
+  } else if (view === "active") {
+    query.deletedAt = null;
+    query.status = "ACTIVE";
+  } else {
+    // "all" view
+    query.deletedAt = null;
+  }
 
   if (search) {
     query.$or = [
@@ -53,7 +73,7 @@ export async function GET(req: NextRequest) {
     query.brandId = new mongoose.Types.ObjectId(brandId);
   }
 
-  if (status && (status === "ACTIVE" || status === "DRAFT")) {
+  if (status && (status === "ACTIVE" || status === "DRAFT") && view === "all") {
     query.status = status;
   }
 
@@ -65,26 +85,29 @@ export async function GET(req: NextRequest) {
     query.type = type;
   }
 
-  const [products, totalCount, brands, categories] = await Promise.all([
-    Product.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .populate("brandId", "name slug")
-      .populate("categoryId", "name slug")
-      .lean(),
-    Product.countDocuments(query),
-    Brand.find({ isActive: true }).select("name slug").lean(),
-    Category.find({ isActive: true }).select("name slug gender").lean(),
-  ]);
+  const [products, totalCount, brands, categories, activeCount, draftCount, trashCount] =
+    await Promise.all([
+      Product.find(query)
+        .sort(view === "trash" ? { deletedAt: -1 } : { createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("brandId", "name slug")
+        .populate("categoryId", "name slug")
+        .lean(),
+      Product.countDocuments(query),
+      Brand.find({ isActive: true }).select("name slug").lean(),
+      Category.find({ isActive: true }).select("name slug gender").lean(),
+      Product.countDocuments({ deletedAt: null, status: "ACTIVE" }),
+      Product.countDocuments({ deletedAt: null, status: "DRAFT" }),
+      Product.countDocuments({ deletedAt: { $ne: null } }),
+    ]);
 
   // For each product, fetch aggregate variant info (stock and SKU count)
   const productIds = products.map((p) => p._id);
   const variants = await Variant.find({
     productId: { $in: productIds },
-    status: "ACTIVE",
   })
-    .select("productId stock sku pricePaise compareAtPricePaise isDefault")
+    .select("productId stock sku pricePaise compareAtPricePaise isDefault status deletedAt")
     .lean();
 
   const variantsByProduct = new Map<string, typeof variants>();
@@ -95,9 +118,27 @@ export async function GET(req: NextRequest) {
     variantsByProduct.set(pId, list);
   }
 
+  // If in trash view, check if products have historical orders
+  const productOrderCounts = new Map<string, number>();
+  if (view === "trash" && productIds.length > 0) {
+    const orders = await Order.find({
+      "items.productId": { $in: productIds },
+    }).select("items.productId");
+
+    for (const o of orders) {
+      for (const item of o.items) {
+        if (item.productId) {
+          const idStr = item.productId.toString();
+          productOrderCounts.set(idStr, (productOrderCounts.get(idStr) || 0) + 1);
+        }
+      }
+    }
+  }
+
   const enrichedProducts = products.map((p) => {
     const pVariants = variantsByProduct.get(p._id.toString()) || [];
-    const totalStock = pVariants.reduce((sum, v) => sum + (v.stock || 0), 0);
+    const activeVariants = pVariants.filter((v) => v.status === "ACTIVE" && !v.deletedAt);
+    const totalStock = activeVariants.reduce((sum, v) => sum + (v.stock || 0), 0);
     const skuCount = pVariants.length;
 
     let stockBadge: "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" = "IN_STOCK";
@@ -107,12 +148,26 @@ export async function GET(req: NextRequest) {
       stockBadge = "LOW_STOCK";
     }
 
+    const orderCount = productOrderCounts.get(p._id.toString()) || 0;
+    const canPermanentlyDelete = orderCount === 0;
+
+    // Calculate days remaining for auto-purge (30-day retention)
+    let daysUntilPurge: number | null = null;
+    if (p.deletedAt) {
+      const deletedTime = new Date(p.deletedAt).getTime();
+      const elapsedDays = (Date.now() - deletedTime) / (1000 * 60 * 60 * 24);
+      daysUntilPurge = Math.max(0, Math.ceil(30 - elapsedDays));
+    }
+
     return {
       ...p,
       totalStock,
       skuCount,
       stockBadge,
       sampleSku: pVariants[0]?.sku || "",
+      orderCount,
+      canPermanentlyDelete,
+      daysUntilPurge,
     };
   });
 
@@ -123,6 +178,11 @@ export async function GET(req: NextRequest) {
       page,
       limit,
       totalPages: Math.ceil(totalCount / limit),
+    },
+    counts: {
+      active: activeCount,
+      draft: draftCount,
+      trash: trashCount,
     },
     facets: {
       brands,

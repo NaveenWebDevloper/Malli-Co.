@@ -361,7 +361,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                 transition: { duration: prefersReducedMotion ? 0.01 : 0.25 },
               },
             }}
-            className={`max-w-3xl pointer-events-auto md:px-6 lg:px-8 ${
+            className={`max-w-5xl pointer-events-auto md:px-6 lg:px-8 ${
               activeBanner.textPosition === "center"
                 ? "mx-auto text-center items-center"
                 : activeBanner.textPosition === "right"
@@ -394,7 +394,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
               </motion.div>
             )}
 
-            {/* 2. Main Title (High-impact typography with wide spacing like Wrogn) */}
+            {/* 2. Main Title (High-impact typography with balanced luxury tracking) */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 18 },
@@ -404,14 +404,14 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                   transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
                 },
               }}
-              className="mb-3 sm:mb-4 overflow-hidden"
+              className="mb-3 sm:mb-4 overflow-visible"
             >
               <h1
-                className={`font-serif font-black uppercase leading-[1.04] whitespace-nowrap ${
+                className={`font-serif font-black uppercase leading-[1.08] break-normal [word-break:keep-all] ${
                   activeBanner.textTheme === "light"
                     ? "text-white drop-shadow-lg"
                     : "text-[#121212]"
-                } text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.14em] sm:tracking-[0.20em] md:tracking-[0.26em]`}
+                } text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.02em] sm:tracking-[0.04em] md:tracking-[0.06em]`}
               >
                 {activeBanner.title}
               </h1>

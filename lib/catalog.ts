@@ -6,6 +6,7 @@ import { Brand } from "../models/Brand.ts";
 import { Category } from "../models/Category.ts";
 import { resolvePrice, getActiveCampaigns, type ResolvedPriceResult } from "./pricing.ts";
 import { getColorHex } from "./collections.ts";
+import { activeStorefrontProductFilter, activeVariantFilter } from "./catalog-query.ts";
 
 export interface CatalogFilterOptions {
   gender?: "MEN" | "KIDS";
@@ -145,7 +146,7 @@ export async function getCatalogProducts(
     limit = 12,
   } = options;
 
-  const query: mongoose.FilterQuery<IProduct> = { status: "ACTIVE" };
+  const query: mongoose.FilterQuery<IProduct> = activeStorefrontProductFilter();
 
   if (gender) {
     query.gender = gender;
@@ -239,10 +240,11 @@ export async function getCatalogProducts(
   const productIds = products.map((p) => p._id);
 
   // 2. Fetch variants for these products
-  const variants = await Variant.find({
-    productId: { $in: productIds },
-    status: "ACTIVE",
-  }).lean();
+  const variants = await Variant.find(
+    activeVariantFilter({
+      productId: { $in: productIds },
+    })
+  ).lean();
 
   const variantsByProduct = new Map<string, typeof variants>();
   for (const v of variants) {
@@ -438,17 +440,18 @@ export async function getProductBySlug(slug: string): Promise<DetailedProduct | 
   void Brand;
   void Category;
 
-  const product = await Product.findOne({ slug, status: "ACTIVE" })
+  const product = await Product.findOne(activeStorefrontProductFilter({ slug }))
     .populate("brandId", "name slug description")
     .populate("categoryId", "name slug")
     .lean();
 
   if (!product) return null;
 
-  const variants = await Variant.find({
-    productId: product._id,
-    status: "ACTIVE",
-  }).lean();
+  const variants = await Variant.find(
+    activeVariantFilter({
+      productId: product._id,
+    })
+  ).lean();
 
   const activeCampaigns = await getActiveCampaigns();
 

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Product } from "@/models/Product";
-import { isR2Configured, getR2Config, uploadToR2 } from "@/lib/r2";
+import { isR2Configured, getR2Config } from "@/lib/r2";
+import { isImageKitConfigured } from "@/lib/imagekit";
 
 export const dynamic = "force-dynamic";
 
@@ -9,28 +10,11 @@ export async function GET() {
   const timestamp = new Date().toISOString();
   const r2Config = getR2Config();
 
-  let r2LiveTest: { success: boolean; url?: string; error?: string } | null = null;
-  if (isR2Configured()) {
-    try {
-      const ping = await uploadToR2({
-        buffer: Buffer.from("ping"),
-        key: `diagnostics/ping-${Date.now()}.txt`,
-        contentType: "text/plain",
-      });
-      r2LiveTest = ping;
-    } catch (testErr) {
-      r2LiveTest = {
-        success: false,
-        error: testErr instanceof Error ? testErr.message : "R2 test exception",
-      };
-    }
-  }
-
   const storageCheck = {
+    imageKitConfigured: isImageKitConfigured(),
     r2Configured: isR2Configured(),
     r2Bucket: r2Config?.bucketName || null,
     r2PublicUrl: r2Config?.publicUrl || null,
-    r2LiveTest,
     cloudinaryConfigured: Boolean(
       process.env.CLOUDINARY_CLOUD_NAME ||
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME

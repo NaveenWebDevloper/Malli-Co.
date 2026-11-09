@@ -2,9 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
-  serverExternalPackages: ["mongoose"],
+  serverExternalPackages: ["mongoose", "sharp"],
   images: {
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+      },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",

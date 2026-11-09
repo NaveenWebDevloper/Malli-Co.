@@ -14,6 +14,7 @@
     "seed": "node --experimental-strip-types scripts/seed.ts",
     "seed:admin": "node --experimental-strip-types scripts/seed-admin.ts",
     "seed:banners": "node --experimental-strip-types scripts/seed-banners.ts",
+    "optimize:images": "node --experimental-strip-types scripts/optimize-mongodb-images.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

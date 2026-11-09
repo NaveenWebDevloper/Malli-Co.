@@ -12,6 +12,7 @@ export interface IVariant extends Document {
   options: Map<string, string>; // e.g. { Size: "M", Color: "Red" }
   isDefault: boolean;
   status: "ACTIVE" | "ARCHIVED";
+  deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -77,11 +78,17 @@ const VariantSchema = new Schema<IVariant>(
       default: "ACTIVE",
       index: true,
     },
+    deletedAt: {
+      type: Date,
+      default: null,
+      index: true,
+    },
   },
   { timestamps: true },
 );
 
 // Explicit schema indexes (Rule 4)
+VariantSchema.index({ deletedAt: 1, status: 1 });
 VariantSchema.index({ productId: 1, status: 1 });
 VariantSchema.index({ productId: 1, isDefault: 1 });
 VariantSchema.index({ createdAt: -1 });

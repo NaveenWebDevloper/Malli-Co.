@@ -6,6 +6,8 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import { Media } from "@/models/Media";
 import { isR2Configured, uploadToR2 } from "@/lib/r2";
+import { isImageKitConfigured, uploadToImageKit } from "@/lib/imagekit";
+import { compressImage } from "@/lib/image-compress";
 
 export const dynamic = "force-dynamic";
 
@@ -38,41 +40,76 @@ export async function POST(req: NextRequest) {
 
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const rawBuffer = Buffer.from(arrayBuffer);
 
-    const ext =
-      path.extname(file.name) ||
-      (file.type === "image/png"
-        ? ".png"
-        : file.type === "image/webp"
-          ? ".webp"
-          : ".jpg");
-
+    const ext = path.extname(file.name) || ".jpg";
     const rawBaseName = path.basename(file.name, ext);
     const safeBaseName = rawBaseName.replace(/[^a-zA-Z0-9_-]/g, "_") || "img";
 
-    // 1. Cloudflare R2 Storage (Top Priority)
+    // 1. High-Performance Image Compression (WebP @ 82% quality, max width 1600px)
+    const compressed = await compressImage(rawBuffer, {
+      maxWidth: 1600,
+      quality: 82,
+      format: "webp",
+    });
+
+    const activeBuffer = compressed.buffer;
+    const finalExt = ".webp";
+    const finalContentType = compressed.contentType || "image/webp";
+
+    // 2. ImageKit Storage (Top Priority for CDN delivery & media library)
+    if (isImageKitConfigured()) {
+      const ikResult = await uploadToImageKit({
+        buffer: activeBuffer,
+        fileName: `${Date.now()}-${safeBaseName}${finalExt}`,
+        folder: "/products",
+        tags: ["products"],
+      });
+
+      if (ikResult.success) {
+        return NextResponse.json({
+          url: ikResult.url,
+          publicId: ikResult.fileId || ikResult.name,
+          format: "webp",
+          provider: "imagekit",
+          storage: "imagekit",
+          width: ikResult.width || compressed.width,
+          height: ikResult.height || compressed.height,
+          originalSize: rawBuffer.length,
+          size: ikResult.size || activeBuffer.length,
+          compressionRatio: compressed.compressionRatio,
+        });
+      }
+
+      console.warn("[Upload] ImageKit upload failed, falling back:", ikResult.error);
+    }
+
+    // 3. Cloudflare R2 Storage (Secondary Cloud Storage)
     if (isR2Configured()) {
-      const r2Key = `products/${Date.now()}-${safeBaseName}${ext}`;
+      const r2Key = `products/${Date.now()}-${safeBaseName}${finalExt}`;
       const r2Result = await uploadToR2({
-        buffer,
+        buffer: activeBuffer,
         key: r2Key,
-        contentType: file.type || "image/jpeg",
+        contentType: finalContentType,
       });
 
       if (r2Result.success) {
         return NextResponse.json({
           url: r2Result.url,
           publicId: r2Result.key,
-          format: ext.replace(".", ""),
+          format: "webp",
           provider: "cloudflare-r2",
+          storage: "r2",
+          originalSize: rawBuffer.length,
+          size: activeBuffer.length,
+          compressionRatio: compressed.compressionRatio,
         });
       }
 
       console.warn("[Upload] Cloudflare R2 upload failed, falling back:", r2Result.error);
     }
 
-    // 2. Cloudinary Upload (Secondary Option if configured)
+    // 4. Cloudinary Upload (Tertiary Cloud Storage if configured)
     const cloudName =
       process.env.CLOUDINARY_CLOUD_NAME ||
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
@@ -82,7 +119,7 @@ export async function POST(req: NextRequest) {
 
     if (cloudName && ((apiSecret && apiKey) || uploadPreset)) {
       try {
-        const base64Data = `data:${file.type};base64,${buffer.toString("base64")}`;
+        const base64Data = `data:${finalContentType};base64,${activeBuffer.toString("base64")}`;
         const timestamp = Math.round(Date.now() / 1000);
         const uploadFormData = new FormData();
         uploadFormData.append("file", base64Data);
@@ -112,8 +149,12 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({
             url: result.secure_url || result.url,
             publicId: result.public_id,
-            format: result.format,
+            format: result.format || "webp",
             provider: "cloudinary",
+            storage: "cloudinary",
+            originalSize: rawBuffer.length,
+            size: activeBuffer.length,
+            compressionRatio: compressed.compressionRatio,
           });
         }
 
@@ -124,47 +165,57 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Helper: Store image directly in MongoDB Media collection
+    // Helper: Store compressed image in MongoDB Media collection
     const saveToMongoDB = async () => {
       await connectDB();
       const mediaDoc = await Media.create({
-        filename: file.name || `product_${Date.now()}${ext}`,
-        contentType: file.type || "image/jpeg",
-        size: buffer.length,
-        data: buffer,
+        filename: `${safeBaseName}${finalExt}`,
+        contentType: finalContentType,
+        size: activeBuffer.length,
+        data: activeBuffer,
       });
 
+      const savingsPct = Math.round(compressed.compressionRatio * 100);
+
       return NextResponse.json({
-        url: `/api/media/${mediaDoc._id}${ext}`,
+        url: `/api/media/${mediaDoc._id}${finalExt}`,
         publicId: mediaDoc._id.toString(),
-        format: ext.replace(".", ""),
+        format: "webp",
         provider: "mongodb-media",
-        note: "Stored in MongoDB Media storage",
+        storage: "mongodb",
+        originalSize: rawBuffer.length,
+        size: activeBuffer.length,
+        compressionRatio: compressed.compressionRatio,
+        note: `Stored in MongoDB as compressed WebP (${savingsPct}% smaller, ${Math.round(activeBuffer.length / 1024)} KB)`,
       });
     };
 
-    // 3. Serverless environment (Vercel) has a read-only filesystem: store directly in MongoDB
+    // 5. Serverless environment (Vercel) has a read-only filesystem: store compressed buffer directly in MongoDB
     if (process.env.VERCEL) {
       return await saveToMongoDB();
     }
 
-    // 4. Local Storage (for local dev with writable disk)
+    // 6. Local Storage (for local dev with writable disk)
     try {
       const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
       await fs.mkdir(uploadDir, { recursive: true });
 
-      const uniqueFileName = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${safeBaseName}${ext}`;
+      const uniqueFileName = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${safeBaseName}${finalExt}`;
       const filePath = path.join(uploadDir, uniqueFileName);
 
-      await fs.writeFile(filePath, buffer);
+      await fs.writeFile(filePath, activeBuffer);
 
       const localUrl = `/uploads/products/${uniqueFileName}`;
 
       return NextResponse.json({
         url: localUrl,
         publicId: `local_${Date.now()}`,
-        format: ext.replace(".", ""),
+        format: "webp",
         provider: "local-fs",
+        storage: "local",
+        originalSize: rawBuffer.length,
+        size: activeBuffer.length,
+        compressionRatio: compressed.compressionRatio,
         note: "Saved to local storage (/uploads/products/)",
       });
     } catch (fsErr) {

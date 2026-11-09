@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ProductCard } from "./ProductCard";
 import type { CatalogResult } from "@/lib/catalog";
+import { getColorHex, isLightColor } from "@/lib/colors";
 
 interface ProductCatalogViewProps {
   initialResult: CatalogResult;
@@ -202,6 +203,8 @@ export function ProductCatalogView({
             <div className="flex flex-col space-y-2">
               {initialResult.filterFacets.colors.map((colorName) => {
                 const isSelected = selectedColors.includes(colorName);
+                const hex = getColorHex(colorName);
+                const isLight = isLightColor(hex);
                 return (
                   <button
                     key={colorName}
@@ -211,17 +214,12 @@ export function ProductCatalogView({
                   >
                     <span className="flex items-center gap-2">
                       <span
-                        className={`w-3.5 h-3.5 rounded-full border border-neutral-300 ${
-                          colorName === "Navy Blue"
-                            ? "bg-[#1B2A4A]"
-                            : colorName === "Olive Green"
-                            ? "bg-[#556B2F]"
-                            : colorName === "Burgundy"
-                            ? "bg-[#800020]"
-                            : colorName === "White"
-                            ? "bg-white"
-                            : "bg-neutral-800"
+                        className={`w-3.5 h-3.5 rounded-full flex-shrink-0 transition-transform group-hover:scale-110 ${
+                          isLight
+                            ? "border border-neutral-400/80 shadow-2xs"
+                            : "border border-black/15 shadow-2xs"
                         }`}
+                        style={{ backgroundColor: hex }}
                       />
                       <span className={isSelected ? "font-bold text-black" : ""}>
                         {colorName}
@@ -346,6 +344,8 @@ export function ProductCatalogView({
                 <div className="flex flex-col space-y-2 text-xs">
                   {initialResult.filterFacets.colors.map((colorName) => {
                     const isSelected = selectedColors.includes(colorName);
+                    const hex = getColorHex(colorName);
+                    const isLight = isLightColor(hex);
                     return (
                       <button
                         key={colorName}
@@ -353,8 +353,18 @@ export function ProductCatalogView({
                         onClick={() => updateFilters("color", colorName, true)}
                         className="flex items-center justify-between text-left"
                       >
-                        <span className={isSelected ? "font-bold text-black" : "text-neutral-700"}>
-                          {colorName}
+                        <span className="flex items-center gap-2">
+                          <span
+                            className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                              isLight
+                                ? "border border-neutral-400/80 shadow-2xs"
+                                : "border border-black/15 shadow-2xs"
+                            }`}
+                            style={{ backgroundColor: hex }}
+                          />
+                          <span className={isSelected ? "font-bold text-black" : "text-neutral-700"}>
+                            {colorName}
+                          </span>
                         </span>
                         {isSelected && <span>✓</span>}
                       </button>

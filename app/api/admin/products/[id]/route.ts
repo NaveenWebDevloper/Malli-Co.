@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { connectDB } from "../../../../../lib/db.ts";
 import { Product } from "../../../../../models/Product.ts";
 import { Variant } from "../../../../../models/Variant.ts";
 import { Order } from "../../../../../models/Order.ts";
+import { Collection } from "../../../../../models/Collection.ts";
+import { Campaign } from "../../../../../models/Campaign.ts";
+import { AuditLog } from "../../../../../models/AuditLog.ts";
 import { InventoryMovement } from "../../../../../models/InventoryMovement.ts";
 import { ProductFormSchema } from "../../../../../lib/validations/product.ts";
 import { rupeesToPaise, paiseToRupees } from "../../../../../lib/currency.ts";
@@ -346,7 +350,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
@@ -373,36 +377,144 @@ export async function DELETE(
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
 
-  // Foreign key guard: check if any order references this product
-  const existingOrder = await Order.findOne({ "items.productId": productId });
-  if (existingOrder) {
+  if (product.deletedAt) {
     return NextResponse.json(
-      {
-        error: `Cannot delete product '${product.name}' because it has associated orders (e.g. Order #${existingOrder.orderNumber}). Please change status to DRAFT instead.`,
-      },
+      { error: "Product is already in trash" },
       { status: 400 },
     );
   }
 
+  let reason = "";
+  try {
+    const body = await req.json();
+    if (typeof body?.reason === "string") {
+      reason = body.reason.trim().slice(0, 200);
+    }
+  } catch {
+    // Optional body
+  }
+
+  const now = new Date();
+  const adminId = session.user.id && mongoose.Types.ObjectId.isValid(session.user.id)
+    ? new mongoose.Types.ObjectId(session.user.id)
+    : undefined;
+
+  let cleanedCollections = 0;
+  let cleanedCampaigns = 0;
+
   const dbSession = await mongoose.startSession();
   try {
     await dbSession.withTransaction(async () => {
-      // Delete variants
-      await Variant.deleteMany({ productId }, { session: dbSession });
-      // Delete inventory movements
-      await InventoryMovement.deleteMany({ productId }, { session: dbSession });
-      // Delete product
-      await Product.deleteOne({ _id: productId }, { session: dbSession });
+      // 1. Soft-delete product: set deletedAt, status DRAFT
+      await Product.updateOne(
+        { _id: productId },
+        {
+          $set: {
+            deletedAt: now,
+            status: "DRAFT",
+            deletedBy: adminId,
+            deleteReason: reason || null,
+          },
+        },
+        { session: dbSession },
+      );
+
+      // 2. Soft-delete and archive all associated variants
+      await Variant.updateMany(
+        { productId },
+        {
+          $set: {
+            deletedAt: now,
+            status: "ARCHIVED",
+          },
+        },
+        { session: dbSession },
+      );
+
+      // 3. Remove product from manual collections
+      const colRes = await Collection.updateMany(
+        { productIds: productId },
+        { $pull: { productIds: productId } },
+        { session: dbSession },
+      );
+      cleanedCollections = colRes.modifiedCount || 0;
+
+      // 4. Remove product from campaign scopes and exclusions
+      const campRes = await Campaign.updateMany(
+        {
+          $or: [
+            { "scope.ids": productId },
+            { "scope.excludeProductIds": productId },
+          ],
+        },
+        {
+          $pull: {
+            "scope.ids": productId,
+            "scope.excludeProductIds": productId,
+          },
+        },
+        { session: dbSession },
+      );
+      cleanedCampaigns = campRes.modifiedCount || 0;
+
+      // 5. Create Audit Log
+      await AuditLog.create(
+        [
+          {
+            action: "PRODUCT_SOFT_DELETE",
+            actor: {
+              id: adminId || new mongoose.Types.ObjectId(),
+              name: session.user.name || "Admin",
+              email: session.user.email || "admin@malliandco.com",
+            },
+            productId,
+            productName: product.name,
+            reason: reason || undefined,
+            cleanedReferences: {
+              collections: cleanedCollections,
+              campaigns: cleanedCampaigns,
+            },
+          },
+        ],
+        { session: dbSession },
+      );
     });
+
+    // Check open (undelivered) orders containing this product to warn the admin
+    const openOrdersCount = await Order.countDocuments({
+      "items.productId": productId,
+      status: { $in: ["PENDING", "PROCESSING", "CONFIRMED", "SHIPPED"] },
+    });
+
+    // Revalidate Next.js cache tags
+    try {
+      revalidateTag("products");
+      revalidateTag("collections");
+      revalidateTag("categories");
+      revalidatePath("/");
+      revalidatePath(`/product/${product.slug}`);
+      revalidatePath("/sitemap.xml");
+    } catch (revalErr) {
+      console.warn("Cache revalidation non-fatal error:", revalErr);
+    }
 
     return NextResponse.json({
       success: true,
-      message: `Product '${product.name}' and all associated variants were deleted successfully.`,
+      message: `Product '${product.name}' moved to Trash.`,
+      openOrdersWarning:
+        openOrdersCount > 0
+          ? `Warning: ${openOrdersCount} open order(s) currently contain this product.`
+          : null,
+      openOrdersCount,
+      cleanedReferences: {
+        collections: cleanedCollections,
+        campaigns: cleanedCampaigns,
+      },
     });
   } catch (err) {
-    console.error("Failed to delete product:", err);
+    console.error("Failed to soft-delete product:", err);
     return NextResponse.json(
-      { error: "Failed to delete product from database" },
+      { error: "Failed to move product to trash" },
       { status: 500 },
     );
   } finally {

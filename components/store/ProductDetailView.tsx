@@ -6,6 +6,7 @@ import Link from "next/link";
 import { PriceTag } from "@/components/product/PriceTag";
 import { useCart } from "./CartContext";
 import type { DetailedProduct } from "@/lib/catalog";
+import { getColorHex, isLightColor } from "@/lib/colors";
 
 export function ProductDetailView({ product }: { product: DetailedProduct }) {
   // Extract all distinct options from variants
@@ -329,6 +330,8 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
               <div className="flex flex-wrap gap-2.5">
                 {allColors.map((colorName) => {
                   const isSelected = selectedColor === colorName;
+                  const hex = getColorHex(colorName);
+                  const isLight = isLightColor(hex);
                   return (
                     <button
                       key={colorName}
@@ -341,17 +344,12 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
                       }`}
                     >
                       <span
-                        className={`w-3.5 h-3.5 rounded-full border border-neutral-300 ${
-                          colorName === "Navy Blue"
-                            ? "bg-[#1B2A4A]"
-                            : colorName === "Olive Green"
-                            ? "bg-[#556B2F]"
-                            : colorName === "Burgundy"
-                            ? "bg-[#800020]"
-                            : colorName === "White"
-                            ? "bg-white"
-                            : "bg-neutral-800"
+                        className={`w-3.5 h-3.5 rounded-full flex-shrink-0 transition-transform group-hover:scale-110 ${
+                          isLight
+                            ? "border border-neutral-400/80 shadow-2xs"
+                            : "border border-black/10 shadow-2xs"
                         }`}
+                        style={{ backgroundColor: hex }}
                       />
                       <span>{colorName}</span>
                     </button>
