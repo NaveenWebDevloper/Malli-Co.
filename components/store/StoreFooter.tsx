@@ -60,15 +60,19 @@ export function StoreFooter() {
             </h4>
             <ul className="space-y-2 text-neutral-400">
               <li>
-                <Link href="/admin/orders" className="hover:text-white transition-colors">
-                  Track Orders
+                <Link href="/account" className="hover:text-white transition-colors">
+                  My Orders &amp; Account
                 </Link>
               </li>
               <li>
-                <span className="cursor-default">Complimentary Pan-India Delivery</span>
+                <Link href="/privacy" className="hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <span className="cursor-default">14-Day Complimentary Returns</span>
+                <Link href="/terms" className="hover:text-white transition-colors">
+                  Terms of Service
+                </Link>
               </li>
               <li>
                 <span className="text-neutral-500">concierge@malliandco.com</span>
@@ -100,9 +104,17 @@ export function StoreFooter() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500">
+        <div className="mt-12 pt-8 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500 gap-4">
           <p>© {new Date().getFullYear()} Malli & Co. Luxury Apparel Pvt. Ltd. All rights reserved.</p>
-          <p className="mt-2 sm:mt-0 font-light">Handcrafted in India • Zero compromise on quality</p>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms of Service
+            </Link>
+          </div>
+          <p className="font-light">Handcrafted in India • Zero compromise on quality</p>
         </div>
       </div>
     </footer>
