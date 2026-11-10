@@ -117,12 +117,14 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
   // Initial fetch if collection not provided via props
   useEffect(() => {
     if (initialCollection) {
+      setCollection(initialCollection);
       setProducts(initialCollection.products || []);
+      setLoading(false);
       return;
     }
 
     let isMounted = true;
-    fetch("/api/collections/seasons-top-picks?filter=all")
+    fetch("/api/collections/featured?filter=all")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (isMounted) {
@@ -148,7 +150,11 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
     setIsFiltering(true);
 
     try {
-      const res = await fetch(`/api/collections/seasons-top-picks?filter=${filterId}`);
+      const targetSlug = collection?.slug;
+      const endpoint = targetSlug
+        ? `/api/collections/${targetSlug}?filter=${filterId}`
+        : `/api/collections/featured?filter=${filterId}`;
+      const res = await fetch(endpoint);
       if (res.ok) {
         const data = await res.json();
         if (data?.success && data.collection?.products) {
@@ -165,7 +171,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
         scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
       }
     }
-  }, []);
+  }, [collection?.slug]);
 
   // Update arrow buttons visibility and pagination indicator
   const updateScrollState = useCallback(() => {
@@ -287,12 +293,29 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
             <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
             <span>Curated Atelier Selection</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">
-            Season&apos;s <span className="italic font-normal">Top Picks</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-neutral-500 font-light">
-            Our most sought-after styles, handpicked for the season.
-          </p>
+          {collection?.title ? (
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">
+              {collection.title}
+            </h2>
+          ) : (
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">
+              Season&apos;s <span className="italic font-normal">Top Picks</span>
+            </h2>
+          )}
+          <div className="flex items-center gap-3 flex-wrap">
+            <p className="text-xs sm:text-sm text-neutral-500 font-light">
+              {collection?.subtitle || "Our most sought-after styles, handpicked for the season."}
+            </p>
+            {collection?.slug && (
+              <Link
+                href={`/collections/${collection.slug}`}
+                className="text-xs font-semibold text-[#8C7A58] hover:text-[#706144] hover:underline inline-flex items-center gap-1"
+              >
+                <span>View Full Collection</span>
+                <span>→</span>
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Right: Pill Filter Buttons */}

@@ -23,11 +23,20 @@ export async function GET(
       );
     }
 
+    const cleanSlug = decodeURIComponent(slug).toLowerCase().trim().replace(/^\/+/, "");
+
     await connectDB();
-    const collection = await Collection.findOne({
-      slug: slug.toLowerCase().trim(),
+    let collection = await Collection.findOne({
+      slug: cleanSlug,
       active: true,
     }).lean();
+
+    // If 'seasons-top-picks' requested but not seeded, fall back to newest active collection
+    if (!collection && cleanSlug === "seasons-top-picks") {
+      collection = await Collection.findOne({ active: true })
+        .sort({ updatedAt: -1 })
+        .lean();
+    }
 
     if (!collection) {
       return NextResponse.json(

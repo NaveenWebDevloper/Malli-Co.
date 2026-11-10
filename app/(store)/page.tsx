@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getCatalogProducts } from "@/lib/catalog";
 import { getActiveHeroBanners, getActiveSeasonalBanner } from "@/lib/banners";
+import { getFeaturedCollection } from "@/lib/collections";
 import { HeroBannerCarousel } from "@/components/home/HeroBannerCarousel";
 import { StoreHeroWrapper } from "@/components/store/StoreHeroWrapper";
 import { SeasonPicks } from "@/components/home/SeasonPicks";
@@ -31,9 +32,10 @@ export const metadata: Metadata = {
 };
 
 export default async function StoreHomePage() {
-  const [banners, seasonalBanner, { products }] = await Promise.all([
+  const [banners, seasonalBanner, featuredCollection, { products }] = await Promise.all([
     getActiveHeroBanners(),
     getActiveSeasonalBanner(),
+    getFeaturedCollection(),
     getCatalogProducts({ limit: 10 }),
   ]);
 
@@ -77,7 +79,7 @@ export default async function StoreHomePage() {
       </div>
 
       {/* 4. Season's Top Picks Curated Carousel */}
-      <SeasonPicks />
+      <SeasonPicks initialCollection={featuredCollection} />
 
       {/* 5. Trending Categories Showcase (Flows seamlessly from Season's Top Picks and blends back into page background) */}
       <TrendingCategories />

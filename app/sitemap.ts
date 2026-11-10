@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { connectDB } from "@/lib/db";
-import { Product, Category } from "@/models";
+import { Product, Category, Collection } from "@/models";
 import { activeStorefrontProductFilter } from "@/lib/catalog-query";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -12,11 +12,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     await connectDB();
 
-    const [products, categories] = await Promise.all([
+    const [products, categories, collections] = await Promise.all([
       Product.find(activeStorefrontProductFilter())
         .select("slug updatedAt")
         .lean(),
       Category.find({ isActive: true })
+        .select("slug updatedAt")
+        .lean(),
+      Collection.find({ active: true })
         .select("slug updatedAt")
         .lean(),
     ]);
@@ -35,12 +38,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
+    const collectionUrls: MetadataRoute.Sitemap = collections.map((col) => ({
+      url: `${baseUrl}/collections/${col.slug}`,
+      lastModified: col.updatedAt ? new Date(col.updatedAt) : new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
     const staticRoutes: MetadataRoute.Sitemap = [
       {
         url: baseUrl,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 1.0,
+      },
+      {
+        url: `${baseUrl}/collections`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.9,
       },
       {
         url: `${baseUrl}/men`,
@@ -68,7 +84,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     ];
 
-    return [...staticRoutes, ...categoryUrls, ...productUrls];
+    return [...staticRoutes, ...collectionUrls, ...categoryUrls, ...productUrls];
   } catch (error) {
     console.error("Failed to generate dynamic sitemap:", error);
     return [

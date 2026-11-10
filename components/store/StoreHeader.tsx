@@ -29,6 +29,7 @@ const NAV_LINKS: NavItem[] = [
   { id: "kids", label: "Kids", href: "/kids" },
   { id: "shirts", label: "Shirts", href: "/category/mens-shirts" },
   { id: "tshirts", label: "T-Shirts", href: "/category/mens-t-shirts" },
+  { id: "collections", label: "Collections", href: "/collections" },
 ];
 
 export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {

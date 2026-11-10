@@ -135,6 +135,60 @@ interface CollectionLike {
 }
 
 /**
+ * Fetches all active collections from MongoDB.
+ */
+export async function getActiveCollections(): Promise<CollectionLike[]> {
+  try {
+    await connectDB();
+    return await Collection.find({ active: true }).sort({ updatedAt: -1 }).lean();
+  } catch (error) {
+    console.error("Error fetching active collections:", error);
+    return [];
+  }
+}
+
+/**
+ * Resolves a primary or featured collection for the storefront.
+ * Tries the preferred slug first, falls back to 'seasons-top-picks', then to any active collection.
+ */
+export async function getFeaturedCollection(
+  preferredSlug?: string,
+): Promise<ResolvedCollectionResult | null> {
+  try {
+    await connectDB();
+    let collection = null;
+
+    if (preferredSlug) {
+      collection = await Collection.findOne({
+        slug: preferredSlug.toLowerCase().trim(),
+        active: true,
+      }).lean();
+    }
+
+    if (!collection) {
+      collection = await Collection.findOne({
+        slug: "seasons-top-picks",
+        active: true,
+      }).lean();
+    }
+
+    if (!collection) {
+      collection = await Collection.findOne({
+        active: true,
+      })
+        .sort({ updatedAt: -1 })
+        .lean();
+    }
+
+    if (!collection) return null;
+    return resolveCollectionProducts(collection);
+  } catch (error) {
+    console.error("Error resolving featured collection:", error);
+    return null;
+  }
+}
+
+/**
  * Resolves a collection and its products with prices calculated via lib/pricing.ts.
  * Only ACTIVE products with stock (>0) are included; DRAFT and zero-stock items are omitted.
  */

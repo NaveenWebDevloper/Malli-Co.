@@ -617,7 +617,15 @@ export function CollectionsManager() {
                 {/* Slug & Metadata */}
                 <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-1">
                   <div className="flex items-center justify-between text-xs text-neutral-500">
-                    <span className="font-mono text-[11px] text-neutral-400">/{col.slug}</span>
+                    <a
+                      href={`/collections/${col.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-[11px] text-[#8C7A58] hover:underline truncate max-w-[170px]"
+                      title={`Open /collections/${col.slug}`}
+                    >
+                      /collections/{col.slug}
+                    </a>
                     <span className="text-[11px]">Max: {col.maxItems} items</span>
                   </div>
                   {col.mode === "AUTO" && (
@@ -633,14 +641,26 @@ export function CollectionsManager() {
 
               {/* Action buttons */}
               <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-                <a
-                  href={`/api/collections/${col.slug}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 underline font-mono"
-                >
-                  View JSON ↗
-                </a>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`/collections/${col.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#8C7A58] hover:bg-[#776646] rounded-lg transition shadow-2xs"
+                  >
+                    <span>View Storefront</span>
+                    <span>↗</span>
+                  </a>
+                  <a
+                    href={`/api/collections/${col.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[11px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 font-mono underline"
+                    title="View raw API payload"
+                  >
+                    JSON
+                  </a>
+                </div>
 
                 <div className="flex items-center gap-2">
                   <button
@@ -793,6 +813,9 @@ export function CollectionsManager() {
                             : "bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-[#8C7A58]"
                         }`}
                       />
+                      <p className="mt-1.5 text-[11px] text-neutral-500 font-mono">
+                        Live Storefront URL: <span className="text-[#8C7A58] font-bold">/collections/{slug || "collection-slug"}</span>
+                      </p>
                     </div>
                   </div>
 
