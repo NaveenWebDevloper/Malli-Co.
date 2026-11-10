@@ -177,13 +177,15 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
   const updateScrollState = useCallback(() => {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+    const canLeft = scrollLeft > 10;
+    const canRight = scrollLeft + clientWidth < scrollWidth - 10;
+    setCanScrollLeft((prev) => (prev !== canLeft ? canLeft : prev));
+    setCanScrollRight((prev) => (prev !== canRight ? canRight : prev));
 
     const maxScroll = Math.max(1, scrollWidth - clientWidth);
     const scrollPercent = Math.min(1, Math.max(0, scrollLeft / maxScroll));
     const page = Math.min(2, Math.round(scrollPercent * 2));
-    setActivePageIndex(page);
+    setActivePageIndex((prev) => (prev !== page ? page : prev));
   }, []);
 
   useEffect(() => {
@@ -208,7 +210,8 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (!scrollRef.current || e.button !== 0) return;
+    // Only handle mouse drag for desktop; allow native touch gesture pipeline on mobile
+    if (e.pointerType === "touch" || !scrollRef.current || e.button !== 0) return;
     isDown.current = true;
     startX.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeftStart.current = scrollRef.current.scrollLeft;
@@ -218,7 +221,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDown.current || !scrollRef.current) return;
+    if (e.pointerType === "touch" || !isDown.current || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX.current) * 1.2;
@@ -227,7 +230,8 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
     lastX.current = e.pageX;
   };
 
-  const handlePointerUpOrLeave = () => {
+  const handlePointerUpOrLeave = (e: React.PointerEvent) => {
+    if (e.pointerType === "touch") return;
     if (!isDown.current || !scrollRef.current) return;
     isDown.current = false;
     if (!prefersReducedMotion && Math.abs(velocity.current) > 3) {
@@ -388,10 +392,14 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUpOrLeave}
           onPointerCancel={handlePointerUpOrLeave}
-          className={`flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-2 scrollbar-none select-none transition-opacity duration-300 ${
+          className={`flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory py-2 scrollbar-none select-none transition-opacity duration-300 touch-pan-x overscroll-x-contain ${
             isFiltering ? "opacity-60" : "opacity-100"
           }`}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
+          }}
           aria-live="polite"
         >
           <AnimatePresence mode="popLayout">
@@ -423,13 +431,12 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
               return (
                 <motion.div
                   key={item._id}
-                  layout
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{
-                    duration: prefersReducedMotion ? 0.01 : 0.4,
-                    delay: prefersReducedMotion ? 0 : Math.min(idx * 0.06, 0.24),
+                    duration: prefersReducedMotion ? 0.01 : 0.35,
+                    delay: prefersReducedMotion ? 0 : Math.min(idx * 0.04, 0.16),
                     ease: "easeOut",
                   }}
                   className="w-[calc(80vw-16px)] sm:w-[calc(48vw-16px)] md:w-[calc(32vw-18px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start"
@@ -444,7 +451,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
                           fill
                           sizes="(max-width: 640px) 80vw, (max-width: 1024px) 33vw, 25vw"
                           className={`object-cover object-center transition-all duration-700 ease-out ${
-                            hasHover ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
+                            hasHover ? "sm:group-hover:opacity-0 sm:group-hover:scale-105" : "sm:group-hover:scale-105"
                           }`}
                         />
                         {hasHover && (
@@ -453,7 +460,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
                             alt={`${item.name} alternate view`}
                             fill
                             sizes="(max-width: 640px) 80vw, (max-width: 1024px) 33vw, 25vw"
-                            className="object-cover object-center absolute inset-0 opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105"
+                            className="object-cover object-center absolute inset-0 opacity-0 transition-all duration-700 ease-out sm:group-hover:opacity-100 sm:group-hover:scale-105"
                           />
                         )}
                       </Link>
