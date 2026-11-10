@@ -696,3 +696,4 @@ export function detectInitialCategory(product: {
     return { gender: "MEN", categoryId: "men-shirts" };
   }
 }
+

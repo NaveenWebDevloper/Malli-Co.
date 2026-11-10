@@ -529,6 +529,13 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
           <div className="pointer-events-auto">
             <a
               href="#lookbook"
+              onClick={(e) => {
+                e.preventDefault();
+                const target = document.getElementById("lookbook");
+                if (target) {
+                  target.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               className="group flex items-center gap-2 text-[10px] font-sans font-semibold uppercase tracking-[0.20em] text-white/70 hover:text-white transition-colors"
             >
               <span>Explore Lookbook</span>

@@ -42,7 +42,7 @@ export function Hero() {
   return (
     <section
       id="lookbook"
-      className="relative w-full bg-[#FBF9F5] overflow-hidden border-b border-[#EAE3D4]/80 scroll-mt-20"
+      className="relative w-full bg-[#FBF9F5] overflow-hidden border-b border-[#EAE3D4]/80 scroll-mt-24 sm:scroll-mt-28"
     >
       {/* Decorative Handwritten Callouts with Looping SVG Arrows */}
       <HeroCallouts />
@@ -79,12 +79,12 @@ export function Hero() {
           />
         </h1>
         <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-lg mx-auto tracking-wide">
-          Interactive 3D Lookbook. Drag or scroll to explore our sartorial masterworks for gentlemen and young nobility.
+          Interactive 3D Lookbook. Swipe horizontally or tap arrows to explore our sartorial masterworks.
         </p>
       </div>
 
       {/* 3D FlexCarousel Container */}
-      <div className="relative w-full h-[520px] sm:h-[580px] md:h-[640px]">
+      <div className="relative w-full h-[460px] sm:h-[540px] md:h-[640px]">
         {hasWebGL2 === null ? (
           <HeroPosterFallback />
         ) : (
@@ -98,6 +98,7 @@ export function Hero() {
             squeeze={0.2}
             focusOnClick
             captions
+            captureWheel={false}
             autoplay
             interval={4.5}
           />

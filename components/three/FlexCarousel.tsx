@@ -349,6 +349,7 @@ interface CarouselSettings {
 interface EngineRef {
   wake: () => void;
   setItems: (next: CarouselItem[]) => void;
+  step?: (delta: number) => void;
 }
 
 interface CarouselMetrics {
@@ -482,6 +483,7 @@ export function FlexCarousel({
     canvas.style.display = "block";
     canvas.style.width = "100%";
     canvas.style.height = "100%";
+    canvas.style.touchAction = "pan-y";
     canvas.setAttribute("aria-hidden", "true");
     container.prepend(canvas);
 
@@ -584,6 +586,7 @@ export function FlexCarousel({
       startPos: 0,
       dragging: false,
       touch: false,
+      intent: "none" as "none" | "vertical" | "horizontal",
       samples: [] as Array<{ x: number; t: number }>,
     };
     const introState = { kind: "none", t: 0, running: false, done: false, readyAt: 0 };
@@ -1169,6 +1172,7 @@ export function FlexCarousel({
       pointer.down = true;
       pointer.id = e.pointerId;
       pointer.touch = e.pointerType === "touch";
+      pointer.intent = "none";
       pointer.startX = x;
       pointer.startY = y;
       pointer.x = x;
@@ -1190,38 +1194,80 @@ export function FlexCarousel({
       pointer.x = x;
       pointer.y = y;
       pointer.over = true;
-      if (pointer.down && e.pointerId === pointer.id) {
-        const dx = x - pointer.startX;
-        const dy = y - pointer.startY;
-        const slop = pointer.touch ? 10 : 5;
-        if (!pointer.dragging) {
-          if (pointer.touch && Math.abs(dy) > slop && Math.abs(dy) > Math.abs(dx)) {
+
+      if (!pointer.down || e.pointerId !== pointer.id) {
+        if (!pointer.touch) {
+          dirty = true;
+          start();
+        }
+        return;
+      }
+
+      const dx = x - pointer.startX;
+      const dy = y - pointer.startY;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      // On mobile / touch devices, reliably distinguish page scrolling from carousel dragging
+      if (pointer.touch) {
+        if (pointer.intent === "vertical") {
+          // Locked to vertical page scroll. Never capture or drag carousel!
+          return;
+        }
+
+        if (pointer.intent === "none") {
+          // If vertical movement begins or is dominant, immediately surrender to native page scrolling
+          if (absDy > 6 && absDy >= absDx) {
+            pointer.intent = "vertical";
             pointer.down = false;
+            pointer.dragging = false;
+            try {
+              container.releasePointerCapture(e.pointerId);
+            } catch {}
+            container.removeAttribute("data-dragging");
             return;
           }
-          if (Math.abs(dx) > slop) {
+
+          // If horizontal movement is clearly dominant, lock into horizontal dragging
+          if (absDx > 10 && absDx > absDy * 1.25) {
+            pointer.intent = "horizontal";
             pointer.dragging = true;
             pointer.startX = x;
             pointer.startPos = pos;
             closeFocus();
-            try {
-              container.setPointerCapture(e.pointerId);
-            } catch {
-              pointer.dragging = true;
-            }
             container.setAttribute("data-dragging", "");
+            // Note: DO NOT setPointerCapture on touch to prevent breaking the browser scroll gesture pipeline
+          } else {
+            // Still within deadzone threshold
+            return;
           }
         }
-        if (pointer.dragging) {
-          pos = pointer.startPos - (x - pointer.startX);
-          goal = pos;
-          vel = 0;
-          const now = performance.now();
-          pointer.samples.push({ x, t: now });
-          while (pointer.samples.length > 2 && now - pointer.samples[0].t > 100)
-            pointer.samples.shift();
+      } else {
+        // Desktop mouse drag
+        if (!pointer.dragging && absDx > 5) {
+          pointer.dragging = true;
+          pointer.startX = x;
+          pointer.startPos = pos;
+          closeFocus();
+          try {
+            container.setPointerCapture(e.pointerId);
+          } catch {
+            pointer.dragging = true;
+          }
+          container.setAttribute("data-dragging", "");
         }
       }
+
+      if (pointer.dragging) {
+        pos = pointer.startPos - (x - pointer.startX);
+        goal = pos;
+        vel = 0;
+        const now = performance.now();
+        pointer.samples.push({ x, t: now });
+        while (pointer.samples.length > 2 && now - pointer.samples[0].t > 100)
+          pointer.samples.shift();
+      }
+
       dirty = true;
       start();
     };
@@ -1229,13 +1275,20 @@ export function FlexCarousel({
     const onPointerUp = (e: PointerEvent) => {
       if (!pointer.down || e.pointerId !== pointer.id) return;
       pointer.down = false;
+      const wasDragging = pointer.dragging;
+      pointer.dragging = false;
+      pointer.intent = "none";
       container.removeAttribute("data-dragging");
+      try {
+        container.releasePointerCapture(e.pointerId);
+      } catch {}
+
       const s = settingsRef.current;
       if (!s) return;
       const m = metrics(s);
       interactedAt = performance.now();
-      if (pointer.dragging) {
-        pointer.dragging = false;
+
+      if (wasDragging) {
         const now = performance.now();
         const first = pointer.samples[0];
         const lastSample = pointer.samples[pointer.samples.length - 1];
@@ -1252,6 +1305,7 @@ export function FlexCarousel({
         start();
         return;
       }
+
       if (closeFocus()) return;
       const [x, y] = localPoint(e);
       const hit = instances.find(
@@ -1279,11 +1333,17 @@ export function FlexCarousel({
     const onPointerCancel = () => {
       pointer.down = false;
       pointer.dragging = false;
+      pointer.intent = "none";
+      try {
+        container.releasePointerCapture(pointer.id);
+      } catch {}
       container.removeAttribute("data-dragging");
       const s = settingsRef.current;
       if (!s) return;
       goal = snapPoint(metrics(s), pos);
+      vel = 0;
       mode = "spring";
+      dirty = true;
       start();
     };
 
@@ -1298,12 +1358,16 @@ export function FlexCarousel({
       }
       const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? height : 1;
       const horizontal = Math.abs(dx) > Math.abs(dy);
-      if (!horizontal && !s.captureWheel) return;
+
+      // Critical fix: If the gesture is vertical, NEVER preventDefault.
+      // Allow window/page to scroll freely!
+      if (!horizontal) return;
+
       e.preventDefault();
       skipIntro();
       interactedAt = performance.now();
       if (closeFocus()) return;
-      const delta = Math.max(-120, Math.min(120, (horizontal ? dx : dy) * unit));
+      const delta = Math.max(-120, Math.min(120, dx * unit));
       goal += delta * 1.25;
       mode = "wheel";
       wheelAt = performance.now();
@@ -1379,6 +1443,15 @@ export function FlexCarousel({
         start();
       },
       setItems,
+      step: (delta: number) => {
+        const s = settingsRef.current;
+        if (s) {
+          skipIntro();
+          closeFocus();
+          interactedAt = performance.now();
+          step(metrics(s), delta);
+        }
+      },
     };
 
     resize();
@@ -1414,6 +1487,7 @@ export function FlexCarousel({
   return (
     <div
       ref={containerRef}
+      data-lenis-prevent
       className={`flex-carousel ${className}`.trim()}
       style={
         {
@@ -1426,6 +1500,37 @@ export function FlexCarousel({
       aria-label="Image carousel"
       tabIndex={0}
     >
+      {/* Prev & Next Atelier Controls for tap & touch accessibility */}
+      <div className="flex-carousel__controls">
+        <button
+          type="button"
+          tabIndex={0}
+          aria-label="Previous lookbook slide"
+          onClick={(e) => {
+            e.stopPropagation();
+            engineRef.current?.step?.(-1);
+          }}
+          className="flex-carousel__arrow flex-carousel__arrow--prev"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
+          aria-label="Next lookbook slide"
+          onClick={(e) => {
+            e.stopPropagation();
+            engineRef.current?.step?.(1);
+          }}
+          className="flex-carousel__arrow flex-carousel__arrow--next"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
       {captions && current && revealed && (
         <div className="flex-carousel__caption" aria-hidden="true">
           <span key={active} className="flex-carousel__title">
