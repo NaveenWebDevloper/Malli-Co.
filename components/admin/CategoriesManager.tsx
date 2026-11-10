@@ -768,7 +768,7 @@ export function CategoriesManager() {
               <div className="flex items-center gap-2">
                 <span className="text-xl">⭐</span>
                 <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
-                  Homepage Trending Categories Curation
+                  Homepage Trending Categories Showcase
                 </h3>
               </div>
               <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 max-w-2xl leading-relaxed">
@@ -856,7 +856,7 @@ export function CategoriesManager() {
             )}
           </div>
 
-          {/* Trending Curation Table */}
+          {/* Trending Showcase Table */}
           <div className="overflow-x-auto bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm">
             <table className="w-full text-left border-collapse text-xs">
               <thead>

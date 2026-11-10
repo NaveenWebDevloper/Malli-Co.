@@ -3,21 +3,21 @@ import { getCatalogProducts } from "@/lib/catalog";
 import { ProductCatalogView } from "@/components/store/ProductCatalogView";
 
 export const metadata: Metadata = {
-  title: "Men's Luxury Clothing & Tailoring | Malli & Co.",
+  title: "Men's Premium Clothing | Malli & Co.",
   description:
-    "Explore pure French flax linen shirts, structured Oxford button-downs, and heavyweight Pima cotton essentials tailored for discerning gentlemen.",
+    "Explore pure linen shirts, structured Oxford button-downs, and premium cotton essentials for men.",
   openGraph: {
-    title: "Men's Luxury Clothing & Tailoring | Malli & Co.",
+    title: "Men's Premium Clothing | Malli & Co.",
     description:
-      "Explore pure French flax linen shirts, structured Oxford button-downs, and heavyweight Pima cotton essentials.",
+      "Explore pure linen shirts, structured Oxford button-downs, and premium cotton essentials for men.",
     url: "https://malliandco.com/men",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Men's Luxury Clothing & Tailoring | Malli & Co.",
+    title: "Men's Premium Clothing | Malli & Co.",
     description:
-      "Explore pure French flax linen shirts, structured Oxford button-downs, and heavyweight Pima cotton essentials.",
+      "Explore pure linen shirts, structured Oxford button-downs, and premium cotton essentials for men.",
   },
 };
 
@@ -87,7 +87,7 @@ export default async function MenCollectionPage({
       <ProductCatalogView
         initialResult={catalogResult}
         title="Men's Collection"
-        subtitle="Artisanal French linen tailoring, Oxford shirts, and luxurious Pima cotton staples cut for the modern gentleman."
+        subtitle="Pure linen shirts, Oxford button-downs, trousers, and premium cotton staples designed for modern men."
         genderFilter="MEN"
       />
     </>

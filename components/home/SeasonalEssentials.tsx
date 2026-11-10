@@ -65,7 +65,7 @@ export function SeasonalEssentials({
         ======================================================================= */}
         <div className="relative z-20 w-full px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8 flex items-center justify-end">
           <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.28em] text-white/60 drop-shadow-sm pointer-events-none">
-            Malli &amp; Co. Atelier
+            Malli &amp; Co.
           </span>
         </div>
 

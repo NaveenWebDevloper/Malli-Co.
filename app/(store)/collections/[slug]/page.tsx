@@ -19,16 +19,16 @@ export async function generateMetadata({
   const collection = await getCollectionBySlug(cleanSlug);
   if (!collection) {
     return {
-      title: "Collection | Malli & Co. Luxury Apparel",
-      description: "Explore curated artisanal luxury menswear and kids' clothing at Malli & Co.",
+      title: "Collection | Malli & Co. Premium Apparel",
+      description: "Explore premium menswear and kids' clothing at Malli & Co.",
     };
   }
 
-  const title = `${collection.title} | Malli & Co. Luxury Collections`;
+  const title = `${collection.title} | Malli & Co. Premium Collections`;
   const description =
     collection.description ||
     collection.subtitle ||
-    `Discover ${collection.title} — a curated atelier selection of handcrafted luxury menswear and festive apparel at Malli & Co.`;
+    `Discover ${collection.title} — a special collection of ready-to-wear menswear and kids' clothing at Malli & Co.`;
 
   return {
     title,
@@ -73,7 +73,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
             Collection Not Found
           </h1>
           <p className="text-xs text-neutral-500 leading-relaxed">
-            The collection <span className="font-mono text-neutral-700">/{cleanSlug}</span> is either inactive or does not exist. Explore our other curated showcases below:
+            The collection <span className="font-mono text-neutral-700">/{cleanSlug}</span> is either inactive or does not exist. Explore our other featured collections below:
           </p>
           <div className="pt-4 flex flex-col gap-2">
             {activeCollections.slice(0, 3).map((col) => (

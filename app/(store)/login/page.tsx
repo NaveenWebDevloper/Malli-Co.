@@ -44,7 +44,7 @@ export default async function LoginPage({
             MALLI &amp; CO.
           </Link>
           <p className="text-xs font-serif italic text-neutral-500">
-            Artisanal Menswear &amp; Tailoring Atelier
+            Premium Clothing for Men &amp; Kids
           </p>
         </div>
 

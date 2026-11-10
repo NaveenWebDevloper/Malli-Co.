@@ -923,7 +923,7 @@ export function BannerManager() {
                       onChange={(e) =>
                         setFormData((prev) => ({ ...prev, subtitle: e.target.value }))
                       }
-                      placeholder="e.g. Hand-tailored outerwear and noble layers designed for understated distinction."
+                      placeholder="e.g. Classic outerwear and everyday layers designed for comfort and distinction."
                       className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white focus:outline-none"
                     />
                   </div>

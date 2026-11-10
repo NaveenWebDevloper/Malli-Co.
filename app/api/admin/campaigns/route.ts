@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
       sendNewSaleBroadcastEmail({
         name: newCampaign.name,
         slug: newCampaign.slug,
-        discountSummary: `${discountStr} ${data.scope?.mode === "ALL" ? "Storewide" : "Special Curation"}`,
+        discountSummary: `${discountStr} ${data.scope?.mode === "ALL" ? "Storewide" : "Selected Styles"}`,
         description: newCampaign.description,
         startsAt: newCampaign.startsAt,
         endsAt: newCampaign.endsAt,

@@ -538,7 +538,7 @@ export default function ProductForm({
                   required
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Detailed material provenance, weave, fit, and styling recommendations..."
+                  placeholder="Detailed fabric description, fit, and styling recommendations..."
                   className="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-black focus:ring-1 focus:ring-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
                 />
               </div>

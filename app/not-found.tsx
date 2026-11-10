@@ -8,13 +8,13 @@ export default function NotFound() {
         Page Not Found
       </h1>
       <p className="text-xs text-neutral-500 max-w-sm mb-6">
-        The piece or page you are looking for does not exist or has been relocated.
+        The product or page you are looking for does not exist or has been relocated.
       </p>
       <Link
         href="/"
         className="px-6 py-2.5 rounded-full bg-[#121212] text-white text-xs font-semibold uppercase tracking-widest hover:bg-black transition-all"
       >
-        Return to Atelier Home
+        Return to Home
       </Link>
     </div>
   );

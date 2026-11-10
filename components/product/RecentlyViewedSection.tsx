@@ -130,7 +130,7 @@ export function RecentlyViewedSection({ currentSlug }: RecentlyViewedSectionProp
               Recently Viewed <span className="italic font-normal">Products</span>
             </h2>
             <p className="text-xs sm:text-sm text-neutral-500 font-light mt-1.5 max-w-xl">
-              Quickly revisit luxury garments and tailoring pieces you explored earlier in this session.
+              Quickly revisit styles and products you explored earlier in this session.
             </p>
           </div>
 

@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Malli & Co. | Premium Men's & Kids' Clothing",
-  description: "Curated premium apparel for men and kids.",
+  description: "Premium clothing for men and kids.",
 };
 
 export default function RootLayout({

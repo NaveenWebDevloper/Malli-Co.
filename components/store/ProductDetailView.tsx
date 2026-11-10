@@ -476,7 +476,7 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
           <div className="space-y-4 text-xs">
             <div>
               <h3 className="font-bold uppercase tracking-wider text-neutral-900 mb-2">
-                Atelier Notes & Story
+                Product Details &amp; Story
               </h3>
               <p className="text-neutral-600 leading-relaxed font-light text-xs sm:text-sm">
                 {product.description}
@@ -487,9 +487,9 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
               <div className="flex items-start gap-2.5">
                 <span className="text-base">🧵</span>
                 <div>
-                  <h4 className="font-bold text-neutral-900">Artisanal Provenance</h4>
+                  <h4 className="font-bold text-neutral-900">Premium Quality &amp; Craftsmanship</h4>
                   <p className="text-neutral-600 font-light mt-0.5">
-                    Tailored with single-needle construction, reinforced split back-yoke, and genuine mother-of-pearl buttons.
+                    Crafted with durable high-precision stitching, reinforced seams, and premium quality buttons for everyday comfort and lasting wear.
                   </p>
                 </div>
               </div>

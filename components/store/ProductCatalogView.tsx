@@ -82,7 +82,7 @@ export function ProductCatalogView({
       <div className="mb-8 pb-6 border-b border-[#EAE3D4] flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-neutral-500">
-            {genderFilter ? `${genderFilter} Apparel` : "Atelier Collection"}
+            {genderFilter ? `${genderFilter} Apparel` : "Featured Collection"}
           </span>
           <h1 className="text-2xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
             {title}
@@ -236,7 +236,7 @@ export function ProductCatalogView({
           {initialResult.filterFacets.brands.length > 0 && (
             <div className="pt-4 border-t border-[#EAE3D4]">
               <h3 className="font-bold uppercase tracking-wider text-[11px] text-[#121212] mb-3">
-                Brand Atelier
+                Brands
               </h3>
               <div className="flex flex-col space-y-2">
                 {initialResult.filterFacets.brands.map((b) => {

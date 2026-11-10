@@ -12,22 +12,22 @@ import { SeasonalEssentials } from "@/components/home/SeasonalEssentials";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Malli & Co. | Luxury Menswear & Kids' Artisanal Clothing",
+  title: "Malli & Co. | Premium Menswear & Kids' Clothing",
   description:
-    "Discover handcrafted menswear and children's celebratory apparel woven from 100% French flax linen and pure Supima cotton. Timeless luxury tailored in India.",
+    "Discover ready-to-wear menswear and children's celebratory apparel crafted from 100% linen and pure cotton. Timeless styles delivered across India.",
   openGraph: {
-    title: "Malli & Co. | Luxury Menswear & Kids' Artisanal Clothing",
+    title: "Malli & Co. | Premium Menswear & Kids' Clothing",
     description:
-      "Handcrafted menswear and children's celebratory apparel woven from 100% French flax linen and pure Supima cotton.",
+      "Ready-to-wear menswear and children's celebratory apparel crafted from 100% linen and pure cotton.",
     url: "https://malliandco.com",
     siteName: "Malli & Co.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Malli & Co. | Luxury Menswear & Kids' Artisanal Clothing",
+    title: "Malli & Co. | Premium Menswear & Kids' Clothing",
     description:
-      "Handcrafted menswear and children's celebratory apparel woven from 100% French flax linen and pure Supima cotton.",
+      "Ready-to-wear menswear and children's celebratory apparel crafted from 100% linen and pure cotton.",
   },
 };
 
@@ -44,7 +44,7 @@ export default async function StoreHomePage() {
     "@type": "ClothingStore",
     name: "Malli & Co.",
     description:
-      "Artisanal luxury menswear and kids' clothing tailored from pure French linen and Pima cottons.",
+      "Premium menswear and kids' clothing crafted from pure linen and cotton.",
     url: "https://malliandco.com",
     address: {
       "@type": "PostalAddress",

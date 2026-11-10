@@ -291,7 +291,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
         <div className="space-y-1.5 max-w-xl">
           <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[#8C7A58]">
             <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
-            <span>Curated Atelier Selection</span>
+            <span>Featured Selection</span>
           </div>
           {collection?.title ? (
             <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">

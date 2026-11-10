@@ -367,7 +367,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             Account Required for Checkout
           </h1>
           <p className="text-xs text-neutral-600 leading-relaxed">
-            To ensure secure transaction records, order tracking, and bespoke tailoring concierge, please sign in or create an account to proceed.
+            To ensure secure transaction records, order tracking, and delivery updates, please sign in or create an account to proceed.
           </p>
         </div>
         <Link

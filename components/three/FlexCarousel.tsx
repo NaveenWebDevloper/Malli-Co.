@@ -39,7 +39,7 @@ const DEFAULT_ITEMS: CarouselItem[] = [
   {
     src: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=1200&q=80&auto=format&fit=max",
     alt: "Charcoal Double-Breasted Suit",
-    title: "Sartorial Charcoal Suit",
+    title: "Classic Charcoal Suit",
     subtitle: "Super 140s Merino Wool",
   },
   {

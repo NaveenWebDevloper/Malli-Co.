@@ -241,7 +241,7 @@ export default async function CustomerAccountPage() {
               🛍️
             </div>
             <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-              You haven&apos;t placed any orders yet. Discover our artisanal linen shirts, luxury trousers, and tailored essentials.
+              You haven&apos;t placed any orders yet. Discover our linen shirts, trousers, and premium essentials.
             </p>
             <Link
               href="/men"

@@ -99,7 +99,7 @@ export function SizeGuideModal({
                     d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
                   />
                 </svg>
-                Atelier Fit &amp; Size Directory
+                Size Directory
               </span>
               {product?.name && (
                 <span className="hidden sm:inline text-xs text-neutral-400 font-serif italic truncate max-w-xs">
@@ -114,7 +114,7 @@ export function SizeGuideModal({
               Size &amp; Measurement Guide
             </h2>
             <p className="text-xs text-neutral-500">
-              Find your ideal bespoke fit. All measurements represent standard body dimensions.
+              Find your perfect fit. All measurements represent standard body dimensions.
             </p>
           </div>
 
@@ -147,7 +147,7 @@ export function SizeGuideModal({
                     : "text-neutral-600 hover:text-black"
                 }`}
               >
-                Gentlemen (Men)
+                Men
               </button>
               <button
                 type="button"
@@ -161,7 +161,7 @@ export function SizeGuideModal({
                     : "text-neutral-600 hover:text-black"
                 }`}
               >
-                Little Atelier (Kids)
+                Kids
               </button>
             </div>
 
@@ -340,7 +340,7 @@ export function SizeGuideModal({
           {activeCategory.fitTips.length > 0 && (
             <div className="rounded-xl bg-[#FAF7F2] p-4 border border-[#EAE3D4] space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-serif font-bold uppercase tracking-wider text-[#8C7A58]">
-                <span>✂ Tailor&apos;s Advice &amp; Fit Recommendations</span>
+                <span>📏 Fit Tips &amp; Recommendations</span>
               </div>
               <ul className="text-xs text-neutral-600 space-y-1 list-disc list-inside">
                 {activeCategory.fitTips.map((tip, idx) => (

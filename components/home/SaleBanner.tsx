@@ -174,9 +174,9 @@ export function SaleBanner({ initialCampaign, initialServerNow }: SaleBannerProp
               {campaign.name}
             </h2>
             <p className="text-sm sm:text-lg text-neutral-200 font-light">
-              Limited time atelier event: Enjoy{" "}
+              Limited time offer: Enjoy{" "}
               <strong className="text-white font-bold">{discountHeadline}</strong> across
-              handcrafted linen and cotton capsules.
+              premium linen and cotton styles.
             </p>
           </div>
 

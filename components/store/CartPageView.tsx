@@ -27,7 +27,7 @@ export function CartPageView() {
           Your shopping bag is empty
         </h2>
         <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-          Explore our collection of pure French linen shirts and tailored Pima cotton tees.
+          Explore our collection of pure linen shirts and premium cotton tees.
         </p>
         <Link
           href="/men"

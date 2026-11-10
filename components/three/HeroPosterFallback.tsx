@@ -25,16 +25,16 @@ export function HeroPosterFallback() {
       {/* Luxury Editorial Typography */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
         <span className="text-[11px] uppercase tracking-[0.35em] text-[#D4AF37] font-medium mb-4">
-          Haute Couture • Autumn / Winter
+          Autumn / Winter Collection
         </span>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-light tracking-tight font-serif text-[#FBF9F5] mb-6 leading-[1.08]">
           The Art of <br />
           <VaporType
             words={[
-              "Noble Tailoring",
-              "Haute Couture",
-              "Italian Linens",
-              "Royal Embroidery",
+              "Premium Wear",
+              "Classic Shirts",
+              "Pure Linens",
+              "Festive Wear",
             ]}
             vaporColor="#D4AF37"
             color="#EAE3D4"
@@ -54,8 +54,8 @@ export function HeroPosterFallback() {
           />
         </h1>
         <p className="max-w-xl text-neutral-300 text-sm sm:text-base font-light leading-relaxed mb-10 tracking-wide">
-          Bespoke silhouettes, Italian linens, and hand-embroidered royal silk attire.
-          Crafted for the modern gentleman and young nobility.
+          Ready-to-wear shirts, breathable linens, and festive outfits.
+          Crafted for modern men and kids.
         </p>
 
         {/* CTA Buttons */}
@@ -78,7 +78,7 @@ export function HeroPosterFallback() {
       {/* Discreet Fallback / Loading Badge */}
       <div className="absolute bottom-6 right-6 flex items-center gap-2 text-[10px] text-neutral-400 tracking-widest uppercase">
         <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-        <span>Malli & Co. Atelier</span>
+        <span>Malli & Co.</span>
       </div>
     </div>
   );

@@ -457,7 +457,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
 
                 {/* Mobile Footer Meta */}
                 <div className="pt-4 border-t border-[#EAE3D4] text-xs text-neutral-500 space-y-1">
-                  <p className="font-serif italic text-neutral-700">Malli &amp; Co. Atelier</p>
+                  <p className="font-serif italic text-neutral-700">Malli &amp; Co.</p>
                   <p>Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad, Telangana - 500090</p>
                   <p className="text-[11px] text-[#8C7A58]">French Linen • Pima Cotton • Royal Silks</p>
                 </div>

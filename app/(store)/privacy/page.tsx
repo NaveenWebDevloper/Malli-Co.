@@ -94,7 +94,7 @@ export default function PrivacyPolicyPage() {
                 <strong>Delivery &amp; Billing Addresses:</strong> Street address, landmark, city, state, postal code (PIN), and country for physical fulfillment of your orders.
               </li>
               <li>
-                <strong>Order &amp; Transaction History:</strong> Garments purchased, sizes, tailored variant snapshots, invoice numbers, order totals in integer paise (INR), and delivery status.
+                <strong>Order &amp; Transaction History:</strong> Garments purchased, sizes, ordered variant snapshots, invoice numbers, order totals in integer paise (INR), and delivery status.
               </li>
               <li>
                 <strong>Payment Information:</strong> All payment transactions are securely handled by our PCI-DSS compliant payment gateway partner, <strong>Razorpay</strong>. We never store credit/debit card numbers, CVVs, or net banking passwords on our servers.
@@ -190,7 +190,7 @@ export default function PrivacyPolicyPage() {
         {/* Footer Navigation */}
         <div className="mt-10 pt-6 border-t border-[#EAE3D4] flex flex-wrap items-center justify-between gap-4 text-xs">
           <Link href="/" className="font-bold uppercase tracking-wider text-neutral-800 hover:text-[#8C7A58] transition">
-            ← Return to Atelier Home
+            ← Return to Home
           </Link>
           <div className="flex gap-4">
             <Link href="/terms" className="text-neutral-500 hover:text-neutral-800 underline">

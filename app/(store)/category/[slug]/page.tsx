@@ -109,7 +109,7 @@ export async function generateMetadata({
   const title = `${category.name} | Malli & Co. Luxury Apparel`;
   const description =
     category.description ||
-    `Explore handcrafted ${category.name} tailored from luxury French linen and pure Supima cottons.`;
+    `Explore premium ${category.name} crafted from pure linen and quality cottons.`;
 
   return {
     title,

@@ -37,8 +37,8 @@ export interface PreloaderProps {
 
 const DEFAULT_WORDS = [
   "MALLI & CO.",
-  "HAUTE COUTURE",
-  "ARTISANAL LINENS",
+  "PREMIUM APPAREL",
+  "PURE LINENS",
   "AUTUMN / WINTER 2026",
 ];
 
@@ -221,7 +221,7 @@ export function Preloader({
           className="text-[10px] uppercase font-semibold tracking-[0.35em] mb-2 block"
           style={{ color: accentColor }}
         >
-          Noble Tailoring & Atelier
+          Premium Menswear &amp; Kids
         </span>
 
         {/* Dynamic Text / Headline */}

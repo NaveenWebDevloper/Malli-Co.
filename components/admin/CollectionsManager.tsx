@@ -499,10 +499,10 @@ export function CollectionsManager() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-neutral-200 dark:border-neutral-800">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-            Curated Collections
+            Collections
           </h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-            Create hand-picked showcases or algorithmic shelves for the storefront.
+            Create product showcases or dynamic shelves for the storefront.
           </p>
         </div>
         <button
@@ -560,7 +560,7 @@ export function CollectionsManager() {
           <p className="text-sm text-neutral-500 max-w-sm mt-1 mb-4">
             {searchQuery
               ? "No collections match your search filter."
-              : "Get started by creating your first curated collection."}
+              : "Get started by creating your first collection."}
           </p>
           <button
             onClick={openCreateModal}
@@ -696,10 +696,10 @@ export function CollectionsManager() {
                 <span className="text-xl">🗃️</span>
                 <div>
                   <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-                    {editingId ? "Edit Collection" : "Create Curated Collection"}
+                    {editingId ? "Edit Collection" : "Create Collection"}
                   </h2>
                   <p className="text-xs text-neutral-500">
-                    Configure customer-facing presentation and product curation.
+                    Configure customer-facing presentation and products.
                   </p>
                 </div>
               </div>
@@ -780,7 +780,7 @@ export function CollectionsManager() {
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. Handcrafted tailored essentials"
+                        placeholder="e.g. Best selling styles and summer essentials"
                         value={subtitle}
                         onChange={(e) => setSubtitle(e.target.value)}
                         className="w-full px-3.5 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8C7A58]"
@@ -822,7 +822,7 @@ export function CollectionsManager() {
                   {/* Mode Selector */}
                   <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-3">
-                      Curation Mode *
+                      Collection Mode *
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button

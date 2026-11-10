@@ -56,10 +56,10 @@ export function Hero() {
           Malli & Co.{" "}
           <VaporType
             words={[
-              "Haute Couture",
-              "Noble Tailoring",
-              "French Linens",
-              "Artisanal Silks",
+              "Premium Menswear",
+              "Pure Linens",
+              "Classic Shirts",
+              "Kids Collection",
             ]}
             vaporColor="#8C7A58"
             color="#121212"
@@ -79,7 +79,7 @@ export function Hero() {
           />
         </h1>
         <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-lg mx-auto tracking-wide">
-          Interactive 3D Lookbook. Swipe horizontally or tap arrows to explore our sartorial masterworks.
+          Interactive 3D Lookbook. Swipe horizontally or tap arrows to explore our featured collection.
         </p>
       </div>
 
@@ -111,7 +111,7 @@ export function Hero() {
           href="/men"
           className="w-full sm:w-auto px-8 py-3.5 bg-[#121212] text-[#FBF9F5] text-xs uppercase tracking-[0.2em] font-medium hover:bg-neutral-800 transition-colors text-center"
         >
-          Explore Men&apos;s Atelier
+          Explore Men&apos;s Collection
         </Link>
         <Link
           href="/kids"

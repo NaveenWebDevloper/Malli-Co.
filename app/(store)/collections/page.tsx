@@ -8,13 +8,13 @@ import { resolveCollectionProducts } from "@/lib/collections";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Curated Collections | Malli & Co. Luxury Apparel",
+  title: "Featured Collections | Malli & Co. Premium Apparel",
   description:
-    "Explore handcrafted menswear and kids' clothing collections curated by the Malli & Co. atelier.",
+    "Explore menswear and kids' clothing collections crafted by Malli & Co.",
   openGraph: {
-    title: "Curated Collections | Malli & Co.",
+    title: "Featured Collections | Malli & Co.",
     description:
-      "Explore handcrafted menswear and kids' clothing collections curated by the Malli & Co. atelier.",
+      "Explore menswear and kids' clothing collections crafted by Malli & Co.",
     url: "https://malliandco.com/collections",
   },
 };
@@ -62,13 +62,13 @@ export default async function CollectionsDirectoryPage() {
           <div className="max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#8C7A58]">
               <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
-              <span>Malli &amp; Co. Atelier Edits</span>
+              <span>Malli &amp; Co. Special Edits</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-serif font-black tracking-tight text-[#121212]">
-              Curated Collections
+              Featured Collections
             </h1>
             <p className="text-sm sm:text-base text-neutral-600 font-light max-w-2xl leading-relaxed">
-              Explore our thematic showcases, handcrafted seasonal edits, and signature silhouettes tailored from pure French linen and Supima cotton.
+              Explore our thematic showcases, seasonal edits, and signature styles made from pure linen and premium cotton.
             </p>
           </div>
         </div>
@@ -83,13 +83,13 @@ export default async function CollectionsDirectoryPage() {
               Collections in preparation
             </h2>
             <p className="text-xs text-neutral-500 mt-1 mb-6">
-              Our ateliers are currently curating new seasonal collections. Please check back shortly.
+              We are currently preparing new seasonal collections. Please check back shortly.
             </p>
             <Link
               href="/men"
               className="inline-block px-5 py-2.5 rounded-xl bg-[#26221C] text-white text-xs font-semibold hover:bg-black transition"
             >
-              Explore Men&apos;s Atelier
+              Explore Men&apos;s Collection
             </Link>
           </div>
         ) : (
@@ -117,20 +117,20 @@ export default async function CollectionsDirectoryPage() {
                       ))
                     ) : (
                       <div className="col-span-2 flex items-center justify-center text-xs text-neutral-400">
-                        Atelier Curation
+                        Malli &amp; Co.
                       </div>
                     )}
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                     <span className="absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-xs text-[10px] font-bold uppercase tracking-wider text-neutral-900">
-                      {col.productCount} Pieces
+                      {col.productCount} {col.productCount === 1 ? "Product" : "Products"}
                     </span>
                   </div>
 
                   {/* Body Text */}
                   <div className="p-6 space-y-2">
                     <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#8C7A58]">
-                      {col.mode === "MANUAL" ? "Bespoke Edit" : "Dynamic Shelf"}
+                      {col.mode === "MANUAL" ? "Special Edit" : "Trending Shelf"}
                     </span>
                     <h2 className="text-xl font-serif font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors leading-snug">
                       {col.title}

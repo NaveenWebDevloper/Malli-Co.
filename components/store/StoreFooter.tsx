@@ -32,12 +32,12 @@ export function StoreFooter() {
             <ul className="space-y-2 text-neutral-400">
               <li>
                 <Link href="/collections" className="hover:text-white transition-colors text-[#8C7A58] font-medium">
-                  All Curated Collections →
+                  All Collections →
                 </Link>
               </li>
               <li>
                 <Link href="/men" className="hover:text-white transition-colors">
-                  Men&apos;s Tailoring
+                  Men&apos;s Collection
                 </Link>
               </li>
               <li>

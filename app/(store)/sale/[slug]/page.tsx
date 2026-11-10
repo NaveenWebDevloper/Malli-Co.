@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: SalePageProps): Promise<Metad
 
   if (!campaign) {
     return {
-      title: "Sale Event | Malli & Co. Luxury Apparel",
-      description: "Discover limited-time artisanal tailoring promotions at Malli & Co.",
+      title: "Sale Event | Malli & Co. Premium Apparel",
+      description: "Discover limited-time promotions on premium clothing at Malli & Co.",
     };
   }
 
@@ -99,8 +99,8 @@ export default async function SaleLandingPage({ params, searchParams }: SalePage
             {campaign?.name || "Sale Event"} Has Ended
           </h1>
           <p className="text-sm text-neutral-600 max-w-lg mx-auto font-light leading-relaxed">
-            This limited-time atelier sale event has drawn to a close. You can still discover
-            ongoing promotions, our curated Season&apos;s Top Picks, or explore the permanent collections.
+            This sale event has drawn to a close. You can still discover
+            ongoing promotions, our Season&apos;s Top Picks, or explore our full collections.
           </p>
         </div>
 

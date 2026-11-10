@@ -144,8 +144,8 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
               <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
               <span>
                 {collection.mode === "MANUAL"
-                  ? "Hand-Curated Atelier Selection"
-                  : "Algorithmic Showcase Drop"}
+                  ? "Handpicked Collection"
+                  : "Trending Showcase"}
               </span>
             </div>
 
@@ -172,11 +172,11 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
             <div className="pt-2 flex items-center gap-3 flex-wrap text-xs text-neutral-500">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-semibold text-neutral-800 shadow-2xs">
                 <span>✨</span>
-                <span>{collection.products.length} Masterpieces</span>
+                <span>{collection.products.length} {collection.products.length === 1 ? "Product" : "Products"}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-medium text-neutral-600 shadow-2xs">
-                <span>📍</span>
-                <span>Tailored in Hyderabad, India</span>
+                <span>⚡</span>
+                <span>Fast Shipping Across India</span>
               </span>
             </div>
           </div>
@@ -267,7 +267,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="px-3 py-1.5 text-xs font-semibold bg-white border border-[#E5DECF] rounded-xl text-neutral-800 focus:outline-none focus:ring-1 focus:ring-[#8C7A58] cursor-pointer"
             >
-              <option value="featured">Curated Order</option>
+              <option value="featured">Recommended</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
               <option value="name">Alphabetical</option>
@@ -451,10 +451,10 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
             <div className="flex items-center justify-between mb-8">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58] block mb-1">
-                  More Ateliers
+                  More Collections
                 </span>
                 <h3 className="text-xl sm:text-2xl font-serif font-bold text-neutral-900">
-                  Explore Other Curated Collections
+                  Explore Other Collections
                 </h3>
               </div>
               <Link
@@ -474,7 +474,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                 >
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C7A58] bg-[#8C7A58]/10 px-2.5 py-0.5 rounded-full inline-block mb-3">
-                      {col.productCount} Pieces
+                      {col.productCount} {col.productCount === 1 ? "Product" : "Products"}
                     </span>
                     <h4 className="text-lg font-serif font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors">
                       {col.title}

@@ -53,7 +53,7 @@ export default function TermsOfServicePage() {
               2. Account Registration &amp; Authentication
             </h2>
             <p>
-              To access personalized shopping features, order histories, and tailored sizes, you may create an account directly or authenticate via <strong>Google Sign-In</strong>.
+              To access personalized shopping features, order histories, and saved preferences, you may create an account directly or authenticate via <strong>Google Sign-In</strong>.
             </p>
             <ul className="list-disc list-inside space-y-1.5 ml-2">
               <li>You represent that all information provided during registration or checkout is truthful, accurate, and complete.</li>
@@ -74,7 +74,7 @@ export default function TermsOfServicePage() {
                 <strong>Currency &amp; Accuracy:</strong> All prices are displayed in Indian Rupees (INR) and are inclusive of applicable Goods and Services Tax (GST). All financial computations are strictly verified server-side.
               </li>
               <li>
-                <strong>Visual Representation:</strong> We make every effort to display garment colors, textures, and tailoring cuts accurately. However, variations may occur depending on your device&apos;s screen calibration.
+                <strong>Visual Representation:</strong> We make every effort to display garment colors, textures, and fits accurately. However, variations may occur depending on your device&apos;s screen calibration.
               </li>
               <li>
                 <strong>Inventory &amp; Reservation:</strong> Initiating checkout reserves stock for a window of 15 minutes to allow payment completion. If payment is not finalized within this period, the reservation automatically releases back to inventory.
@@ -148,7 +148,7 @@ export default function TermsOfServicePage() {
         {/* Footer Navigation */}
         <div className="mt-10 pt-6 border-t border-[#EAE3D4] flex flex-wrap items-center justify-between gap-4 text-xs">
           <Link href="/" className="font-bold uppercase tracking-wider text-neutral-800 hover:text-[#8C7A58] transition">
-            ← Return to Atelier Home
+            ← Return to Home
           </Link>
           <div className="flex gap-4">
             <Link href="/privacy" className="text-neutral-500 hover:text-neutral-800 underline">
