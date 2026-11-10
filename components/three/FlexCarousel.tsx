@@ -1243,8 +1243,8 @@ export function FlexCarousel({
           }
         }
       } else {
-        // Desktop mouse drag
-        if (!pointer.dragging && absDx > 5) {
+        // Desktop mouse drag: require clear horizontal intent to prevent vertical scroll jitter
+        if (!pointer.dragging && absDx > 7 && absDx > absDy) {
           pointer.dragging = true;
           pointer.startX = x;
           pointer.startPos = pos;
@@ -1349,7 +1349,7 @@ export function FlexCarousel({
 
     const onWheel = (e: WheelEvent) => {
       const s = settingsRef.current;
-      if (!s || e.ctrlKey) return;
+      if (!s || e.ctrlKey || !s.captureWheel) return;
       let dx = e.deltaX;
       let dy = e.deltaY;
       if (e.shiftKey && Math.abs(dx) < Math.abs(dy)) {
@@ -1359,7 +1359,7 @@ export function FlexCarousel({
       const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? height : 1;
       const horizontal = Math.abs(dx) > Math.abs(dy);
 
-      // Critical fix: If the gesture is vertical, NEVER preventDefault.
+      // Critical fix: If the gesture is vertical or captureWheel is disabled, NEVER preventDefault.
       // Allow window/page to scroll freely!
       if (!horizontal) return;
 
@@ -1423,7 +1423,10 @@ export function FlexCarousel({
     container.addEventListener("pointerup", onPointerUp);
     container.addEventListener("pointerleave", onPointerLeave);
     container.addEventListener("pointercancel", onPointerCancel);
-    container.addEventListener("wheel", onWheel, { passive: false });
+    const shouldCaptureWheel = Boolean(settingsRef.current?.captureWheel);
+    if (shouldCaptureWheel) {
+      container.addEventListener("wheel", onWheel, { passive: false });
+    }
     container.addEventListener("keydown", onKeyDown);
     container.addEventListener("focus", onFocus);
     container.addEventListener("blur", onBlur);
@@ -1469,7 +1472,9 @@ export function FlexCarousel({
       container.removeEventListener("pointerup", onPointerUp);
       container.removeEventListener("pointerleave", onPointerLeave);
       container.removeEventListener("pointercancel", onPointerCancel);
-      container.removeEventListener("wheel", onWheel);
+      if (shouldCaptureWheel) {
+        container.removeEventListener("wheel", onWheel);
+      }
       container.removeEventListener("keydown", onKeyDown);
       container.removeEventListener("focus", onFocus);
       container.removeEventListener("blur", onBlur);
@@ -1487,7 +1492,7 @@ export function FlexCarousel({
   return (
     <div
       ref={containerRef}
-      data-lenis-prevent
+      {...(captureWheel ? { "data-lenis-prevent": true } : {})}
       className={`flex-carousel ${className}`.trim()}
       style={
         {

@@ -169,12 +169,12 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
             )}
 
             {/* Meta tags / badge strip */}
-            <div className="pt-2 flex items-center gap-3 flex-wrap text-xs text-neutral-500">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-semibold text-neutral-800 shadow-2xs">
+            <div className="pt-2 flex items-center gap-2 sm:gap-3 flex-wrap text-[11px] sm:text-xs text-neutral-500">
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-semibold text-neutral-800 shadow-2xs">
                 <span>✨</span>
                 <span>{collection.products.length} {collection.products.length === 1 ? "Product" : "Products"}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-medium text-neutral-600 shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white border border-[#E5DECF] font-medium text-neutral-600 shadow-2xs">
                 <span>⚡</span>
                 <span>Fast Shipping Across India</span>
               </span>
@@ -186,10 +186,10 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
       {/* =========================================================================
           CONTROLS: FILTER PILLS & SORT SELECTOR
       ========================================================================= */}
-      <div className="sticky top-16 z-20 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#EDE6D8]/80 py-3.5 px-4 sm:px-6 lg:px-8">
+      <div className="relative sm:sticky sm:top-[76px] lg:top-[80px] z-20 bg-[#FDFBF7] sm:bg-[#FDFBF7]/90 sm:backdrop-blur-md border-b border-[#EDE6D8]/80 py-3 sm:py-3.5 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 overscroll-x-contain touch-pan-x">
             <button
               type="button"
               onClick={() => setActiveCategory("all")}
@@ -260,8 +260,8 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
           </div>
 
           {/* Sort Selector */}
-          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
-            <span className="text-xs text-neutral-500 font-medium hidden sm:inline">Sort by:</span>
+          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1.5 sm:pt-0 border-t border-[#EDE6D8]/50 sm:border-0">
+            <span className="text-xs text-neutral-500 font-medium">Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -308,7 +308,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
               return (
                 <div
                   key={item._id}
-                  className="group relative flex flex-col rounded-2xl bg-white border border-[#EDE7DC]/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-all duration-300"
+                  className="group relative flex flex-col rounded-2xl bg-white border border-[#EDE7DC]/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-all duration-300 min-w-0"
                 >
                   {/* Image Container with aspect ratio 4/5 */}
                   <div className="relative aspect-[4/5] w-full overflow-hidden rounded-t-2xl bg-[#F4EFE6]">
@@ -319,7 +319,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className={`object-cover object-center transition-all duration-700 ease-out ${
-                          hasHover ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
+                          hasHover ? "sm:group-hover:opacity-0 sm:group-hover:scale-105" : "sm:group-hover:scale-105"
                         }`}
                       />
                       {hasHover && (
@@ -328,7 +328,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                           alt={`${item.name} alternate view`}
                           fill
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-cover object-center absolute inset-0 opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105"
+                          className="object-cover object-center absolute inset-0 opacity-0 transition-all duration-700 ease-out sm:group-hover:opacity-100 sm:group-hover:scale-105"
                         />
                       )}
                     </Link>
@@ -371,8 +371,8 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                   </div>
 
                   {/* Card Details Body */}
-                  <div className="p-3.5 sm:p-5 flex flex-col flex-1 justify-between gap-3">
-                    <Link href={`/product/${item.slug}`}>
+                  <div className="p-3 sm:p-5 flex flex-col flex-1 justify-between gap-2.5 sm:gap-3 min-w-0">
+                    <Link href={`/product/${item.slug}`} className="block min-w-0">
                       <h2 className="text-xs sm:text-sm font-semibold text-neutral-900 truncate group-hover:text-[#8C7A58] transition-colors">
                         {item.name}
                       </h2>
@@ -380,27 +380,27 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
 
                     {/* Swatches & Arrow Action Row */}
                     <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 min-w-0">
                         {item.colorSwatches && item.colorSwatches.length > 0 ? (
-                          <div className="flex items-center -space-x-1">
+                          <div className="flex items-center -space-x-1 shrink-0">
                             {item.colorSwatches.slice(0, 3).map((swatch, sIdx) => (
                               <span
                                 key={`${swatch.name}-${sIdx}`}
                                 style={{ backgroundColor: swatch.hex }}
                                 title={swatch.name}
-                                className="w-3.5 h-3.5 rounded-full border border-white shadow-xs"
+                                className="w-3.5 h-3.5 rounded-full border border-white shadow-xs shrink-0"
                               />
                             ))}
                           </div>
                         ) : (
-                          <span className="text-[11px] text-neutral-400">Pure Linen</span>
+                          <span className="text-[11px] text-neutral-400 truncate">Pure Linen</span>
                         )}
                       </div>
 
                       <Link
                         href={`/product/${item.slug}`}
                         aria-label={`View ${item.name}`}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-700 group-hover:border-black group-hover:bg-black group-hover:text-white transition-all shadow-xs"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-700 group-hover:border-black group-hover:bg-black group-hover:text-white transition-all shadow-xs shrink-0"
                       >
                         <svg
                           viewBox="0 0 24 24"
@@ -418,20 +418,20 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                     </div>
 
                     {/* Price Row */}
-                    <div className="flex items-center justify-between pt-2 border-t border-[#F0EBE1]">
-                      <div className="flex items-baseline gap-2">
+                    <div className="flex items-center justify-between pt-2 border-t border-[#F0EBE1] flex-wrap gap-1">
+                      <div className="flex items-baseline gap-1.5 sm:gap-2">
                         <span className="font-bold text-xs sm:text-sm text-neutral-900 font-serif">
                           {formatCurrency(item.pricing.finalPrice)}
                         </span>
                         {compareAt && (
-                          <span className="line-through text-[11px] text-neutral-400 font-normal">
+                          <span className="line-through text-[10px] sm:text-[11px] text-neutral-400 font-normal">
                             {formatCurrency(compareAt)}
                           </span>
                         )}
                       </div>
 
                       {discountPercent > 0 && (
-                        <span className="bg-[#F4ECE1] text-[#7A6945] text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded">
+                        <span className="bg-[#F4ECE1] text-[#7A6945] text-[9.5px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded">
                           {discountPercent}% OFF
                         </span>
                       )}
