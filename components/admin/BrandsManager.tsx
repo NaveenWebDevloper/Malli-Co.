@@ -358,7 +358,7 @@ export function BrandsManager() {
       {/* Add / Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex items-center justify-between border-b border-neutral-100 pb-3 dark:border-neutral-800">
               <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
                 {editingBrand ? `Edit Brand: ${editingBrand.name}` : "Create Brand / Label"}

@@ -86,7 +86,7 @@ export function InventoryAdjustModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
         <div className="flex items-start justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
           <div>
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">

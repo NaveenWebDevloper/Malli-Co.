@@ -29,12 +29,12 @@ export function AdminBreadcrumbs() {
   );
 
   return (
-    <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-      <Link href="/admin" className="hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors">
+    <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 min-w-0 truncate">
+      <Link href="/admin" className="hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors shrink-0">
         Admin
       </Link>
-      <span>/</span>
-      <span className="font-medium text-neutral-900 dark:text-neutral-100 capitalize">
+      <span className="shrink-0">/</span>
+      <span className="font-medium text-neutral-900 dark:text-neutral-100 capitalize truncate">
         {label}
       </span>
     </div>

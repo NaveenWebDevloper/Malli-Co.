@@ -55,7 +55,7 @@ export function ProductDeleteModal({
       aria-modal="true"
       aria-labelledby="delete-modal-title"
     >
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900">
         {/* Header */}
         <div className="p-6 border-b border-neutral-100 dark:border-neutral-800">
           <div className="flex items-center gap-3 text-red-600 dark:text-red-400">

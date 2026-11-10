@@ -699,13 +699,13 @@ export function CampaignsManager() {
       ========================================================================= */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Status Filter Tabs */}
-        <div className="inline-flex rounded-lg border border-neutral-200 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="inline-flex max-w-full overflow-x-auto no-scrollbar rounded-lg border border-neutral-200 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-900">
           {["ALL", "LIVE", "SCHEDULED", "PAUSED", "ENDED"].map((tab) => (
             <button
               key={tab}
               type="button"
               onClick={() => setStatusFilter(tab)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition whitespace-nowrap ${
                 statusFilter === tab
                   ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-sm"
                   : "text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white"

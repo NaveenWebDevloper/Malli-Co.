@@ -765,7 +765,7 @@ export default function ProductForm({
                     </div>
 
                     <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
-                      <table className="w-full text-left text-xs">
+                      <table className="w-full text-left text-xs min-w-[640px]">
                         <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300">
                           <tr>
                             <th className="py-2.5 px-3 font-semibold">

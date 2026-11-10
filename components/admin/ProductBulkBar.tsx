@@ -29,7 +29,7 @@ export function ProductBulkBar({
       aria-label="Bulk actions toolbar"
       className="fixed bottom-6 inset-x-0 z-40 mx-auto w-[92%] max-w-2xl animate-in slide-in-from-bottom-5 duration-200"
     >
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-neutral-800 bg-[#121212] px-5 py-3.5 text-white shadow-2xl backdrop-blur-md dark:border-neutral-700 dark:bg-black/90">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 rounded-2xl border border-neutral-800 bg-[#121212] px-3.5 sm:px-5 py-2.5 sm:py-3.5 text-white shadow-2xl backdrop-blur-md dark:border-neutral-700 dark:bg-black/90">
         <div className="flex items-center gap-2.5">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#8C7A58] text-xs font-bold text-white">
             {selectedCount}

@@ -540,7 +540,7 @@ export function BannerManager() {
                 onDragStart={() => handleDragStart(idx)}
                 onDragOver={handleDragOver}
                 onDrop={() => handleDrop(idx)}
-                className={`group flex items-center justify-between p-3.5 sm:p-4 rounded-xl border transition-all ${
+                className={`group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl border transition-all ${
                   draggedIdx === idx
                     ? "opacity-40 border-dashed border-neutral-400 bg-neutral-100 dark:bg-neutral-800"
                     : "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 shadow-sm"
@@ -626,7 +626,7 @@ export function BannerManager() {
                 </div>
 
                 {/* Right: Status Badges, Toggle & Actions */}
-                <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-4 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-neutral-800 flex-shrink-0">
                   {/* Schedule Badge */}
                   <span
                     className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${

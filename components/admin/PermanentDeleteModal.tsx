@@ -66,7 +66,7 @@ export function PermanentDeleteModal({
       aria-modal="true"
       aria-labelledby="perm-delete-title"
     >
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-red-200 bg-white shadow-2xl dark:border-red-950 dark:bg-neutral-900">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-red-200 bg-white shadow-2xl dark:border-red-950 dark:bg-neutral-900">
         {/* Header */}
         <div className="p-6 border-b border-red-100 bg-red-50/50 dark:border-red-950/60 dark:bg-red-950/20">
           <div className="flex items-center gap-3 text-red-600 dark:text-red-400">

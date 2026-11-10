@@ -213,7 +213,7 @@ export default async function AdminDashboardPage() {
                 </p>
               </div>
             ) : (
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs min-w-[560px]">
                 <thead>
                   <tr className="border-b border-neutral-100 text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
                     <th className="pb-3 font-medium">Order Number</th>

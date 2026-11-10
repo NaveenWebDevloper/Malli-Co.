@@ -328,11 +328,11 @@ export function ProductsManager({
       </div>
 
       {/* Tabs / Segmented Control */}
-      <div className="flex items-center gap-1.5 border-b border-neutral-200 dark:border-neutral-800 pb-px">
+      <div className="flex items-center gap-1.5 border-b border-neutral-200 dark:border-neutral-800 pb-px overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => handleTabChange("active")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer ${
+          className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer whitespace-nowrap ${
             view === "active"
               ? "border-[#121212] text-[#121212] dark:border-white dark:text-white"
               : "border-transparent text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
@@ -353,7 +353,7 @@ export function ProductsManager({
         <button
           type="button"
           onClick={() => handleTabChange("draft")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer ${
+          className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer whitespace-nowrap ${
             view === "draft"
               ? "border-[#121212] text-[#121212] dark:border-white dark:text-white"
               : "border-transparent text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
@@ -374,7 +374,7 @@ export function ProductsManager({
         <button
           type="button"
           onClick={() => handleTabChange("trash")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer ${
+          className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer whitespace-nowrap ${
             view === "trash"
               ? "border-red-600 text-red-600 dark:border-red-400 dark:text-red-400"
               : "border-transparent text-neutral-500 hover:text-red-600 dark:hover:text-red-400"

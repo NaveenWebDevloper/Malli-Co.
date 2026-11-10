@@ -39,7 +39,11 @@ const navItems: NavItem[] = [
   { name: "Settings", href: "/admin/settings", icon: IconSettings },
 ];
 
-export function AdminSidebarNav() {
+interface AdminSidebarNavProps {
+  onNavigate?: () => void;
+}
+
+export function AdminSidebarNav({ onNavigate }: AdminSidebarNavProps = {}) {
   const pathname = usePathname();
 
   return (
@@ -55,6 +59,7 @@ export function AdminSidebarNav() {
           <Link
             key={item.name}
             href={item.href}
+            onClick={() => onNavigate?.()}
             className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium transition-all ${
               isActive
                 ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 shadow-sm"
