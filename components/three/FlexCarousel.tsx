@@ -1501,7 +1501,7 @@ export function FlexCarousel({
       tabIndex={0}
     >
       {/* Prev & Next Atelier Controls for tap & touch accessibility */}
-      <div className="flex-carousel__controls">
+      <div className="flex-carousel__controls absolute inset-x-0 left-0 right-0 w-full top-1/2 -translate-y-1/2 flex justify-between items-center px-3 sm:px-6 pointer-events-none z-20">
         <button
           type="button"
           tabIndex={0}
