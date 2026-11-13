@@ -27,7 +27,7 @@
   :root {
     --announcement-height: 36px;
     --header-top: var(--announcement-height);
-    --header-height: 96px;
+    --header-height: 110px;
     --header-gap: 0px;
   }
 }

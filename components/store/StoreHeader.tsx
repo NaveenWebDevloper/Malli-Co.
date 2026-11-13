@@ -127,8 +127,8 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
           "transition-[height,top,background-color,box-shadow,border-color] duration-300 ease-out",
           "border-b border-[#EAE3D4]/90",
           isScrolled
-            ? "top-0 h-[76px] sm:h-[80px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
-            : "top-[var(--announcement-height,36px)] h-[82px] sm:h-[88px] lg:h-[96px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
+            ? "top-0 h-[76px] sm:h-[80px] lg:h-[88px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
+            : "top-[var(--announcement-height,36px)] h-[82px] sm:h-[88px] lg:h-[110px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
         )}
         role="banner"
       >
@@ -164,23 +164,39 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
               </button>
             </div>
 
-            {/* Brand Logo (Placed on the left, slightly enlarged) */}
+            {/* Brand Logo (Responsive: circular emblem on mobile, expanded brandmark on desktop) */}
             <Link
               href="/"
               className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-105 active:scale-95 flex-shrink-0"
               aria-label="Malli & Co. Home"
             >
+              {/* Mobile circular emblem logo (< lg) */}
+              <Image
+                src="/images/logo-mobile.png"
+                alt="Malli & Co. — Kids & Men's Wear"
+                width={160}
+                height={160}
+                priority
+                className={cn(
+                  "block lg:hidden object-contain w-auto transition-all duration-300 ease-out",
+                  isScrolled
+                    ? "h-12 w-12 sm:h-14 sm:w-14"
+                    : "h-14 w-14 sm:h-16 sm:w-16"
+                )}
+              />
+
+              {/* Desktop brandmark logo (lg+) - enlarged for crisp detail */}
               <Image
                 src="/images/logo.png"
                 alt="Malli & Co. — Kids & Men's Wear"
-                width={220}
-                height={210}
+                width={280}
+                height={270}
                 priority
                 className={cn(
-                  "object-contain w-auto transition-all duration-300 ease-out",
+                  "hidden lg:block object-contain w-auto transition-all duration-300 ease-out",
                   isScrolled
-                    ? "h-12 sm:h-14 lg:h-[60px]"
-                    : "h-14 sm:h-16 lg:h-[76px]"
+                    ? "lg:h-[72px] xl:h-[76px]"
+                    : "lg:h-[90px] xl:h-[96px]"
                 )}
               />
             </Link>
