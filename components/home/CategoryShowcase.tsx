@@ -151,14 +151,20 @@ export function CategoryShowcase() {
           </div>
 
           {/* Right Hero Character Imagery */}
-          <div className="absolute right-0 bottom-0 top-0 w-[45%] sm:w-[48%] pointer-events-none flex items-end justify-end">
-            <div className="relative w-full h-[95%] sm:h-full">
+          <div className="absolute right-0 bottom-0 top-0 w-[46%] sm:w-[50%] md:w-[48%] pointer-events-none flex items-end justify-end overflow-hidden">
+            <div
+              className="relative w-full h-full"
+              style={{
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 15%, black 35%)",
+                maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 15%, black 35%)",
+              }}
+            >
               <Image
                 src="/images/showcase/banner-girl.png"
                 alt="Malli & Co. Kids Collection - Joyful Girl in Party Dress"
                 fill
-                sizes="(max-width: 768px) 50vw, 30vw"
-                className="object-contain object-bottom-right transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 35vw"
+                className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
           </div>
@@ -195,14 +201,20 @@ export function CategoryShowcase() {
           </div>
 
           {/* Right Hero Character Imagery */}
-          <div className="absolute right-0 bottom-0 top-0 w-[45%] sm:w-[48%] pointer-events-none flex items-end justify-end">
-            <div className="relative w-full h-[95%] sm:h-full">
+          <div className="absolute right-0 bottom-0 top-0 w-[46%] sm:w-[50%] md:w-[48%] pointer-events-none flex items-end justify-end overflow-hidden">
+            <div
+              className="relative w-full h-full"
+              style={{
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 15%, black 35%)",
+                maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 15%, black 35%)",
+              }}
+            >
               <Image
                 src="/images/showcase/banner-man.png"
                 alt="Malli & Co. Men's Collection - Stylish Gentleman in Jacket"
                 fill
-                sizes="(max-width: 768px) 50vw, 30vw"
-                className="object-contain object-bottom-right transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 35vw"
+                className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
           </div>
@@ -213,3 +225,4 @@ export function CategoryShowcase() {
 }
 
 export default CategoryShowcase;
+
