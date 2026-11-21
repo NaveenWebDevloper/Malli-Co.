@@ -28,6 +28,7 @@
     --header-top: var(--announcement-height);
     --header-height: 88px;
     --header-gap: 0px;
+    --header-offset: calc(var(--header-top) + var(--header-height));
   }
 }
 
@@ -37,6 +38,7 @@
     --header-top: var(--announcement-height);
     --header-height: 112px;
     --header-gap: 0px;
+    --header-offset: calc(var(--header-top) + var(--header-height));
   }
 }
 
@@ -46,6 +48,7 @@
     --header-top: var(--announcement-height);
     --header-height: 118px;
     --header-gap: 0px;
+    --header-offset: calc(var(--header-top) + var(--header-height));
   }
 }
 

@@ -3,6 +3,7 @@ import { getCatalogProducts } from "@/lib/catalog";
 import { getActiveHeroBanners, getActiveSeasonalBanner } from "@/lib/banners";
 import { getFeaturedCollection } from "@/lib/collections";
 import { HeroBannerCarousel } from "@/components/home/HeroBannerCarousel";
+import { TrustBanner } from "@/components/home/TrustBanner";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { SeasonPicks } from "@/components/home/SeasonPicks";
 import { TrendingCategories } from "@/components/home/TrendingCategories";
@@ -67,6 +68,9 @@ export default async function StoreHomePage() {
 
       {/* 1. Premier Editorial Banner Carousel (Stage 3 & 4) */}
       <HeroBannerCarousel banners={banners} />
+
+      {/* Trust & Guarantee Strip (Flush below hero banner with zero gaps) */}
+      <TrustBanner />
 
       {/* 2. Shop by Category & Dual Feature Collection Banners */}
       <CategoryShowcase />

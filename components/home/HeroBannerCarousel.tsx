@@ -241,7 +241,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       {...bindGesture()}
-      className="group relative w-full overflow-hidden select-none bg-[#10264B] touch-pan-y rounded-none h-[72vh] min-h-[520px] sm:h-[82vh] sm:min-h-[620px] lg:h-[88vh] lg:min-h-[700px] xl:h-[92vh] xl:min-h-[760px] max-h-[940px] mb-12 md:mb-16 isolate"
+      className="group relative w-full overflow-hidden select-none bg-[#10264B] touch-pan-y rounded-none h-[50vh] min-h-[380px] sm:h-[58vh] sm:min-h-[460px] lg:h-[64vh] lg:min-h-[520px] xl:h-[68vh] xl:min-h-[560px] max-h-[720px] mb-0 isolate"
       style={{
         transform: "translateZ(0)",
       }}

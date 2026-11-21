@@ -28,7 +28,7 @@ export default async function StoreLayout({
         <div className="min-h-screen flex flex-col bg-[#FBF9F5] text-[#121212] selection:bg-neutral-900 selection:text-[#FBF9F5] overflow-x-clip">
           <AnnouncementBar />
           <StoreHeader isAdmin={isAdmin} />
-          <main className="flex-1 pt-[var(--header-offset)]">
+          <main className="flex-1 pt-[118px] sm:pt-[124px] lg:pt-[148px] xl:pt-[154px]" style={{ paddingTop: "var(--header-offset)" }}>
             <PageTransitionProvider>{children}</PageTransitionProvider>
           </main>
           <StoreFooter />
