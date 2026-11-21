@@ -3,7 +3,7 @@ import { getCatalogProducts } from "@/lib/catalog";
 import { getActiveHeroBanners, getActiveSeasonalBanner } from "@/lib/banners";
 import { getFeaturedCollection } from "@/lib/collections";
 import { HeroBannerCarousel } from "@/components/home/HeroBannerCarousel";
-import { StoreHeroWrapper } from "@/components/store/StoreHeroWrapper";
+import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { SeasonPicks } from "@/components/home/SeasonPicks";
 import { TrendingCategories } from "@/components/home/TrendingCategories";
 import { SaleBanner } from "@/components/home/SaleBanner";
@@ -68,10 +68,8 @@ export default async function StoreHomePage() {
       {/* 1. Premier Editorial Banner Carousel (Stage 3 & 4) */}
       <HeroBannerCarousel banners={banners} />
 
-      {/* 2. 3D WebGL Lookbook Hero Section (Rule 8 compliant, id="lookbook") */}
-      <div className="my-16 sm:my-24">
-        <StoreHeroWrapper />
-      </div>
+      {/* 2. Shop by Category & Dual Feature Collection Banners */}
+      <CategoryShowcase />
 
       {/* 3. Live Promotion Sale Banner (Top Priority Live Campaign) */}
       <div className="mb-16 sm:mb-24">
