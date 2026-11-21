@@ -127,8 +127,8 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
           "transition-[height,top,background-color,box-shadow,border-color] duration-300 ease-out",
           "border-b border-[#EAE3D4]/90",
           isScrolled
-            ? "top-0 h-[76px] sm:h-[80px] lg:h-[88px] xl:h-[92px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
-            : "top-[var(--announcement-height,36px)] h-[82px] sm:h-[88px] lg:h-[112px] xl:h-[118px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
+            ? "top-0 h-[64px] sm:h-[68px] lg:h-[72px] xl:h-[76px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
+            : "top-[var(--announcement-height,36px)] h-[72px] sm:h-[76px] lg:h-[84px] xl:h-[88px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
         )}
         role="banner"
       >
@@ -180,12 +180,12 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                 className={cn(
                   "block lg:hidden object-contain w-auto transition-all duration-300 ease-out",
                   isScrolled
-                    ? "h-12 w-12 sm:h-14 sm:w-14"
-                    : "h-14 w-14 sm:h-16 sm:w-16"
+                    ? "h-11 w-11 sm:h-12 sm:w-12"
+                    : "h-12 w-12 sm:h-14 sm:w-14"
                 )}
               />
 
-              {/* Desktop banner logo (lg+) - prominent, large, and detailed */}
+              {/* Desktop banner logo (lg+) - prominent, sleek, and proportionate */}
               <Image
                 src="/images/logo-desktop.png"
                 alt="Malli & Co. — Kids & Men's Wear"
@@ -195,8 +195,8 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                 className={cn(
                   "hidden lg:block object-contain w-auto transition-all duration-300 ease-out",
                   isScrolled
-                    ? "lg:h-[68px] xl:h-[72px]"
-                    : "lg:h-[86px] xl:h-[94px] 2xl:h-[98px]"
+                    ? "lg:h-[50px] xl:h-[54px]"
+                    : "lg:h-[62px] xl:h-[66px] 2xl:h-[70px]"
                 )}
               />
             </Link>

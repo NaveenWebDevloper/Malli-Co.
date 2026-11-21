@@ -3,7 +3,7 @@ import React from "react";
 export function HeroBannerCarouselSkeleton() {
   return (
     <div
-      className="relative w-full overflow-hidden bg-[#10264B] rounded-none h-[50vh] min-h-[380px] sm:h-[58vh] sm:min-h-[460px] lg:h-[64vh] lg:min-h-[520px] xl:h-[68vh] xl:min-h-[560px] max-h-[720px] mb-0 isolate"
+      className="relative w-full overflow-hidden bg-[#10264B] rounded-none h-[48vh] min-h-[360px] sm:h-[54vh] sm:min-h-[420px] lg:h-[60vh] lg:min-h-[480px] xl:h-[64vh] xl:min-h-[520px] max-h-[680px] mb-0 isolate"
       style={{
         transform: "translateZ(0)",
       }}

@@ -17,7 +17,7 @@
   /* Top announcement & header spacing geometry (Full-Width Header) */
   --announcement-height: 36px;
   --header-top: var(--announcement-height);
-  --header-height: 82px;
+  --header-height: 72px;
   --header-gap: 0px;
   --header-offset: calc(var(--header-top) + var(--header-height));
 }
@@ -26,7 +26,7 @@
   :root {
     --announcement-height: 36px;
     --header-top: var(--announcement-height);
-    --header-height: 88px;
+    --header-height: 76px;
     --header-gap: 0px;
     --header-offset: calc(var(--header-top) + var(--header-height));
   }
@@ -36,7 +36,7 @@
   :root {
     --announcement-height: 36px;
     --header-top: var(--announcement-height);
-    --header-height: 112px;
+    --header-height: 84px;
     --header-gap: 0px;
     --header-offset: calc(var(--header-top) + var(--header-height));
   }
@@ -46,7 +46,7 @@
   :root {
     --announcement-height: 36px;
     --header-top: var(--announcement-height);
-    --header-height: 118px;
+    --header-height: 88px;
     --header-gap: 0px;
     --header-offset: calc(var(--header-top) + var(--header-height));
   }
