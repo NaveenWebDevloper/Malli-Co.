@@ -164,24 +164,24 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
               </button>
             </div>
 
-            {/* Brand Logo (Responsive: circular emblem on mobile, expanded banner on desktop) */}
+            {/* Brand Logo (Responsive: stacked emblem on mobile, expanded banner on desktop) */}
             <Link
               href="/"
-              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#F5B817] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 flex-shrink-0"
+              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#F5B817] focus-visible:outline-none rounded-xl p-0.5 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 flex-shrink-0"
               aria-label="Malli & Co. Home"
             >
-              {/* Mobile circular emblem logo (< lg) */}
+              {/* Mobile emblem logo (< lg) */}
               <Image
-                src="/images/logo-mobile.png"
-                alt="Malli & Co. — Kids & Men's Wear"
-                width={160}
-                height={160}
+                src="/images/logo-mobile-v2.png"
+                alt="Malli & Co. — Kids & Men's Fashion Hub"
+                width={187}
+                height={205}
                 priority
                 className={cn(
-                  "block lg:hidden object-contain w-auto transition-all duration-300 ease-out",
+                  "block lg:hidden object-contain w-auto transition-all duration-300 ease-out rounded-lg shadow-xs",
                   isScrolled
-                    ? "h-11 w-11 sm:h-12 sm:w-12"
-                    : "h-12 w-12 sm:h-14 sm:w-14"
+                    ? "h-[46px] sm:h-[50px]"
+                    : "h-[54px] sm:h-[58px]"
                 )}
               />
 
