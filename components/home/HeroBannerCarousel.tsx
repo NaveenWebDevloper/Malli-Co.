@@ -241,8 +241,10 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       {...bindGesture()}
-      className="group relative w-full overflow-hidden select-none bg-[#10264B] touch-pan-y rounded-none h-[48vh] min-h-[360px] sm:h-[54vh] sm:min-h-[420px] lg:h-[60vh] lg:min-h-[480px] xl:h-[64vh] xl:min-h-[520px] max-h-[680px] mb-0 isolate"
+      className="group relative w-full overflow-hidden select-none bg-[#10264B] touch-pan-y rounded-none mb-0 isolate h-[calc(100vh-var(--header-offset)-var(--trust-banner-height,60px))] sm:h-[calc(100dvh-var(--header-offset)-var(--trust-banner-height,60px))]"
       style={{
+        height: "calc(100vh - var(--header-offset) - var(--trust-banner-height, 60px))",
+        minHeight: "420px",
         transform: "translateZ(0)",
       }}
     >

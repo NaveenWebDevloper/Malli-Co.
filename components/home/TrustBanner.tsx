@@ -3,7 +3,10 @@ import React from "react";
 export function TrustBanner() {
   return (
     <section
-      className="w-full bg-[#EFECE6] border-b border-[#D8D2C5]/90 my-0 py-3.5 sm:py-4.5 md:py-5 select-none"
+      className="w-full bg-[#EFECE6] border-b border-[#D8D2C5]/90 my-0 py-2.5 sm:py-3 flex items-center justify-center select-none flex-shrink-0"
+      style={{
+        minHeight: "var(--trust-banner-height, 60px)",
+      }}
       aria-label="Service Guarantees"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

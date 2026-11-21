@@ -3,8 +3,10 @@ import React from "react";
 export function HeroBannerCarouselSkeleton() {
   return (
     <div
-      className="relative w-full overflow-hidden bg-[#10264B] rounded-none h-[48vh] min-h-[360px] sm:h-[54vh] sm:min-h-[420px] lg:h-[60vh] lg:min-h-[480px] xl:h-[64vh] xl:min-h-[520px] max-h-[680px] mb-0 isolate"
+      className="relative w-full overflow-hidden bg-[#10264B] rounded-none mb-0 isolate h-[calc(100vh-var(--header-offset)-var(--trust-banner-height,60px))] sm:h-[calc(100dvh-var(--header-offset)-var(--trust-banner-height,60px))]"
       style={{
+        height: "calc(100vh - var(--header-offset) - var(--trust-banner-height, 60px))",
+        minHeight: "420px",
         transform: "translateZ(0)",
       }}
       aria-hidden="true"
