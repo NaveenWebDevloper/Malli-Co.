@@ -241,9 +241,8 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       {...bindGesture()}
-      className="group relative w-[calc(100%-24px)] sm:w-[calc(100%-32px)] lg:w-[80%] mx-auto overflow-hidden select-none bg-[#121212] touch-pan-y rounded-[20px] sm:rounded-[24px] lg:rounded-[32px] h-[60vh] min-h-[440px] md:h-[76vh] md:min-h-[520px] md:max-h-[800px] mb-12 md:mb-16 isolate"
+      className="group relative w-full overflow-hidden select-none bg-[#10264B] touch-pan-y rounded-none h-[72vh] min-h-[520px] sm:h-[82vh] sm:min-h-[620px] lg:h-[88vh] lg:min-h-[700px] xl:h-[92vh] xl:min-h-[760px] max-h-[940px] mb-12 md:mb-16 isolate"
       style={{
-        WebkitMaskImage: "-webkit-radial-gradient(white, black)",
         transform: "translateZ(0)",
       }}
     >
@@ -291,7 +290,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                 fill
                 priority={currentIndex === 0}
                 loading={currentIndex === 0 ? "eager" : "lazy"}
-                sizes="(max-width: 640px) calc(100vw - 24px), (max-width: 1024px) calc(100vw - 32px), 80vw"
+                sizes="100vw"
                 className="object-cover object-center"
               />
             </div>
@@ -305,7 +304,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                   fill
                   priority={currentIndex === 0}
                   loading={currentIndex === 0 ? "eager" : "lazy"}
-                  sizes="(max-width: 640px) calc(100vw - 24px), (max-width: 1024px) calc(100vw - 32px), 80vw"
+                  sizes="100vw"
                   className="object-cover object-center"
                 />
               </div>
@@ -340,7 +339,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
       </AnimatePresence>
 
       {/* Slide Text Content Layer (40px desktop / 24px mobile inset padding) */}
-      <div className="relative z-20 h-full w-full p-6 lg:p-10 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-24 pointer-events-none">
+      <div className="relative z-20 h-full w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-24 pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeBanner.id}
@@ -361,7 +360,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                 transition: { duration: prefersReducedMotion ? 0.01 : 0.25 },
               },
             }}
-            className={`max-w-5xl pointer-events-auto md:px-6 lg:px-8 ${
+            className={`w-full max-w-4xl pointer-events-auto ${
               activeBanner.textPosition === "center"
                 ? "mx-auto text-center items-center"
                 : activeBanner.textPosition === "right"
@@ -463,7 +462,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
               {/* Primary CTA */}
               <Link
                 href={activeBanner.ctaUrl}
-                className="inline-flex items-center gap-2 px-7 sm:px-9 py-3.5 rounded-full bg-white text-[#121212] text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-2xl hover:bg-neutral-100 hover:scale-[1.03] active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex items-center gap-2 px-7 sm:px-9 py-3.5 rounded-full bg-[#FBF9F5] text-[#10264B] text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-2xl hover:bg-[#F5B817] hover:text-[#10264B] hover:scale-[1.03] active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B817]"
               >
                 <span>{activeBanner.ctaLabel}</span>
                 <span className="text-sm font-sans">→</span>
@@ -473,7 +472,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
               {activeBanner.secondaryCtaLabel && activeBanner.secondaryCtaUrl && (
                 <Link
                   href={activeBanner.secondaryCtaUrl}
-                  className="inline-flex items-center px-6 sm:px-7 py-3.5 rounded-full border border-white/50 bg-black/30 text-[#FBF9F5] text-xs font-serif font-bold uppercase tracking-[0.2em] backdrop-blur-md hover:bg-white/15 hover:border-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white active:scale-[0.98]"
+                  className="inline-flex items-center px-6 sm:px-7 py-3.5 rounded-full border border-white/50 bg-[#10264B]/40 text-[#FBF9F5] text-xs font-sans font-bold uppercase tracking-[0.2em] backdrop-blur-md hover:bg-white/20 hover:border-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B817] active:scale-[0.98]"
                 >
                   <span>{activeBanner.secondaryCtaLabel}</span>
                 </Link>
@@ -490,7 +489,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
             type="button"
             onClick={prevSlide}
             aria-label="Previous slide"
-            className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center border border-white/20 bg-black/40 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all shadow-xl focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="hidden md:flex absolute left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center border border-white/20 bg-black/40 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 hover:bg-[#F5B817] hover:text-[#10264B] hover:border-[#F5B817] hover:scale-105 active:scale-95 transition-all shadow-xl focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B817]"
           >
             <svg
               className="w-5 h-5 -translate-x-0.5"
@@ -507,7 +506,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
             type="button"
             onClick={nextSlide}
             aria-label="Next slide"
-            className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center border border-white/20 bg-black/40 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all shadow-xl focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="hidden md:flex absolute right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center border border-white/20 bg-black/40 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 hover:bg-[#F5B817] hover:text-[#10264B] hover:border-[#F5B817] hover:scale-105 active:scale-95 transition-all shadow-xl focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B817]"
           >
             <svg
               className="w-5 h-5 translate-x-0.5"
@@ -522,9 +521,9 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
         </>
       )}
 
-      {/* Bottom Controls Bar: Left Lookbook Cue & Right Wrogn-Style Indicators */}
-      <div className="absolute inset-x-0 bottom-6 sm:bottom-8 px-6 sm:px-10 z-30 pointer-events-none">
-        <div className="w-full flex items-center justify-between">
+      {/* Bottom Controls Bar: Left Lookbook Cue & Right Indicators */}
+      <div className="absolute inset-x-0 bottom-6 sm:bottom-8 z-30 pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex items-center justify-between">
           {/* Bottom-Left: Subtle Lookbook Anchor Cue */}
           <div className="pointer-events-auto">
             <a
@@ -536,14 +535,14 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                   target.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="group flex items-center gap-2 text-[10px] font-sans font-semibold uppercase tracking-[0.20em] text-white/70 hover:text-white transition-colors"
+              className="group flex items-center gap-2 text-[10px] font-sans font-semibold uppercase tracking-[0.20em] text-white/80 hover:text-[#F5B817] transition-colors"
             >
               <span>Explore Lookbook</span>
               <span className="text-xs transition-transform group-hover:translate-y-0.5">↓</span>
             </a>
           </div>
 
-          {/* Bottom-Right: Wrogn-style Square/Dash Slide Indicators */}
+          {/* Bottom-Right: Slide Indicators */}
           {!isSingleSlide ? (
             <div
               className="flex items-center gap-2 pointer-events-auto"
@@ -560,7 +559,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                     aria-selected={isActive}
                     aria-label={`Slide ${idx + 1} of ${totalSlides}`}
                     onClick={() => goToSlide(idx)}
-                    className={`relative overflow-hidden transition-all duration-300 rounded-[2px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white ${
+                    className={`relative overflow-hidden transition-all duration-300 rounded-[2px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B817] ${
                       isActive
                         ? "w-4 sm:w-5 h-2 bg-white/40 shadow-sm"
                         : "w-2 sm:w-2.5 h-2 bg-white/35 hover:bg-white/60"
@@ -568,7 +567,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
                   >
                     {isActive && (
                       <span
-                        className="absolute inset-0 bg-white rounded-[2px]"
+                        className="absolute inset-0 bg-[#F5B817] rounded-[2px]"
                         style={{
                           transform: `scaleX(${progress})`,
                           transformOrigin: "left",

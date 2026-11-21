@@ -142,7 +142,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="w-10 h-10 flex flex-col items-center justify-center space-y-1.5 text-neutral-800 rounded-full focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none"
+                className="w-10 h-10 flex flex-col items-center justify-center space-y-1.5 text-neutral-800 rounded-full focus-visible:ring-2 focus-visible:ring-[#F5B817] focus-visible:outline-none"
                 aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={isMobileMenuOpen}
               >
@@ -167,7 +167,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
             {/* Brand Logo (Responsive: circular emblem on mobile, expanded banner on desktop) */}
             <Link
               href="/"
-              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 flex-shrink-0"
+              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#F5B817] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 flex-shrink-0"
               aria-label="Malli & Co. Home"
             >
               {/* Mobile circular emblem logo (< lg) */}
@@ -228,10 +228,10 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                       className={cn(
                         "relative block px-3 xl:px-4 py-2 text-[12.5px] xl:text-[14px] font-medium uppercase tracking-[0.08em] xl:tracking-[0.12em]",
                         "transition-colors duration-200 rounded-full",
-                        "focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none",
+                        "focus-visible:ring-2 focus-visible:ring-[#F5B817] focus-visible:outline-none",
                         isActive || isHovered || isPending
-                          ? "text-[#121212] font-semibold"
-                          : "text-neutral-600 hover:text-[#121212]"
+                          ? "text-[#10264B] font-semibold"
+                          : "text-neutral-600 hover:text-[#10264B]"
                       )}
                     >
                       {/* Sliding Pill Indicator (layoutId) */}
@@ -242,7 +242,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                             "absolute inset-0 rounded-full -z-10",
                             isPending
                               ? "bg-[#DDD4C1] animate-pulse"
-                              : "bg-[#EAE3D4]/70"
+                              : "bg-[#10264B]/10"
                           )}
                           transition={{
                             type: "spring",
@@ -254,7 +254,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                       <span className="relative z-10 flex items-center gap-1.5">
                         {link.label}
                         {isPending && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#8C7A58] animate-ping" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#F5B817] animate-ping" />
                         )}
                       </span>
                     </Link>

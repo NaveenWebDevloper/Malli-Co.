@@ -293,16 +293,16 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 sm:mb-10">
         {/* Left: Eyebrow, Serif Title with Italic Accent & Subtitle */}
         <div className="space-y-1.5 max-w-xl">
-          <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[#8C7A58]">
-            <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[#10264B]">
+            <span className="w-5 h-[1.5px] bg-[#F5B817]" aria-hidden="true" />
             <span>Featured Selection</span>
           </div>
           {collection?.title ? (
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#10264B] tracking-tight leading-tight">
               {collection.title}
             </h2>
           ) : (
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#121212] tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#10264B] tracking-tight leading-tight">
               Season&apos;s <span className="italic font-normal">Top Picks</span>
             </h2>
           )}
@@ -313,7 +313,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
             {collection?.slug && (
               <Link
                 href={`/collections/${collection.slug}`}
-                className="text-xs font-semibold text-[#8C7A58] hover:text-[#706144] hover:underline inline-flex items-center gap-1"
+                className="text-xs font-semibold text-[#10264B] hover:text-[#F5B817] hover:underline inline-flex items-center gap-1"
               >
                 <span>View Full Collection</span>
                 <span>→</span>
@@ -335,8 +335,8 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
                 onClick={() => handleFilterSelect(btn.id)}
                 className={`inline-flex items-center gap-2 px-4 sm:px-4.5 py-2 rounded-full text-xs font-medium tracking-wide transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#26221C] text-white border border-[#26221C] shadow-sm scale-[1.02]"
-                    : "bg-white hover:bg-[#FAF7F2] text-neutral-700 hover:text-black border border-[#E5DECF] hover:border-neutral-400 shadow-xs active:scale-95"
+                    ? "bg-[#10264B] text-white border border-[#10264B] shadow-sm scale-[1.02]"
+                    : "bg-white hover:bg-[#FAF7F2] text-neutral-700 hover:text-[#10264B] border border-[#E5DECF] hover:border-neutral-400 shadow-xs active:scale-95"
                 }`}
               >
                 {Icon && (
