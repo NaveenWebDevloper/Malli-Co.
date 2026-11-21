@@ -19,7 +19,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "boys",
     label: "Boys",
     href: "/kids?gender=boys",
-    image: "/images/showcase/category-boys.png",
+    image: "/images/showcase/category-boys-v2.jpg",
     alt: "Boys Fashion Collection",
     bgTint: "bg-[#EAEFF7]",
   },
@@ -27,7 +27,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "girls",
     label: "Girls",
     href: "/kids?gender=girls",
-    image: "/images/showcase/category-girls.png",
+    image: "/images/showcase/category-girls-v2.jpg",
     alt: "Girls Fashion Collection",
     bgTint: "bg-[#FDF0F3]",
   },
@@ -35,7 +35,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "mens",
     label: "Men's",
     href: "/men",
-    image: "/images/showcase/category-mens.png",
+    image: "/images/showcase/category-mens-v2.jpg",
     alt: "Men's Luxury & Casual Wear",
     bgTint: "bg-[#F7F2EC]",
   },
@@ -43,7 +43,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "newborn",
     label: "Newborn",
     href: "/kids?category=newborn",
-    image: "/images/showcase/category-newborn.png",
+    image: "/images/showcase/category-newborn-v2.jpg",
     alt: "Newborn & Baby Wear",
     bgTint: "bg-[#FFF4EC]",
   },
@@ -51,7 +51,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "ethnic",
     label: "Ethnic Wear",
     href: "/kids?category=ethnic-wear",
-    image: "/images/showcase/category-ethnic.png",
+    image: "/images/showcase/category-ethnic-v2.jpg",
     alt: "Ethnic & Festive Celebration Apparel",
     bgTint: "bg-[#FDF6EA]",
   },
@@ -102,7 +102,8 @@ export function CategoryShowcase() {
                   src={cat.image}
                   alt={cat.alt}
                   fill
-                  sizes="(max-width: 640px) 130px, (max-width: 1024px) 160px, 200px"
+                  quality={95}
+                  sizes="(max-width: 640px) 180px, (max-width: 1024px) 240px, 320px"
                   className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               </div>
@@ -160,10 +161,11 @@ export function CategoryShowcase() {
               }}
             >
               <Image
-                src="/images/showcase/banner-girl.png"
+                src="/images/showcase/banner-kids-v2.jpg"
                 alt="Malli & Co. Kids Collection - Joyful Girl in Party Dress"
                 fill
-                sizes="(max-width: 768px) 50vw, 35vw"
+                quality={95}
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 45vw, 600px"
                 className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
@@ -210,10 +212,11 @@ export function CategoryShowcase() {
               }}
             >
               <Image
-                src="/images/showcase/banner-man.png"
+                src="/images/showcase/banner-mens-v2.jpg"
                 alt="Malli & Co. Men's Collection - Stylish Gentleman in Jacket"
                 fill
-                sizes="(max-width: 768px) 50vw, 35vw"
+                quality={95}
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 45vw, 600px"
                 className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
