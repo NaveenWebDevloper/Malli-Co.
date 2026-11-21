@@ -127,16 +127,16 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
           "transition-[height,top,background-color,box-shadow,border-color] duration-300 ease-out",
           "border-b border-[#EAE3D4]/90",
           isScrolled
-            ? "top-0 h-[76px] sm:h-[80px] lg:h-[88px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
-            : "top-[var(--announcement-height,36px)] h-[82px] sm:h-[88px] lg:h-[110px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
+            ? "top-0 h-[76px] sm:h-[80px] lg:h-[88px] xl:h-[92px] bg-[#FBF9F5]/98 backdrop-blur-xl shadow-md"
+            : "top-[var(--announcement-height,36px)] h-[82px] sm:h-[88px] lg:h-[112px] xl:h-[118px] bg-[#FBF9F5]/95 backdrop-blur-md shadow-sm"
         )}
         role="banner"
       >
-        <div className="w-full h-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center justify-between">
+        <div className="w-full h-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-6 xl:px-12 flex items-center justify-between">
           {/* =====================================================================
               LEFT: BRAND LOGO + NAV LINKS (Beside each other)
           ===================================================================== */}
-          <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 xl:gap-10">
+          <div className="flex items-center gap-4 sm:gap-6 lg:gap-6 xl:gap-8">
             {/* Mobile Hamburger Trigger */}
             <div className="flex items-center lg:hidden">
               <button
@@ -164,10 +164,10 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
               </button>
             </div>
 
-            {/* Brand Logo (Responsive: circular emblem on mobile, expanded brandmark on desktop) */}
+            {/* Brand Logo (Responsive: circular emblem on mobile, expanded banner on desktop) */}
             <Link
               href="/"
-              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-105 active:scale-95 flex-shrink-0"
+              className="group flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none rounded-md p-1 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 flex-shrink-0"
               aria-label="Malli & Co. Home"
             >
               {/* Mobile circular emblem logo (< lg) */}
@@ -185,25 +185,25 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                 )}
               />
 
-              {/* Desktop brandmark logo (lg+) - enlarged for crisp detail */}
+              {/* Desktop banner logo (lg+) - prominent, large, and detailed */}
               <Image
-                src="/images/logo.png"
+                src="/images/logo-desktop.png"
                 alt="Malli & Co. — Kids & Men's Wear"
-                width={280}
-                height={270}
+                width={500}
+                height={167}
                 priority
                 className={cn(
                   "hidden lg:block object-contain w-auto transition-all duration-300 ease-out",
                   isScrolled
-                    ? "lg:h-[72px] xl:h-[76px]"
-                    : "lg:h-[90px] xl:h-[96px]"
+                    ? "lg:h-[68px] xl:h-[72px]"
+                    : "lg:h-[86px] xl:h-[94px] 2xl:h-[98px]"
                 )}
               />
             </Link>
 
             {/* Desktop Navigation Links (Directly beside logo) */}
             <nav
-              className="hidden lg:flex items-center space-x-1.5 xl:space-x-2"
+              className="hidden lg:flex items-center space-x-1 xl:space-x-2"
               role="navigation"
               aria-label="Main Store Navigation"
               onMouseLeave={handleNavMouseLeave}
@@ -226,7 +226,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                       prefetch={true}
                       onClick={() => setPendingNav(link.href)}
                       className={cn(
-                        "relative block px-3.5 xl:px-4 py-2 text-[13px] xl:text-[14px] font-medium uppercase tracking-[0.10em] xl:tracking-[0.12em]",
+                        "relative block px-3 xl:px-4 py-2 text-[12.5px] xl:text-[14px] font-medium uppercase tracking-[0.08em] xl:tracking-[0.12em]",
                         "transition-colors duration-200 rounded-full",
                         "focus-visible:ring-2 focus-visible:ring-[#8C7A58] focus-visible:outline-none",
                         isActive || isHovered || isPending

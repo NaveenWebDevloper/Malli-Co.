@@ -27,7 +27,16 @@
   :root {
     --announcement-height: 36px;
     --header-top: var(--announcement-height);
-    --header-height: 110px;
+    --header-height: 112px;
+    --header-gap: 0px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --announcement-height: 36px;
+    --header-top: var(--announcement-height);
+    --header-height: 118px;
     --header-gap: 0px;
   }
 }
