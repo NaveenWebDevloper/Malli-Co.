@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
-import { UpiPaymentModal, type UpiPaymentDetails } from "./UpiPaymentModal";
 
 const INDIAN_STATES = [
   "Telangana",
@@ -99,13 +98,6 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     "MANUAL_UPI" | "RAZORPAY"
   >("MANUAL_UPI");
-
-  const [upiModalState, setUpiModalState] = useState<{
-    isOpen: boolean;
-    orderNumber: string;
-    totalPaise: number;
-    upiDetails: UpiPaymentDetails;
-  } | null>(null);
 
   useEffect(() => {
     async function loadPaymentSettings() {
@@ -269,15 +261,12 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
         throw new Error(errorMsg);
       }
 
-      // If Manual UPI, launch the dedicated interactive UPI Scanner modal
+      // If Manual UPI, navigate directly to the dedicated full-screen Payment Page
       if (orderData.paymentMethod === "MANUAL_UPI") {
-        setIsSubmitting(false);
-        setUpiModalState({
-          isOpen: true,
-          orderNumber: orderData.orderNumber,
-          totalPaise: orderData.amountPaise,
-          upiDetails: orderData.upiDetails,
-        });
+        await refreshCart();
+        router.push(
+          `/checkout/payment/${encodeURIComponent(orderData.orderNumber)}`,
+        );
         return;
       }
 
@@ -911,30 +900,6 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
           </div>
         </div>
       </div>
-
-      {/* Manual UPI Payment Modal */}
-      {upiModalState && (
-        <UpiPaymentModal
-          isOpen={upiModalState.isOpen}
-          orderNumber={upiModalState.orderNumber}
-          totalPaise={upiModalState.totalPaise}
-          upiDetails={upiModalState.upiDetails}
-          onSuccess={async () => {
-            await refreshCart();
-            setUpiModalState(null);
-            router.push(
-              `/order/confirmed/${encodeURIComponent(upiModalState.orderNumber)}`,
-            );
-          }}
-          onClose={() => {
-            const ordNum = upiModalState.orderNumber;
-            setUpiModalState(null);
-            setErrorMessage(
-              `Payment reference pending. Your items remain held for Order #${ordNum}. You can submit your UTR anytime on the order page.`,
-            );
-          }}
-        />
-      )}
     </div>
   );
 }
