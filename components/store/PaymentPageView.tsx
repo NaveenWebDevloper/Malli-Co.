@@ -263,7 +263,10 @@ export function PaymentPageView({
 
               {/* QR Code Presentation Box */}
               <div className="inline-block p-4 sm:p-5 rounded-3xl bg-white border-2 border-[#EAE3D4] shadow-md">
-                {viewMode === "standee" && upiDetails.qrImage ? (
+                {viewMode === "standee" &&
+                upiDetails.qrImage &&
+                (upiDetails.qrImage.startsWith("/") ||
+                  upiDetails.qrImage.startsWith("http")) ? (
                   <div className="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto rounded-2xl overflow-hidden bg-neutral-50">
                     <Image
                       src={upiDetails.qrImage}
@@ -409,7 +412,9 @@ export function PaymentPageView({
                 {items.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 py-3">
                     <div className="relative h-14 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-[#F0EBE1] border border-[#E8E2D6]">
-                      {item.image ? (
+                      {item.image &&
+                      (item.image.startsWith("/") ||
+                        item.image.startsWith("http")) ? (
                         <Image
                           src={item.image}
                           alt={item.name}
@@ -418,7 +423,7 @@ export function PaymentPageView({
                           className="object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[10px] text-neutral-400">
+                        <div className="flex h-full w-full items-center justify-center text-[10px] text-neutral-400 font-mono">
                           IMG
                         </div>
                       )}
@@ -497,3 +502,4 @@ export function PaymentPageView({
     </div>
   );
 }
+

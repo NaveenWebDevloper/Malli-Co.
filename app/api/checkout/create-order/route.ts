@@ -373,19 +373,17 @@ export async function POST(req: NextRequest) {
         await Cart.updateOne({ cartToken }, { $set: { items: [] } });
       }
 
-      if (!session?.user?.id) {
-        cookieStore.set(
-          `malli_guest_order_${createdOrder.orderNumber}`,
-          rawGuestToken,
-          {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60, // 7 days
-            path: "/",
-          },
-        );
-      }
+      cookieStore.set(
+        `malli_guest_order_${createdOrder.orderNumber}`,
+        rawGuestToken,
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          maxAge: 7 * 24 * 60 * 60, // 7 days
+          path: "/",
+        },
+      );
     } catch {
       // Graceful fallback for environments where cookies() is restricted
     }

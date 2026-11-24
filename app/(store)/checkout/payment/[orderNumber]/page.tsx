@@ -77,46 +77,68 @@ export default async function CheckoutPaymentPage({
   }
 
   const paymentSettings = await getStorePaymentSettings();
-  const amountRupees = (order.totals.totalPaise / 100).toFixed(2);
-  const upiUri = `upi://pay?pa=${paymentSettings.storeUpiId}&pn=${encodeURIComponent(
-    paymentSettings.storeUpiName,
+  const totalPaise = order.totals?.totalPaise || 0;
+  const amountRupees = (totalPaise / 100).toFixed(2);
+  const storeUpiId = paymentSettings?.storeUpiId || "malliandco@okaxis";
+  const storeUpiName = paymentSettings?.storeUpiName || "Malli & Co.";
+  const upiUri = `upi://pay?pa=${storeUpiId}&pn=${encodeURIComponent(
+    storeUpiName,
   )}&am=${amountRupees}&cu=INR&tn=${encodeURIComponent(`Order ${order.orderNumber}`)}`;
 
-  const orderItems = order.items.map((i) => ({
-    name: i.nameSnapshot,
-    sku: i.skuSnapshot,
-    qty: i.qty,
-    pricePaise: i.finalPricePaise ?? i.priceSnapshotPaise,
-    image: i.imageSnapshot,
-    options: i.optionsSnapshot ? Object.fromEntries(i.optionsSnapshot as unknown as Map<string, string>) : undefined,
-  }));
+  const orderItems = (order.items || []).map((i) => {
+    let options: Record<string, string> | undefined;
+    if (i.optionsSnapshot instanceof Map) {
+      options = Object.fromEntries(i.optionsSnapshot);
+    } else if (i.optionsSnapshot && typeof i.optionsSnapshot === "object") {
+      options = i.optionsSnapshot as Record<string, string>;
+    }
+
+    return {
+      name: i.nameSnapshot || "Artisanal Garment",
+      sku: i.skuSnapshot || "",
+      qty: i.qty || 1,
+      pricePaise: i.finalPricePaise ?? i.priceSnapshotPaise ?? 0,
+      image: i.imageSnapshot,
+      options,
+    };
+  });
+
+  let expiresAtIso: string | undefined;
+  if (order.expiresAt) {
+    try {
+      expiresAtIso = new Date(order.expiresAt).toISOString();
+    } catch {
+      expiresAtIso = undefined;
+    }
+  }
 
   return (
     <PaymentPageView
       orderNumber={order.orderNumber}
-      totalPaise={order.totals.totalPaise}
-      subtotalPaise={order.totals.subtotalPaise}
-      shippingPaise={order.totals.shippingPaise}
-      taxPaise={order.totals.taxPaise}
-      discountPaise={order.totals.discountPaise || 0}
-      expiresAt={order.expiresAt?.toISOString()}
+      totalPaise={totalPaise}
+      subtotalPaise={order.totals?.subtotalPaise || 0}
+      shippingPaise={order.totals?.shippingPaise || 0}
+      taxPaise={order.totals?.taxPaise || 0}
+      discountPaise={order.totals?.discountPaise || 0}
+      expiresAt={expiresAtIso}
       items={orderItems}
       shippingAddress={{
-        name: order.shippingAddress.name,
-        phone: order.shippingAddress.phone,
-        street: order.shippingAddress.street,
-        landmark: order.shippingAddress.landmark,
-        city: order.shippingAddress.city,
-        state: order.shippingAddress.state,
-        postalCode: order.shippingAddress.postalCode,
+        name: order.shippingAddress?.name || "Customer",
+        phone: order.shippingAddress?.phone || "",
+        street: order.shippingAddress?.street || "",
+        landmark: order.shippingAddress?.landmark || "",
+        city: order.shippingAddress?.city || "",
+        state: order.shippingAddress?.state || "",
+        postalCode: order.shippingAddress?.postalCode || "",
       }}
       upiDetails={{
-        upiId: paymentSettings.storeUpiId,
-        payeeName: paymentSettings.storeUpiName,
-        qrImage: paymentSettings.storeUpiQrImage,
-        instructions: paymentSettings.storeUpiInstructions,
+        upiId: storeUpiId,
+        payeeName: storeUpiName,
+        qrImage: paymentSettings?.storeUpiQrImage || "",
+        instructions: paymentSettings?.storeUpiInstructions || "",
         upiUri,
       }}
     />
   );
 }
+
