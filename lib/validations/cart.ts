@@ -56,6 +56,7 @@ export const CheckoutPayloadSchema = z.object({
     )
     .min(1, "Cart must contain at least one item"),
   shippingAddress: CheckoutAddressSchema,
+  paymentMethod: z.enum(["RAZORPAY", "MANUAL_UPI"]).default("MANUAL_UPI"),
   saveAddress: z.boolean().optional(),
   notes: z.string().max(500).optional(),
 });

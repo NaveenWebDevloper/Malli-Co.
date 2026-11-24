@@ -167,9 +167,11 @@ export async function updateOrderStatus(
 export interface ConfirmOrderPaymentParams {
   orderId?: string | mongoose.Types.ObjectId;
   orderNumber?: string;
+  paymentMethod?: "RAZORPAY" | "MANUAL_UPI";
   razorpayOrderId?: string;
-  razorpayPaymentId: string;
+  razorpayPaymentId?: string;
   razorpaySignature?: string;
+  upiTransactionId?: string;
   performedBy?: string;
   note?: string;
 }
@@ -194,9 +196,11 @@ export async function confirmOrderPayment(
   const {
     orderId,
     orderNumber,
+    paymentMethod,
     razorpayOrderId,
     razorpayPaymentId,
     razorpaySignature,
+    upiTransactionId,
     performedBy = "Payment Gateway",
     note,
   } = params;
@@ -257,6 +261,15 @@ export async function confirmOrderPayment(
         const previousStock = updatedVariant.stock + item.qty;
         const newStock = updatedVariant.stock;
 
+        const isManual =
+          paymentMethod === "MANUAL_UPI" ||
+          order.paymentMethod === "MANUAL_UPI" ||
+          Boolean(upiTransactionId || order.paymentDetails?.upiTransactionId);
+
+        const txnRef = isManual
+          ? `UPI UTR: ${upiTransactionId || order.paymentDetails?.upiTransactionId || "Verified"}`
+          : razorpayPaymentId || "Captured";
+
         // Mandatory Audit Logging in the same transaction (Rule 3)
         await InventoryMovement.create(
           [
@@ -269,7 +282,7 @@ export async function confirmOrderPayment(
               newStock,
               reason: "SALE",
               orderId: order._id,
-              note: `Payment captured: ${razorpayPaymentId} (order ${order.orderNumber})`,
+              note: `Payment confirmed: ${txnRef} (order ${order.orderNumber})`,
             },
           ],
           { session },
@@ -279,17 +292,41 @@ export async function confirmOrderPayment(
       // Update Order Status to PAID
       order.status = "PAID";
       order.paymentStatus = "PAID";
-      order.expiresAt = undefined; // Clear 15-minute hold timer
-      order.paymentDetails = {
-        ...order.paymentDetails,
-        razorpayPaymentId,
-        ...(razorpayOrderId ? { razorpayOrderId } : {}),
-        ...(razorpaySignature ? { razorpaySignature } : {}),
-      };
+      order.expiresAt = undefined; // Clear hold timer
+
+      const isManual =
+        paymentMethod === "MANUAL_UPI" ||
+        order.paymentMethod === "MANUAL_UPI" ||
+        Boolean(upiTransactionId || order.paymentDetails?.upiTransactionId);
+
+      if (isManual) {
+        order.paymentMethod = "MANUAL_UPI";
+        order.paymentDetails = {
+          ...order.paymentDetails,
+          method: "MANUAL_UPI",
+          upiTransactionId:
+            upiTransactionId || order.paymentDetails?.upiTransactionId,
+          verifiedBy: performedBy,
+          verifiedAt: new Date(),
+        };
+      } else {
+        order.paymentDetails = {
+          ...order.paymentDetails,
+          razorpayPaymentId,
+          ...(razorpayOrderId ? { razorpayOrderId } : {}),
+          ...(razorpaySignature ? { razorpaySignature } : {}),
+        };
+      }
+
+      const timelineNote =
+        note ||
+        (isManual
+          ? `Manual UPI payment verified & approved by ${performedBy} (UTR: ${order.paymentDetails?.upiTransactionId || "N/A"})`
+          : `Payment verified successfully (Txn: ${razorpayPaymentId})`);
 
       order.timeline.push({
         status: "PAID",
-        note: note || `Payment verified successfully (Txn: ${razorpayPaymentId})`,
+        note: timelineNote,
         performedBy,
         timestamp: new Date(),
       });

@@ -26,6 +26,11 @@ export interface OrderListItem {
   }[];
   status: "PENDING" | "PAID" | "CONFIRMED" | "PACKED" | "SHIPPED" | "DELIVERED" | "CANCELLED" | "RETURNED";
   paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+  paymentMethod?: string;
+  paymentDetails?: {
+    upiTransactionId?: string;
+    method?: string;
+  };
   totals: {
     subtotalPaise: number;
     discountPaise: number;
@@ -58,6 +63,7 @@ interface OrdersResponse {
     delivered: number;
     cancelled: number;
     returned: number;
+    awaitingUpi?: number;
   };
 }
 
@@ -194,7 +200,7 @@ export function OrdersTable() {
           <div className="relative flex-1 max-w-md">
             <input
               type="text"
-              placeholder="Search by order #, customer name, phone, or email..."
+              placeholder="Search by order #, UTR #, customer name, phone, or email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-xl border border-neutral-300 bg-white py-2 pl-9 pr-4 text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
@@ -236,6 +242,7 @@ export function OrdersTable() {
               className="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-xs text-neutral-800 focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 font-medium"
             >
               <option value="ALL">All Payment Statuses</option>
+              <option value="AWAITING_UPI">⏳ Awaiting UPI Verification</option>
               <option value="PAID">PAID</option>
               <option value="PENDING">PENDING</option>
               <option value="FAILED">FAILED</option>
@@ -391,13 +398,25 @@ export function OrdersTable() {
 
                       {/* Payment Status */}
                       <td className="px-4 py-4">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border ${getPaymentStatusBadge(
-                            order.paymentStatus,
-                          )}`}
-                        >
-                          {order.paymentStatus}
-                        </span>
+                        {order.paymentStatus === "PENDING" &&
+                        order.paymentDetails?.upiTransactionId ? (
+                          <div className="space-y-0.5">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border text-amber-800 bg-amber-50 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300">
+                              ⏳ Verify UPI
+                            </span>
+                            <span className="block font-mono text-[9px] text-neutral-500 font-semibold truncate max-w-[120px]">
+                              UTR: {order.paymentDetails.upiTransactionId}
+                            </span>
+                          </div>
+                        ) : (
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border ${getPaymentStatusBadge(
+                              order.paymentStatus,
+                            )}`}
+                          >
+                            {order.paymentStatus}
+                          </span>
+                        )}
                       </td>
 
                       {/* Actions */}

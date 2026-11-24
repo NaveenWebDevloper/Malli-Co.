@@ -1,16 +1,20 @@
 import Link from "next/link";
+import { PaymentSettingsForm } from "@/components/admin/PaymentSettingsForm";
 
 export default function AdminSettingsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
           Store & System Settings
         </h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Visual storefront lookbook configurations, payment gateways, and shipping parameters.
+          Visual storefront lookbook configurations, manual UPI payment gateway, and shipping parameters.
         </p>
       </div>
+
+      {/* Manual UPI Payment & QR Scanner Settings */}
+      <PaymentSettingsForm />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Hero Carousel Settings Card */}

@@ -38,9 +38,17 @@ interface OrderDetail {
   }[];
   status: OrderStatus;
   paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+  paymentMethod?: "RAZORPAY" | "MANUAL_UPI";
   paymentDetails?: {
+    method?: string;
     razorpayOrderId?: string;
     razorpayPaymentId?: string;
+    upiTransactionId?: string;
+    upiReceiptImage?: string;
+    upiSubmittedAt?: string;
+    verifiedBy?: string;
+    verifiedAt?: string;
+    rejectionReason?: string;
   };
   totals: {
     subtotalPaise: number;
@@ -79,6 +87,42 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
   const [transitionNote, setTransitionNote] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [actionMessage, setActionMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Manual payment verification
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verifyMessage, setVerifyMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+  const [showRejectBox, setShowRejectBox] = useState(false);
+
+  const handleVerifyPayment = async (action: "APPROVE" | "REJECT") => {
+    setIsVerifying(true);
+    setVerifyMessage(null);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/verify-payment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          note: action === "REJECT" ? rejectReason.trim() || undefined : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Payment verification failed");
+      }
+      setVerifyMessage({ type: "success", text: data.message });
+      setShowRejectBox(false);
+      setRejectReason("");
+      await fetchOrderDetail();
+    } catch (err) {
+      setVerifyMessage({
+        type: "error",
+        text: err instanceof Error ? err.message : "Error verifying payment",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   const fetchOrderDetail = useCallback(async () => {
     setIsLoading(true);
@@ -255,6 +299,161 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
           }`}
         >
           {actionMessage.text}
+        </div>
+      )}
+
+      {verifyMessage && (
+        <div
+          className={`p-4 rounded-xl text-xs font-medium border ${
+            verifyMessage.type === "success"
+              ? "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
+              : "bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
+          }`}
+        >
+          {verifyMessage.text}
+        </div>
+      )}
+
+      {/* Manual UPI Payment Verification Panel */}
+      {(order.paymentMethod === "MANUAL_UPI" ||
+        order.paymentDetails?.method === "MANUAL_UPI" ||
+        Boolean(order.paymentDetails?.upiTransactionId)) && (
+        <div
+          className={`rounded-2xl border-2 p-5 shadow-sm space-y-4 ${
+            order.paymentStatus === "PAID"
+              ? "border-emerald-200 bg-emerald-50/30 dark:border-emerald-900/40 dark:bg-emerald-950/20"
+              : order.status === "CANCELLED"
+              ? "border-red-200 bg-red-50/30 dark:border-red-900/40 dark:bg-red-950/20"
+              : "border-amber-300 bg-amber-50/40 dark:border-amber-700/60 dark:bg-amber-950/20"
+          }`}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    order.paymentStatus === "PAID"
+                      ? "bg-emerald-500"
+                      : order.status === "CANCELLED"
+                      ? "bg-red-500"
+                      : "bg-amber-500 animate-pulse"
+                  }`}
+                />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                  Manual UPI Payment Verification
+                </span>
+              </div>
+              <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 mt-1">
+                {order.paymentStatus === "PAID"
+                  ? `Payment Verified & Settled (${formatCurrency(order.totals.totalPaise)})`
+                  : order.status === "CANCELLED"
+                  ? "Manual Payment Cancelled / Rejected"
+                  : `Customer Awaiting Verification (${formatCurrency(order.totals.totalPaise)})`}
+              </h3>
+            </div>
+
+            {order.paymentStatus === "PENDING" && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleVerifyPayment("APPROVE")}
+                  disabled={isVerifying}
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  <span>✓</span>
+                  <span>{isVerifying ? "Processing..." : "Approve & Mark Paid"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowRejectBox(!showRejectBox)}
+                  disabled={isVerifying}
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-950/50 dark:text-red-300 transition disabled:opacity-50"
+                >
+                  ✕ Reject
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Customer Submitted UTR Information */}
+          <div className="p-4 rounded-xl bg-white border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div>
+              <span className="text-[10px] font-bold uppercase text-neutral-400 block mb-0.5">
+                Customer UTR / Txn Reference
+              </span>
+              <span className="font-mono font-bold text-sm text-neutral-900 dark:text-neutral-100 select-all block">
+                {order.paymentDetails?.upiTransactionId || (
+                  <span className="text-amber-600 italic">Not yet submitted</span>
+                )}
+              </span>
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold uppercase text-neutral-400 block mb-0.5">
+                Reference Submitted At
+              </span>
+              <span className="text-neutral-700 dark:text-neutral-300 block">
+                {order.paymentDetails?.upiSubmittedAt
+                  ? new Date(order.paymentDetails.upiSubmittedAt).toLocaleString("en-IN")
+                  : "Awaiting submission"}
+              </span>
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold uppercase text-neutral-400 block mb-0.5">
+                Verification State
+              </span>
+              <span className="font-semibold text-neutral-900 dark:text-neutral-100 block">
+                {order.paymentStatus === "PAID" ? (
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    Verified by {order.paymentDetails?.verifiedBy || "Admin"}
+                  </span>
+                ) : order.status === "CANCELLED" ? (
+                  <span className="text-red-600 dark:text-red-400">
+                    Rejected: {order.paymentDetails?.rejectionReason || "Payment not received"}
+                  </span>
+                ) : (
+                  <span className="text-amber-600 dark:text-amber-400">
+                    Pending Store Admin Approval
+                  </span>
+                )}
+              </span>
+            </div>
+          </div>
+
+          {/* Quick Reject Form */}
+          {showRejectBox && (
+            <div className="p-4 rounded-xl bg-white border border-red-200 dark:border-red-900/60 dark:bg-neutral-900 space-y-3">
+              <label className="block text-xs font-bold text-red-700 dark:text-red-400">
+                Rejection Reason (This will cancel the order and release held stock)
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. UTR reference not found in bank account / incorrect amount"
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                className="w-full rounded-xl border border-red-300 bg-white px-3 py-2 text-xs text-neutral-900 focus:outline-none dark:border-red-800 dark:bg-neutral-800 dark:text-neutral-100"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowRejectBox(false)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleVerifyPayment("REJECT")}
+                  disabled={isVerifying}
+                  className="px-4 py-1.5 rounded-lg text-xs font-bold bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                >
+                  Confirm Rejection &amp; Cancel Order
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -539,7 +738,11 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
               <div className="flex justify-between">
                 <span>Method</span>
                 <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                  Razorpay Payment Gateway
+                  {order.paymentMethod === "MANUAL_UPI" ||
+                  order.paymentDetails?.method === "MANUAL_UPI" ||
+                  order.paymentDetails?.upiTransactionId
+                    ? "Manual UPI Transfer"
+                    : "Razorpay Gateway"}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -548,6 +751,28 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
                   {order.paymentStatus}
                 </span>
               </div>
+              {order.paymentDetails?.upiTransactionId && (
+                <div className="flex justify-between">
+                  <span>UPI UTR / Txn Ref</span>
+                  <span className="font-mono text-[11px] font-bold text-neutral-900 dark:text-neutral-100 select-all">
+                    {order.paymentDetails.upiTransactionId}
+                  </span>
+                </div>
+              )}
+              {order.paymentDetails?.verifiedBy && (
+                <div className="flex justify-between">
+                  <span>Verified By</span>
+                  <span className="text-neutral-800 dark:text-neutral-200">
+                    {order.paymentDetails.verifiedBy}
+                  </span>
+                </div>
+              )}
+              {order.paymentDetails?.rejectionReason && (
+                <div className="flex justify-between text-red-600 dark:text-red-400">
+                  <span>Rejection Note</span>
+                  <span>{order.paymentDetails.rejectionReason}</span>
+                </div>
+              )}
               {order.paymentDetails?.razorpayPaymentId && (
                 <div className="flex justify-between">
                   <span>Payment ID</span>

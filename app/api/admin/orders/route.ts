@@ -39,7 +39,12 @@ export async function GET(req: NextRequest) {
 
   // Payment Status Filter
   if (paymentStatus && paymentStatus !== "ALL") {
-    query.paymentStatus = paymentStatus as PaymentStatus;
+    if (paymentStatus === "AWAITING_UPI") {
+      query.paymentStatus = "PENDING";
+      query["paymentDetails.upiTransactionId"] = { $exists: true, $ne: "" };
+    } else {
+      query.paymentStatus = paymentStatus as PaymentStatus;
+    }
   }
 
   // Date Filter
@@ -86,11 +91,12 @@ export async function GET(req: NextRequest) {
       { orderNumber: { $regex: search, $options: "i" } },
       { "shippingAddress.name": { $regex: search, $options: "i" } },
       { "shippingAddress.phone": { $regex: search, $options: "i" } },
+      { "paymentDetails.upiTransactionId": { $regex: search, $options: "i" } },
       { customerId: { $in: customerIds } },
     ];
   }
 
-  const [orders, totalCount, statusCounts] = await Promise.all([
+  const [orders, totalCount, statusCounts, awaitingUpiCount] = await Promise.all([
     Order.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -107,6 +113,10 @@ export async function GET(req: NextRequest) {
       Order.countDocuments({ status: "CANCELLED" }),
       Order.countDocuments({ status: "RETURNED" }),
     ]),
+    Order.countDocuments({
+      paymentStatus: "PENDING",
+      "paymentDetails.upiTransactionId": { $exists: true, $ne: "" },
+    }),
   ]);
 
   const [pending, paid, packed, shipped, delivered, cancelled, returned] = statusCounts;
@@ -125,6 +135,7 @@ export async function GET(req: NextRequest) {
       delivered,
       cancelled,
       returned,
+      awaitingUpi: awaitingUpiCount,
     },
   });
 }

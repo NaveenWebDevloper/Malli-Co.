@@ -15,6 +15,7 @@ import {
 } from "../../../../lib/cart.ts";
 import { getActiveCampaigns, resolvePrice } from "../../../../lib/pricing.ts";
 import { releaseExpiredOrders } from "../../../../lib/orders.ts";
+import { getStorePaymentSettings } from "../../../../lib/settings.ts";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -38,7 +39,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { items: requestedItems, shippingAddress, saveAddress, notes } = parsed.data;
+  const {
+    items: requestedItems,
+    shippingAddress,
+    paymentMethod = "MANUAL_UPI",
+    saveAddress,
+    notes,
+  } = parsed.data;
 
   // Opportunistically release any expired held orders in the background
   releaseExpiredOrders().catch((err) => {
@@ -311,6 +318,10 @@ export async function POST(req: NextRequest) {
             items: orderItems,
             status: "PENDING",
             paymentStatus: "PENDING",
+            paymentMethod,
+            paymentDetails: {
+              method: paymentMethod,
+            },
             expiresAt,
             guestAccessTokenHash,
             totals: {
@@ -352,7 +363,64 @@ export async function POST(req: NextRequest) {
     await sessionDB.endSession();
   }
 
-  // 3. Initiate real Razorpay Order via Razorpay API
+  // 3. If Manual UPI, skip Razorpay gateway and return dynamic UPI payment details
+  if (paymentMethod === "MANUAL_UPI") {
+    // Clear cart and set guest order access cookie
+    try {
+      const cookieStore = await cookies();
+      const cartToken = cookieStore.get("malli_cart_token")?.value;
+      if (cartToken) {
+        await Cart.updateOne({ cartToken }, { $set: { items: [] } });
+      }
+
+      if (!session?.user?.id) {
+        cookieStore.set(
+          `malli_guest_order_${createdOrder.orderNumber}`,
+          rawGuestToken,
+          {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60, // 7 days
+            path: "/",
+          },
+        );
+      }
+    } catch {
+      // Graceful fallback for environments where cookies() is restricted
+    }
+
+    const paymentSettings = await getStorePaymentSettings();
+    const amountRupees = (totalPaise / 100).toFixed(2);
+    const upiUri = `upi://pay?pa=${paymentSettings.storeUpiId}&pn=${encodeURIComponent(
+      paymentSettings.storeUpiName,
+    )}&am=${amountRupees}&cu=INR&tn=${encodeURIComponent(
+      `Order ${createdOrder.orderNumber}`,
+    )}`;
+
+    return NextResponse.json({
+      success: true,
+      orderId: createdOrder._id.toString(),
+      orderNumber: createdOrder.orderNumber,
+      paymentMethod: "MANUAL_UPI",
+      amountPaise: totalPaise,
+      currency: "INR",
+      upiDetails: {
+        upiId: paymentSettings.storeUpiId,
+        payeeName: paymentSettings.storeUpiName,
+        qrImage: paymentSettings.storeUpiQrImage,
+        instructions: paymentSettings.storeUpiInstructions,
+        upiUri,
+      },
+      customer: {
+        name: shippingAddress.name,
+        email: shippingAddress.email,
+        phone: shippingAddress.phone,
+      },
+    });
+  }
+
+  // 4. Initiate real Razorpay Order via Razorpay API
   const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
   const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
 

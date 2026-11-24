@@ -8,6 +8,7 @@ import { connectDB } from "@/lib/db";
 import { Order } from "@/models/Order";
 import { formatCurrency } from "@/lib/currency";
 import { OrderPaymentRetryButton } from "@/components/store/OrderPaymentRetryButton";
+import { OrderUtrSubmissionCard } from "@/components/store/OrderUtrSubmissionCard";
 
 export const metadata: Metadata = {
   title: "Order Status | Malli & Co. Luxury Apparel",
@@ -72,6 +73,8 @@ export default async function OrderConfirmedPage({
   }
 
   const isPaid = order.paymentStatus === "PAID";
+  const isManualUpi = order.paymentMethod === "MANUAL_UPI" || Boolean(order.paymentDetails?.upiTransactionId);
+  const hasUtr = Boolean(order.paymentDetails?.upiTransactionId);
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 text-center space-y-8">
@@ -81,6 +84,10 @@ export default async function OrderConfirmedPage({
           <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 text-2xl flex items-center justify-center mx-auto">
             ✓
           </div>
+        ) : hasUtr ? (
+          <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-800 text-2xl flex items-center justify-center mx-auto">
+            🔍
+          </div>
         ) : (
           <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-800 text-2xl flex items-center justify-center mx-auto">
             ⏳
@@ -88,11 +95,19 @@ export default async function OrderConfirmedPage({
         )}
 
         <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8C7A58]">
-          {isPaid ? "Order Confirmed & Paid" : "Payment Pending"}
+          {isPaid
+            ? "Order Confirmed & Paid"
+            : hasUtr
+            ? "Payment Verification In Progress"
+            : "Payment Pending"}
         </span>
 
         <h1 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212]">
-          {isPaid ? "Thank You For Your Order" : "Complete Your Order Payment"}
+          {isPaid
+            ? "Thank You For Your Order"
+            : hasUtr
+            ? "Payment Under Verification"
+            : "Complete Your Order Payment"}
         </h1>
 
         <p className="text-sm font-mono text-neutral-600">
@@ -104,26 +119,39 @@ export default async function OrderConfirmedPage({
       <p className="max-w-lg mx-auto text-xs sm:text-sm text-neutral-600 leading-relaxed font-light">
         {isPaid
           ? "Your payment has been verified. A formal tax invoice and receipt have been dispatched to your email address."
+          : hasUtr
+          ? `We have received your payment reference (${order.paymentDetails?.upiTransactionId}). Our team will confirm your order as soon as bank credit is verified.`
+          : isManualUpi
+          ? "Your items are reserved. Please complete your UPI payment and submit the transaction reference below to verify your order."
           : "Your artisanal garments are temporarily held for 15 minutes. Please complete payment to confirm your order."}
       </p>
 
-      {/* Retry Action if pending */}
+      {/* Payment Action if pending */}
       {!isPaid && (
-        <div className="max-w-md mx-auto p-6 rounded-2xl bg-[#FBF9F5] border border-[#EAE3D4] space-y-4">
-          <p className="text-xs text-neutral-600">
-            Total Payable: <strong className="text-base text-black">{formatCurrency(order.totals.totalPaise)}</strong>
-          </p>
-          <OrderPaymentRetryButton
+        isManualUpi ? (
+          <OrderUtrSubmissionCard
             orderNumber={order.orderNumber}
-            razorpayOrderId={order.paymentDetails?.razorpayOrderId}
-            amountPaise={order.totals.totalPaise}
-            customer={{
-              name: order.shippingAddress.name,
-              email: order.shippingAddress.phone || "",
-              phone: order.shippingAddress.phone,
-            }}
+            totalPaise={order.totals.totalPaise}
+            initialUtr={order.paymentDetails?.upiTransactionId}
+            isPaid={isPaid}
           />
-        </div>
+        ) : (
+          <div className="max-w-md mx-auto p-6 rounded-2xl bg-[#FBF9F5] border border-[#EAE3D4] space-y-4">
+            <p className="text-xs text-neutral-600">
+              Total Payable: <strong className="text-base text-black">{formatCurrency(order.totals.totalPaise)}</strong>
+            </p>
+            <OrderPaymentRetryButton
+              orderNumber={order.orderNumber}
+              razorpayOrderId={order.paymentDetails?.razorpayOrderId}
+              amountPaise={order.totals.totalPaise}
+              customer={{
+                name: order.shippingAddress.name,
+                email: order.shippingAddress.phone || "",
+                phone: order.shippingAddress.phone,
+              }}
+            />
+          </div>
+        )
       )}
 
       {/* Order Summary Receipt Box */}

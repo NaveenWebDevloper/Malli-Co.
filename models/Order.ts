@@ -13,6 +13,8 @@ export type OrderStatus =
 
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 
+export type PaymentMethod = "RAZORPAY" | "MANUAL_UPI";
+
 export interface IOrderTimeline {
   status: OrderStatus;
   note?: string;
@@ -117,16 +119,34 @@ export const OrderTotalsSchema = new Schema<IOrderTotals>(
 );
 
 export interface IPaymentDetails {
+  method?: PaymentMethod;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   razorpaySignature?: string;
+  upiTransactionId?: string;
+  upiReceiptImage?: string;
+  upiSubmittedAt?: Date;
+  verifiedBy?: string;
+  verifiedAt?: Date;
+  rejectionReason?: string;
 }
 
 export const PaymentDetailsSchema = new Schema<IPaymentDetails>(
   {
+    method: {
+      type: String,
+      enum: ["RAZORPAY", "MANUAL_UPI"],
+      default: "MANUAL_UPI",
+    },
     razorpayOrderId: { type: String, trim: true },
     razorpayPaymentId: { type: String, trim: true },
     razorpaySignature: { type: String, trim: true },
+    upiTransactionId: { type: String, trim: true },
+    upiReceiptImage: { type: String, trim: true },
+    upiSubmittedAt: { type: Date },
+    verifiedBy: { type: String, trim: true },
+    verifiedAt: { type: Date },
+    rejectionReason: { type: String, trim: true },
   },
   { _id: false },
 );
@@ -137,6 +157,7 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   status: OrderStatus;
   paymentStatus: PaymentStatus;
+  paymentMethod?: PaymentMethod;
   paymentDetails?: IPaymentDetails;
   totals: IOrderTotals;
   shippingAddress: IAddress;
@@ -192,6 +213,12 @@ const OrderSchema = new Schema<IOrder>(
       default: "PENDING",
       index: true,
     },
+    paymentMethod: {
+      type: String,
+      enum: ["RAZORPAY", "MANUAL_UPI"],
+      default: "MANUAL_UPI",
+      index: true,
+    },
     paymentDetails: {
       type: PaymentDetailsSchema,
       default: () => ({}),
@@ -224,7 +251,9 @@ OrderSchema.index({ customerId: 1, createdAt: -1 });
 OrderSchema.index({ status: 1, paymentStatus: 1 });
 OrderSchema.index({ status: 1, createdAt: -1 });
 OrderSchema.index({ paymentStatus: 1, createdAt: -1 });
+OrderSchema.index({ paymentMethod: 1, status: 1 });
 OrderSchema.index({ "paymentDetails.razorpayOrderId": 1 });
+OrderSchema.index({ "paymentDetails.upiTransactionId": 1 });
 OrderSchema.index({ expiresAt: 1 });
 OrderSchema.index({ createdAt: -1 });
 

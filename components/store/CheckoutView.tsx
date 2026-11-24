@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
+import { UpiPaymentModal, type UpiPaymentDetails } from "./UpiPaymentModal";
 
 const INDIAN_STATES = [
   "Telangana",
@@ -84,6 +85,49 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Manual UPI and payment gateway settings
+  const [paymentSettings, setPaymentSettings] = useState<{
+    manualUpiEnabled: boolean;
+    storeUpiId: string;
+    storeUpiName: string;
+    storeUpiQrImage: string;
+    storeUpiInstructions: string;
+    razorpayAvailable: boolean;
+  } | null>(null);
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    "MANUAL_UPI" | "RAZORPAY"
+  >("MANUAL_UPI");
+
+  const [upiModalState, setUpiModalState] = useState<{
+    isOpen: boolean;
+    orderNumber: string;
+    totalPaise: number;
+    upiDetails: UpiPaymentDetails;
+  } | null>(null);
+
+  useEffect(() => {
+    async function loadPaymentSettings() {
+      try {
+        const res = await fetch("/api/checkout/payment-settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) {
+            setPaymentSettings(data.settings);
+            if (!data.settings.manualUpiEnabled && data.settings.razorpayAvailable) {
+              setSelectedPaymentMethod("RAZORPAY");
+            } else {
+              setSelectedPaymentMethod("MANUAL_UPI");
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load checkout payment settings:", err);
+      }
+    }
+    loadPaymentSettings();
+  }, []);
 
   const items = cart?.items || [];
   const totals = cart?.totals;
@@ -203,6 +247,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             state: formData.state.trim(),
             postalCode: formData.postalCode.trim().replace(/\s+/g, ""),
           },
+          paymentMethod: selectedPaymentMethod,
           saveAddress: saveAddress,
         }),
       });
@@ -222,6 +267,18 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
           }
         }
         throw new Error(errorMsg);
+      }
+
+      // If Manual UPI, launch the dedicated interactive UPI Scanner modal
+      if (orderData.paymentMethod === "MANUAL_UPI") {
+        setIsSubmitting(false);
+        setUpiModalState({
+          isOpen: true,
+          orderNumber: orderData.orderNumber,
+          totalPaise: orderData.amountPaise,
+          upiDetails: orderData.upiDetails,
+        });
+        return;
       }
 
       const { orderNumber, razorpayOrderId, amountPaise, keyId, customer } =
@@ -684,28 +741,87 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             </div>
 
             {/* Payment Method */}
-            <div className="rounded-2xl border border-[#EAE3D4] bg-white p-6 shadow-sm space-y-3">
+            <div className="rounded-2xl border border-[#EAE3D4] bg-white p-6 shadow-sm space-y-4">
               <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-400">
-                2. Payment Gateway
+                2. Select Payment Method
               </h2>
 
-              <div className="p-4 rounded-xl border border-[#121212] bg-[#FBF9F5] flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#121212] flex items-center justify-center text-[9px] text-white font-bold">
-                    ✓
-                  </span>
-                  <div>
-                    <p className="text-xs font-bold text-[#121212]">
-                      Razorpay Official Payment Gateway
-                    </p>
-                    <p className="text-[11px] text-neutral-500">
-                      Supports UPI (GPay, PhonePe, Paytm), Credit/Debit Cards, NetBanking
-                    </p>
+              <div className="space-y-3">
+                {/* Manual UPI Option */}
+                {paymentSettings?.manualUpiEnabled !== false && (
+                  <div
+                    onClick={() => setSelectedPaymentMethod("MANUAL_UPI")}
+                    className={cn(
+                      "p-4 rounded-xl border cursor-pointer transition-all flex items-start justify-between",
+                      selectedPaymentMethod === "MANUAL_UPI"
+                        ? "border-[#121212] bg-[#FBF9F5] shadow-sm"
+                        : "border-[#EAE3D4] hover:border-neutral-400 bg-white",
+                    )}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "w-4 h-4 rounded-full mt-0.5 flex items-center justify-center text-[9px] font-bold transition-colors",
+                          selectedPaymentMethod === "MANUAL_UPI"
+                            ? "bg-[#121212] text-white"
+                            : "border border-neutral-300 bg-white",
+                        )}
+                      >
+                        {selectedPaymentMethod === "MANUAL_UPI" ? "✓" : ""}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs font-bold text-[#121212]">
+                            Instant UPI Transfer &amp; QR Scanner
+                          </p>
+                          <span className="text-[9px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded border border-emerald-200">
+                            Recommended
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Scan QR or transfer via Google Pay, PhonePe, Paytm, or BHIM. Zero payment gateway markup.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  RBI Compliant
-                </span>
+                )}
+
+                {/* Razorpay Option */}
+                {paymentSettings?.razorpayAvailable && (
+                  <div
+                    onClick={() => setSelectedPaymentMethod("RAZORPAY")}
+                    className={cn(
+                      "p-4 rounded-xl border cursor-pointer transition-all flex items-start justify-between",
+                      selectedPaymentMethod === "RAZORPAY"
+                        ? "border-[#121212] bg-[#FBF9F5] shadow-sm"
+                        : "border-[#EAE3D4] hover:border-neutral-400 bg-white",
+                    )}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "w-4 h-4 rounded-full mt-0.5 flex items-center justify-center text-[9px] font-bold transition-colors",
+                          selectedPaymentMethod === "RAZORPAY"
+                            ? "bg-[#121212] text-white"
+                            : "border border-neutral-300 bg-white",
+                        )}
+                      >
+                        {selectedPaymentMethod === "RAZORPAY" ? "✓" : ""}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-[#121212]">
+                          Razorpay Payment Gateway
+                        </p>
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Cards, NetBanking, and Razorpay UPI checkout.
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] uppercase font-bold text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
+                      Gateway
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -716,9 +832,11 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
               className="w-full py-4 rounded-xl bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99] flex items-center justify-center"
             >
               {isSubmitting
-                ? "Initiating Secure Payment..."
+                ? "Initiating Order..."
                 : totals
-                ? `Pay ${formatCurrency(totals.totalPaise)} via Razorpay`
+                ? selectedPaymentMethod === "MANUAL_UPI"
+                  ? `Pay ${formatCurrency(totals.totalPaise)} via UPI`
+                  : `Pay ${formatCurrency(totals.totalPaise)} via Razorpay`
                 : "Proceed to Payment"}
             </button>
           </form>
@@ -793,6 +911,30 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
           </div>
         </div>
       </div>
+
+      {/* Manual UPI Payment Modal */}
+      {upiModalState && (
+        <UpiPaymentModal
+          isOpen={upiModalState.isOpen}
+          orderNumber={upiModalState.orderNumber}
+          totalPaise={upiModalState.totalPaise}
+          upiDetails={upiModalState.upiDetails}
+          onSuccess={async () => {
+            await refreshCart();
+            setUpiModalState(null);
+            router.push(
+              `/order/confirmed/${encodeURIComponent(upiModalState.orderNumber)}`,
+            );
+          }}
+          onClose={() => {
+            const ordNum = upiModalState.orderNumber;
+            setUpiModalState(null);
+            setErrorMessage(
+              `Payment reference pending. Your items remain held for Order #${ordNum}. You can submit your UTR anytime on the order page.`,
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
