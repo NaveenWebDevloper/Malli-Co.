@@ -37,7 +37,7 @@ export default async function LoginPage({
 
   return (
     <div className="min-h-[calc(100vh-140px)] bg-[#F8F7F4]/60 py-8 sm:py-14 px-4 sm:px-6 lg:px-8 flex flex-col justify-center font-sans">
-      <div className="max-w-5xl mx-auto w-full space-y-4">
+      <div className="max-w-4xl mx-auto w-full space-y-4">
         
         {/* Navigation Breadcrumb / Return */}
         <div className="flex items-center justify-between text-xs text-neutral-500 px-2">
