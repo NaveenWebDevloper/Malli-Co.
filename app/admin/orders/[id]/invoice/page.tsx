@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { InvoiceView } from "@/components/admin/InvoiceView";
 
 export default async function AdminOrderInvoicePage({

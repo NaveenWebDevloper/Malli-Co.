@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { PaymentSettingsForm } from "@/components/admin/PaymentSettingsForm";
 

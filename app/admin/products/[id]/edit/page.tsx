@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";

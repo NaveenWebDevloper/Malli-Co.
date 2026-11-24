@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { connectDB } from "@/lib/db";
 import { Brand } from "@/models/Brand";
 import { Category } from "@/models/Category";

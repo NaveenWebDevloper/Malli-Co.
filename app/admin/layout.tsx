@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { auth, signOut } from "@/auth";
 import { AdminShell } from "@/components/admin/AdminShell";
 

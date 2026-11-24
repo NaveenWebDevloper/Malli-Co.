@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { BrandsManager } from "@/components/admin/BrandsManager";
 
 export const metadata = {

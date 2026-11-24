@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { CustomersManager } from "@/components/admin/CustomersManager";
 
 export const metadata = {

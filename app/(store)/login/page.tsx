@@ -5,10 +5,12 @@ import { auth } from "@/auth";
 import { AuthForm } from "@/components/store/AuthForm";
 
 export const metadata: Metadata = {
-  title: "Client Portal | Malli & Co. Luxury Apparel",
-  description: "Sign in or create an account to manage your orders, shipping details, and bespoke wardrobe preferences.",
+  title: "Login & Register | Malli & Co. Fashion Hub",
+  description: "Sign in or create an account with Malli & Co. to track orders, save favorites, and enjoy express checkout.",
   robots: { index: false, follow: false },
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function LoginPage({
   searchParams,
@@ -34,39 +36,31 @@ export default async function LoginPage({
   const initialTab = params.mode === "register" ? "register" : "signin";
 
   return (
-    <div className="flex min-h-[calc(100vh-140px)] items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[#FBF9F5]">
-      <div className="w-full max-w-md space-y-6 rounded-2xl border border-[#EAE3D4] bg-white p-8 sm:p-10 shadow-sm">
-        <div className="text-center space-y-2">
+    <div className="min-h-[calc(100vh-140px)] bg-[#F8F7F4]/60 py-8 sm:py-14 px-4 sm:px-6 lg:px-8 flex flex-col justify-center font-sans">
+      <div className="max-w-5xl mx-auto w-full space-y-4">
+        
+        {/* Navigation Breadcrumb / Return */}
+        <div className="flex items-center justify-between text-xs text-neutral-500 px-2">
           <Link
             href="/"
-            className="text-2xl font-sans font-black tracking-tight text-[#121212] hover:opacity-80 transition-opacity"
+            className="hover:text-[#10264B] transition-colors flex items-center gap-1.5 font-medium"
           >
-            MALLI &amp; CO.
+            <span>←</span> Return to Storefront
           </Link>
-          <p className="text-xs font-sans italic text-neutral-500">
-            Premium Clothing for Men &amp; Kids
-          </p>
+          <span className="font-medium text-neutral-400">Malli &amp; Co. Secure Authentication</span>
         </div>
 
         {params.error && (
-          <div className="rounded-xl bg-red-50 p-3 text-center text-xs font-medium text-red-700 border border-red-100">
+          <div className="rounded-2xl bg-red-50 p-3.5 text-center text-xs font-semibold text-red-700 border border-red-200">
             {params.error}
           </div>
         )}
 
+        {/* Unified Split Auth Form */}
         <AuthForm
           defaultTab={initialTab}
           callbackUrl={targetCallbackUrl}
         />
-
-        <div className="pt-4 border-t border-[#EAE3D4] text-center">
-          <Link
-            href="/men"
-            className="text-xs font-sans text-[#8C7A58] hover:text-[#121212] transition-colors uppercase tracking-wider"
-          >
-            ← Return to Collections
-          </Link>
-        </div>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { OrderDetailView } from "@/components/admin/OrderDetailView";
 
 export default async function AdminOrderDetailPage({
