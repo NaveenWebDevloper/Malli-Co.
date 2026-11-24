@@ -31,7 +31,7 @@ export function CartDrawer() {
           {/* Header */}
           <div className="px-6 py-5 border-b border-[#EAE3D4] flex items-center justify-between">
             <div>
-              <h2 className="text-base font-serif font-black uppercase tracking-wider text-[#121212]">
+              <h2 className="text-base font-sans font-black uppercase tracking-wider text-[#121212]">
                 Your Shopping Bag
               </h2>
               <span className="text-[11px] text-neutral-500">
@@ -82,7 +82,7 @@ export function CartDrawer() {
             {!isLoading && items.length === 0 && (
               <div className="text-center py-24 space-y-4">
                 <span className="text-3xl">🛍️</span>
-                <p className="font-serif text-base font-bold text-[#121212]">
+                <p className="font-sans text-base font-bold text-[#121212]">
                   Your shopping bag is empty
                 </p>
                 <p className="text-xs text-neutral-500 max-w-xs mx-auto">
@@ -234,7 +234,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="w-full py-3.5 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white font-serif font-bold uppercase tracking-[0.2em] text-xs shadow-lg transition-all text-center flex items-center justify-center active:scale-[0.99]"
+                  className="w-full py-3.5 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white font-sans font-bold uppercase tracking-[0.2em] text-xs shadow-lg transition-all text-center flex items-center justify-center active:scale-[0.99]"
                 >
                   Proceed to Checkout
                 </Link>

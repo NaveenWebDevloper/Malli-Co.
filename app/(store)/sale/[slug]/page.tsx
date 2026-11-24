@@ -95,7 +95,7 @@ export default async function SaleLandingPage({ params, searchParams }: SalePage
           <span className="inline-block text-[10px] font-bold uppercase tracking-[0.25em] text-[#8C7A58] bg-[#8C7A58]/10 px-3 py-1 rounded-full">
             Event Concluded
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212]">
+          <h1 className="text-3xl sm:text-4xl font-sans font-black uppercase tracking-tight text-[#121212]">
             {campaign?.name || "Sale Event"} Has Ended
           </h1>
           <p className="text-sm text-neutral-600 max-w-lg mx-auto font-light leading-relaxed">
@@ -251,7 +251,7 @@ export default async function SaleLandingPage({ params, searchParams }: SalePage
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-serif font-black uppercase tracking-tight text-white drop-shadow-sm">
+            <h1 className="text-3xl sm:text-5xl font-sans font-black uppercase tracking-tight text-white drop-shadow-sm">
               {campaign.name}
             </h1>
 

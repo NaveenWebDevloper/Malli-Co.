@@ -263,7 +263,7 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-4xl font-serif font-black tracking-tight text-[#121212] uppercase leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-sans font-black tracking-tight text-[#121212] uppercase leading-tight">
               {product.name}
             </h1>
 
@@ -455,7 +455,7 @@ export function ProductDetailView({ product }: { product: DetailedProduct }) {
                 type="button"
                 onClick={handleAddToBag}
                 disabled={isOutOfStock || isAdding}
-                className="flex-1 py-3.5 px-6 rounded-xl bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99]"
+                className="flex-1 py-3.5 px-6 rounded-xl bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99]"
               >
                 {isOutOfStock ? "Sold Out" : isAdding ? "Adding..." : "Add to Bag"}
               </button>

@@ -161,7 +161,7 @@ export function TrendingCategories({ initialCategories }: TrendingCategoriesProp
             <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D5CBB5]">
               Popular Departments
             </span>
-            <h3 className="mt-1 font-serif text-3xl font-black uppercase tracking-wide text-white sm:text-4xl">
+            <h3 className="mt-1 font-sans text-3xl font-black uppercase tracking-wide text-white sm:text-4xl">
               Trending Categories
             </h3>
           </div>

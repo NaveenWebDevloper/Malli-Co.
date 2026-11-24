@@ -144,7 +144,7 @@ export function AuthForm({
             setActiveTab("signin");
             setSignInError(null);
           }}
-          className={`flex-1 pb-3 text-xs font-serif font-bold uppercase tracking-[0.2em] transition-all relative ${
+          className={`flex-1 pb-3 text-xs font-sans font-bold uppercase tracking-[0.2em] transition-all relative ${
             activeTab === "signin"
               ? "text-[#121212]"
               : "text-neutral-400 hover:text-neutral-700"
@@ -161,7 +161,7 @@ export function AuthForm({
             setActiveTab("register");
             setRegError(null);
           }}
-          className={`flex-1 pb-3 text-xs font-serif font-bold uppercase tracking-[0.2em] transition-all relative ${
+          className={`flex-1 pb-3 text-xs font-sans font-bold uppercase tracking-[0.2em] transition-all relative ${
             activeTab === "register"
               ? "text-[#121212]"
               : "text-neutral-400 hover:text-neutral-700"
@@ -255,7 +255,7 @@ export function AuthForm({
             <button
               type="submit"
               disabled={signInLoading}
-              className="w-full py-3.5 rounded-full bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 transition-all active:scale-[0.99] flex items-center justify-center"
+              className="w-full py-3.5 rounded-full bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 transition-all active:scale-[0.99] flex items-center justify-center"
             >
               {signInLoading ? "Authenticating..." : "Sign In to Account"}
             </button>
@@ -345,7 +345,7 @@ export function AuthForm({
             <button
               type="submit"
               disabled={regLoading}
-              className="w-full py-3.5 rounded-full bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 transition-all active:scale-[0.99] flex items-center justify-center"
+              className="w-full py-3.5 rounded-full bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-neutral-800 disabled:opacity-50 transition-all active:scale-[0.99] flex items-center justify-center"
             >
               {regLoading ? "Creating Account..." : "Create Malli & Co. Account"}
             </button>

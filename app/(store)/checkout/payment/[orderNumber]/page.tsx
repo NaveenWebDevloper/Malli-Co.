@@ -55,7 +55,7 @@ export default async function CheckoutPaymentPage({
         <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 text-xl flex items-center justify-center mx-auto">
           ✕
         </div>
-        <h1 className="text-xl font-serif font-bold text-[#121212]">
+        <h1 className="text-xl font-sans font-bold text-[#121212]">
           Access Restricted
         </h1>
         <p className="text-xs text-neutral-500 leading-relaxed">

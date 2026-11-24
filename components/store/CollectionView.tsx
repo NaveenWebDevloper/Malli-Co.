@@ -150,13 +150,13 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-black tracking-tight text-[#121212] leading-[1.1]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-sans font-black tracking-tight text-[#121212] leading-[1.1]">
               {collection.title}
             </h1>
 
             {/* Subtitle / Narrative */}
             {collection.subtitle && (
-              <p className="text-base sm:text-lg text-neutral-700 font-serif italic">
+              <p className="text-base sm:text-lg text-neutral-700 font-sans italic">
                 {collection.subtitle}
               </p>
             )}
@@ -283,7 +283,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
         {filteredProducts.length === 0 ? (
           <div className="py-20 text-center bg-white rounded-3xl border border-[#EDE6D8] p-8 max-w-lg mx-auto shadow-sm">
             <span className="text-4xl block mb-3">🧺</span>
-            <h3 className="text-lg font-bold text-neutral-900 font-serif">No products found</h3>
+            <h3 className="text-lg font-bold text-neutral-900 font-sans">No products found</h3>
             <p className="text-xs text-neutral-500 mt-1 mb-6">
               There are currently no items matching the selected filter in this collection.
             </p>
@@ -420,7 +420,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                     {/* Price Row */}
                     <div className="flex items-center justify-between pt-2 border-t border-[#F0EBE1] flex-wrap gap-1">
                       <div className="flex items-baseline gap-1.5 sm:gap-2">
-                        <span className="font-bold text-xs sm:text-sm text-neutral-900 font-serif">
+                        <span className="font-bold text-xs sm:text-sm text-neutral-900 font-sans">
                           {formatCurrency(item.pricing.finalPrice)}
                         </span>
                         {compareAt && (
@@ -453,7 +453,7 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58] block mb-1">
                   More Collections
                 </span>
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-neutral-900">
+                <h3 className="text-xl sm:text-2xl font-sans font-bold text-neutral-900">
                   Explore Other Collections
                 </h3>
               </div>
@@ -476,11 +476,11 @@ export function CollectionView({ collection, otherCollections = [] }: Collection
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C7A58] bg-[#8C7A58]/10 px-2.5 py-0.5 rounded-full inline-block mb-3">
                       {col.productCount} {col.productCount === 1 ? "Product" : "Products"}
                     </span>
-                    <h4 className="text-lg font-serif font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors">
+                    <h4 className="text-lg font-sans font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors">
                       {col.title}
                     </h4>
                     {col.subtitle && (
-                      <p className="text-xs text-neutral-500 font-serif italic mt-1">
+                      <p className="text-xs text-neutral-500 font-sans italic mt-1">
                         {col.subtitle}
                       </p>
                     )}

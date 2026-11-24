@@ -14,7 +14,7 @@ export default async function OrderSuccessPage({
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-20 text-center space-y-4">
-      <h1 className="text-2xl font-serif font-bold text-[#121212]">
+      <h1 className="text-2xl font-sans font-bold text-[#121212]">
         Order Confirmation
       </h1>
       <p className="text-xs text-neutral-600">

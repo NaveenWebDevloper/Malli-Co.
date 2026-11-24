@@ -95,7 +95,7 @@ export function SimilarProductsSection({
               <span>—</span>
               <span>Personalized Selection</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#121212] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-[#121212] tracking-tight">
               Similar Styles &amp; <span className="italic font-normal">Recommendations</span>
             </h2>
             <p className="text-xs sm:text-sm text-neutral-500 font-light mt-1.5 max-w-xl">

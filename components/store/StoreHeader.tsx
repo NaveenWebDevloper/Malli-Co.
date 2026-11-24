@@ -418,7 +418,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                   >
                     <Link
                       href="/"
-                      className="block text-base font-serif font-bold uppercase tracking-wider text-neutral-900 hover:text-[#8C7A58]"
+                      className="block text-base font-sans font-bold uppercase tracking-wider text-neutral-900 hover:text-[#8C7A58]"
                     >
                       Home
                     </Link>
@@ -436,7 +436,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                         href={link.href}
                         prefetch={true}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-base font-serif font-bold uppercase tracking-wider text-neutral-900 hover:text-[#8C7A58]"
+                        className="block text-base font-sans font-bold uppercase tracking-wider text-neutral-900 hover:text-[#8C7A58]"
                       >
                         {link.label}
                       </Link>
@@ -451,7 +451,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
                   >
                     <Link
                       href="/account"
-                      className="block text-base font-serif font-bold uppercase tracking-wider text-[#8C7A58] hover:text-neutral-900"
+                      className="block text-base font-sans font-bold uppercase tracking-wider text-[#8C7A58] hover:text-neutral-900"
                     >
                       My Account &amp; Orders
                     </Link>
@@ -473,7 +473,7 @@ export function StoreHeader({ isAdmin = false }: StoreHeaderProps) {
 
                 {/* Mobile Footer Meta */}
                 <div className="pt-4 border-t border-[#EAE3D4] text-xs text-neutral-500 space-y-1">
-                  <p className="font-serif italic text-neutral-700">Malli &amp; Co.</p>
+                  <p className="font-sans italic text-neutral-700">Malli &amp; Co.</p>
                   <p>Near Vikas Pre School, Govt High School Road, Mallampet, Bachupally, Hyderabad, Telangana - 500090</p>
                   <p className="text-[11px] text-[#8C7A58]">French Linen • Pima Cotton • Royal Silks</p>
                 </div>

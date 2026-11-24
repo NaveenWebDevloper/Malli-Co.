@@ -298,11 +298,11 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
             <span>Featured Selection</span>
           </div>
           {collection?.title ? (
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#10264B] tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-sans text-[#10264B] tracking-tight leading-tight">
               {collection.title}
             </h2>
           ) : (
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif text-[#10264B] tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-sans text-[#10264B] tracking-tight leading-tight">
               Season&apos;s <span className="italic font-normal">Top Picks</span>
             </h2>
           )}
@@ -552,7 +552,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
                       {/* Price Row */}
                       <div className="flex items-center justify-between pt-2 border-t border-[#F0EBE1]">
                         <div className="flex items-baseline gap-2">
-                          <span className="font-bold text-xs sm:text-sm text-neutral-900 font-serif">
+                          <span className="font-bold text-xs sm:text-sm text-neutral-900 font-sans">
                             {formatCurrency(item.pricing.finalPrice)}
                           </span>
                           {compareAtPricePaise && (
@@ -603,7 +603,7 @@ export function SeasonPicks({ initialCollection }: SeasonPicksProps) {
         {/* View All Picks CTA Button */}
         <Link
           href={`/collection/${collection?.slug || "seasons-top-picks"}`}
-          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#26221C] hover:bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#26221C] hover:bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
         >
           <span>View All Picks</span>
           <span className="text-sm font-sans">→</span>

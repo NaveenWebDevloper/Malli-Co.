@@ -38,7 +38,7 @@ export default async function CustomerOrderDetailPage({
   if (!isOwner && !isAdmin) {
     return (
       <div className="max-w-md mx-auto my-20 p-8 rounded-2xl bg-white border border-[#EAE3D4] text-center space-y-4">
-        <h1 className="text-xl font-serif font-bold text-[#121212]">
+        <h1 className="text-xl font-sans font-bold text-[#121212]">
           Access Denied
         </h1>
         <p className="text-xs text-neutral-500">
@@ -73,7 +73,7 @@ export default async function CustomerOrderDetailPage({
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8C7A58]">
             Order Status: {order.status}
           </span>
-          <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+          <h1 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
             Order #{order.orderNumber}
           </h1>
           <p className="text-xs text-neutral-500 mt-1">

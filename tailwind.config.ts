@@ -77,6 +77,7 @@ const config: Config = {
       fontFamily: {
         sans: ["Montserrat", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         montserrat: ["Montserrat", "sans-serif"],
+        serif: ["Montserrat", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
       },
       gridTemplateColumns: {
         // 12-Column Desktop Grid

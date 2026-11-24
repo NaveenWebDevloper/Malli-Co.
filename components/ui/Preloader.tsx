@@ -209,7 +209,7 @@ export function Preloader({
         {/* Brand Crest / Monogram */}
         <div className="mb-6 flex items-center justify-center">
           <div
-            className="w-12 h-12 rounded-full border border-[#8C7A58]/40 flex items-center justify-center text-[#FBF9F5] font-serif tracking-widest text-sm"
+            className="w-12 h-12 rounded-full border border-[#8C7A58]/40 flex items-center justify-center text-[#FBF9F5] font-sans tracking-widest text-sm"
             style={{ borderColor: accentColor }}
           >
             M&C
@@ -228,7 +228,7 @@ export function Preloader({
         <div className="h-10 flex items-center justify-center overflow-hidden">
           <p
             key={currentWordIndex}
-            className="text-xl sm:text-2xl font-serif text-[#FBF9F5] tracking-wide animate-fade-in"
+            className="text-xl sm:text-2xl font-sans text-[#FBF9F5] tracking-wide animate-fade-in"
           >
             {textArray[currentWordIndex]}
           </p>

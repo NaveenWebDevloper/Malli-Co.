@@ -69,7 +69,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-20 bg-[#FDFBF7]">
         <div className="max-w-md space-y-4">
           <span className="text-4xl block">🧺</span>
-          <h1 className="text-2xl font-serif font-bold text-neutral-900">
+          <h1 className="text-2xl font-sans font-bold text-neutral-900">
             Collection Not Found
           </h1>
           <p className="text-xs text-neutral-500 leading-relaxed">

@@ -69,12 +69,12 @@ export function OrderUtrSubmissionCard({
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 rounded-2xl bg-[#FBF9F5] border border-[#EAE3D4] text-left space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C7A58]">
+    <div className="max-w-md mx-auto p-6 rounded-2xl bg-white border border-neutral-200 shadow-sm text-left space-y-4 font-sans">
+      <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-[#10264B]">
           UPI Payment Verification
         </span>
-        <span className="text-xs font-mono font-bold text-black">
+        <span className="text-xs font-mono font-bold text-neutral-900">
           {formatCurrency(totalPaise)}
         </span>
       </div>
@@ -88,7 +88,7 @@ export function OrderUtrSubmissionCard({
             Submitted UTR: <strong className="text-black">{initialUtr}</strong>
           </p>
           <p className="text-[10px] text-neutral-500 pt-1">
-            Our team will confirm your order as soon as the credit reflects in our store account.
+            Our accounts desk will confirm your order as soon as the credit reflects in our store account.
           </p>
         </div>
       ) : (
@@ -103,7 +103,7 @@ export function OrderUtrSubmissionCard({
               placeholder="e.g. 432109876543"
               value={utrNumber}
               onChange={(e) => setUtrNumber(e.target.value)}
-              className="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black font-mono focus:border-black focus:outline-none"
+              className="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black font-mono focus:border-[#10264B] focus:ring-1 focus:ring-[#10264B] focus:outline-none"
             />
           </div>
 
@@ -122,7 +122,7 @@ export function OrderUtrSubmissionCard({
           <button
             type="submit"
             disabled={isSubmitting || !utrNumber.trim()}
-            className="w-full py-2.5 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition disabled:opacity-50"
+            className="w-full py-2.5 rounded-xl bg-[#10264B] hover:bg-[#0B1B36] text-white text-xs font-bold uppercase tracking-wider transition disabled:opacity-50 shadow-sm"
           >
             {isSubmitting ? "Recording..." : "Submit UTR Reference"}
           </button>

@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
           <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8C7A58] block mb-2">
             Malli &amp; Co. Legal &amp; Governance
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212]">
+          <h1 className="text-3xl sm:text-4xl font-sans font-black uppercase tracking-tight text-[#121212]">
             Privacy Policy
           </h1>
           <p className="mt-2 text-xs text-neutral-500 font-mono">
@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
         {/* Introduction */}
         <div className="prose prose-neutral max-w-none text-xs sm:text-sm leading-relaxed space-y-6 text-neutral-700">
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               1. Introduction &amp; Scope
             </h2>
             <p>
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Google OAuth & User Data */}
           <section className="space-y-3 bg-[#FAF8F5] p-5 rounded-xl border border-[#EAE3D4]">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4] pb-1.5 flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4] pb-1.5 flex items-center gap-2">
               <span>2. Google OAuth &amp; Social Sign-In Data</span>
             </h2>
             <p>
@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Personal Information We Collect */}
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               3. Information We Collect Directly
             </h2>
             <p>When you interact with our platform, we may collect the following categories of information:</p>
@@ -107,7 +107,7 @@ export default function PrivacyPolicyPage() {
 
           {/* How We Use Information */}
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               4. How We Use Your Information
             </h2>
             <p>We process your data strictly for legitimate operational and business purposes, including:</p>
@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Third-Party Service Providers */}
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               5. Third-Party Service Providers
             </h2>
             <p>
@@ -143,7 +143,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Data Retention & Deletion */}
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               6. Data Retention &amp; User Rights (Account &amp; Data Deletion)
             </h2>
             <p>
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Security */}
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               7. Security Measures
             </h2>
             <p>
@@ -170,7 +170,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Contact & Grievance */}
           <section className="space-y-3 border-t border-[#EAE3D4] pt-6">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide">
               8. Grievance Officer &amp; Contact Information
             </h2>
             <p>

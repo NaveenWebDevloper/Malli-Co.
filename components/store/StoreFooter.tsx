@@ -12,7 +12,7 @@ export function StoreFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand Philosophy */}
           <div className="md:col-span-1 space-y-4">
-            <span className="font-serif text-xl font-bold tracking-[0.2em] uppercase text-white block">
+            <span className="font-sans text-xl font-bold tracking-[0.2em] uppercase text-white block">
               MALLI & CO.
             </span>
             <p className="text-xs text-neutral-400 leading-relaxed font-light">

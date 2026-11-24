@@ -1261,7 +1261,7 @@ export function BannerManager() {
                       )}
 
                       <h4
-                        className={`font-serif font-black uppercase tracking-tight leading-tight mb-1.5 ${
+                        className={`font-sans font-black uppercase tracking-tight leading-tight mb-1.5 ${
                           previewViewport === "desktop" ? "text-base sm:text-lg" : "text-sm"
                         } ${
                           formData.textTheme === "light"

@@ -84,7 +84,7 @@ export function ProductCatalogView({
           <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-neutral-500">
             {genderFilter ? `${genderFilter} Apparel` : "Featured Collection"}
           </span>
-          <h1 className="text-2xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+          <h1 className="text-2xl sm:text-4xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
             {title}
           </h1>
           {subtitle && (
@@ -265,7 +265,7 @@ export function ProductCatalogView({
           {initialResult.products.length === 0 ? (
             <div className="py-20 text-center rounded-3xl bg-[#F4EFE6]/50 border border-[#EAE3D4] p-8 space-y-4">
               <span className="text-3xl">🌿</span>
-              <h3 className="text-lg font-serif font-bold text-[#121212]">
+              <h3 className="text-lg font-sans font-bold text-[#121212]">
                 No matching garments found
               </h3>
               <p className="text-xs text-neutral-500 max-w-sm mx-auto">
@@ -299,7 +299,7 @@ export function ProductCatalogView({
           <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-[#FBF9F5] shadow-2xl p-6 flex flex-col justify-between z-10 overflow-y-auto">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#EAE3D4]">
-                <h3 className="font-serif font-bold uppercase tracking-wider text-sm">
+                <h3 className="font-sans font-bold uppercase tracking-wider text-sm">
                   Refine Catalogue
                 </h3>
                 <button

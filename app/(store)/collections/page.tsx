@@ -64,7 +64,7 @@ export default async function CollectionsDirectoryPage() {
               <span className="w-5 h-[1.5px] bg-[#8C7A58]" aria-hidden="true" />
               <span>Malli &amp; Co. Special Edits</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-serif font-black tracking-tight text-[#121212]">
+            <h1 className="text-3xl sm:text-5xl font-sans font-black tracking-tight text-[#121212]">
               Featured Collections
             </h1>
             <p className="text-sm sm:text-base text-neutral-600 font-light max-w-2xl leading-relaxed">
@@ -79,7 +79,7 @@ export default async function CollectionsDirectoryPage() {
         {collectionsWithPreview.length === 0 ? (
           <div className="py-20 text-center bg-white rounded-3xl border border-[#EDE6D8] p-8 max-w-md mx-auto shadow-sm">
             <span className="text-4xl block mb-3">🧺</span>
-            <h2 className="text-lg font-bold text-neutral-900 font-serif">
+            <h2 className="text-lg font-bold text-neutral-900 font-sans">
               Collections in preparation
             </h2>
             <p className="text-xs text-neutral-500 mt-1 mb-6">
@@ -132,11 +132,11 @@ export default async function CollectionsDirectoryPage() {
                     <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#8C7A58]">
                       {col.mode === "MANUAL" ? "Special Edit" : "Trending Shelf"}
                     </span>
-                    <h2 className="text-xl font-serif font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors leading-snug">
+                    <h2 className="text-xl font-sans font-bold text-neutral-900 group-hover:text-[#8C7A58] transition-colors leading-snug">
                       {col.title}
                     </h2>
                     {col.subtitle && (
-                      <p className="text-xs text-neutral-600 font-serif italic">
+                      <p className="text-xs text-neutral-600 font-sans italic">
                         {col.subtitle}
                       </p>
                     )}

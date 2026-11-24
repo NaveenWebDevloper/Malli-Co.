@@ -102,14 +102,14 @@ export function SizeGuideModal({
                 Size Directory
               </span>
               {product?.name && (
-                <span className="hidden sm:inline text-xs text-neutral-400 font-serif italic truncate max-w-xs">
+                <span className="hidden sm:inline text-xs text-neutral-400 font-sans italic truncate max-w-xs">
                   • {product.name}
                 </span>
               )}
             </div>
             <h2
               id="size-guide-title"
-              className="text-2xl sm:text-3xl font-serif font-black tracking-tight text-[#121212]"
+              className="text-2xl sm:text-3xl font-sans font-black tracking-tight text-[#121212]"
             >
               Size &amp; Measurement Guide
             </h2>
@@ -141,7 +141,7 @@ export function SizeGuideModal({
                   setActiveGender("MEN");
                   setActiveCategoryId("men-shirts");
                 }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-serif font-bold uppercase tracking-wider transition-all ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-sans font-bold uppercase tracking-wider transition-all ${
                   activeGender === "MEN"
                     ? "bg-[#121212] text-white shadow-xs"
                     : "text-neutral-600 hover:text-black"
@@ -155,7 +155,7 @@ export function SizeGuideModal({
                   setActiveGender("KIDS");
                   setActiveCategoryId("kids-bottoms");
                 }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-serif font-bold uppercase tracking-wider transition-all ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-sans font-bold uppercase tracking-wider transition-all ${
                   activeGender === "KIDS"
                     ? "bg-[#121212] text-white shadow-xs"
                     : "text-neutral-600 hover:text-black"
@@ -224,7 +224,7 @@ export function SizeGuideModal({
           {/* Active Category Header */}
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-2 border-b border-[#EAE3D4]/60">
             <div>
-              <h3 className="text-lg font-serif font-bold text-[#121212]">
+              <h3 className="text-lg font-sans font-bold text-[#121212]">
                 {activeCategory.title}
               </h3>
               <p className="text-xs text-neutral-500">{activeCategory.subtitle}</p>
@@ -245,13 +245,13 @@ export function SizeGuideModal({
                   {activeCategory.columns.map((col) => (
                     <th
                       key={col.key}
-                      className="px-4 py-3 font-serif font-bold uppercase tracking-wider text-[11px] whitespace-nowrap"
+                      className="px-4 py-3 font-sans font-bold uppercase tracking-wider text-[11px] whitespace-nowrap"
                     >
                       {col.label} {col.key !== "size" && `(${unit.toUpperCase()})`}
                     </th>
                   ))}
                   {onSelectSize && (
-                    <th className="px-4 py-3 font-serif font-bold uppercase tracking-wider text-[11px] text-right">
+                    <th className="px-4 py-3 font-sans font-bold uppercase tracking-wider text-[11px] text-right">
                       Action
                     </th>
                   )}
@@ -339,7 +339,7 @@ export function SizeGuideModal({
           {/* Fit Tips & Atelier Advice */}
           {activeCategory.fitTips.length > 0 && (
             <div className="rounded-xl bg-[#FAF7F2] p-4 border border-[#EAE3D4] space-y-1.5">
-              <div className="flex items-center gap-2 text-xs font-serif font-bold uppercase tracking-wider text-[#8C7A58]">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-[#8C7A58]">
                 <span>📏 Fit Tips &amp; Recommendations</span>
               </div>
               <ul className="text-xs text-neutral-600 space-y-1 list-disc list-inside">
@@ -352,7 +352,7 @@ export function SizeGuideModal({
 
           {/* Visual "How to Measure" Grid */}
           <div className="space-y-3 pt-2">
-            <h4 className="text-xs font-serif font-bold uppercase tracking-[0.16em] text-[#8C7A58]">
+            <h4 className="text-xs font-sans font-bold uppercase tracking-[0.16em] text-[#8C7A58]">
               How to Measure Accurately
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
@@ -410,7 +410,7 @@ export function SizeGuideModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors shadow-sm"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors shadow-sm"
           >
             Close &amp; Return to Product
           </button>

@@ -408,7 +408,7 @@ function HeroBannerCarouselInner({ banners }: { banners: BannerSlide[] }) {
               className="mb-3 sm:mb-4 overflow-visible"
             >
               <h1
-                className={`font-serif font-black uppercase leading-[1.08] break-normal [word-break:keep-all] ${
+                className={`font-sans font-black uppercase leading-[1.08] break-normal [word-break:keep-all] ${
                   activeBanner.textTheme === "light"
                     ? "text-white drop-shadow-lg"
                     : "text-[#121212]"

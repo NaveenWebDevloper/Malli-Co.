@@ -21,7 +21,7 @@ export default function TermsOfServicePage() {
           <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8C7A58] block mb-2">
             Malli &amp; Co. Legal &amp; Governance
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212]">
+          <h1 className="text-3xl sm:text-4xl font-sans font-black uppercase tracking-tight text-[#121212]">
             Terms of Service
           </h1>
           <p className="mt-2 text-xs text-neutral-500 font-mono">
@@ -32,7 +32,7 @@ export default function TermsOfServicePage() {
         {/* Content */}
         <div className="prose prose-neutral max-w-none text-xs sm:text-sm leading-relaxed space-y-6 text-neutral-700">
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               1. Agreement to Terms
             </h2>
             <p>
@@ -49,7 +49,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               2. Account Registration &amp; Authentication
             </h2>
             <p>
@@ -63,7 +63,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               3. Products, Artisanal Craftsmanship &amp; Pricing
             </h2>
             <p>
@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               4. Orders &amp; Payment Processing
             </h2>
             <p>
@@ -97,7 +97,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               5. Shipping, Delivery &amp; Returns
             </h2>
             <ul className="list-disc list-inside space-y-1.5 ml-2">
@@ -114,7 +114,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               6. Intellectual Property Rights
             </h2>
             <p>
@@ -123,7 +123,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide border-b border-[#EAE3D4]/80 pb-1.5">
               7. Governing Law &amp; Jurisdiction
             </h2>
             <p>
@@ -132,7 +132,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="space-y-3 border-t border-[#EAE3D4] pt-6">
-            <h2 className="text-base sm:text-lg font-serif font-bold text-neutral-900 uppercase tracking-wide">
+            <h2 className="text-base sm:text-lg font-sans font-bold text-neutral-900 uppercase tracking-wide">
               8. Contact &amp; Legal Notices
             </h2>
             <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#EAE3D4] text-xs font-mono space-y-1">

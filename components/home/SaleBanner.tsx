@@ -170,7 +170,7 @@ export function SaleBanner({ initialCampaign, initialServerNow }: SaleBannerProp
 
           {/* Headline & Discount */}
           <div className="space-y-1 sm:space-y-2">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-black uppercase tracking-tight text-white drop-shadow-sm">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-black uppercase tracking-tight text-white drop-shadow-sm">
               {campaign.name}
             </h2>
             <p className="text-sm sm:text-lg text-neutral-200 font-light">

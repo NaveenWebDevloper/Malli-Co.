@@ -52,7 +52,7 @@ export function Hero() {
         <span className="text-[10px] md:text-xs uppercase tracking-[0.3em] font-medium text-[#8C7A58] block mb-2">
           Autumn / Winter 2026 Collection
         </span>
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-light font-serif tracking-tight text-[#121212]">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-light font-sans tracking-tight text-[#121212]">
           Malli & Co.{" "}
           <VaporType
             words={[

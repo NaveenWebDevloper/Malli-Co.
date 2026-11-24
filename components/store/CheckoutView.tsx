@@ -409,7 +409,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
           🔒
         </div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-serif font-bold text-[#121212]">
+          <h1 className="text-2xl font-sans font-bold text-[#121212]">
             Account Required for Checkout
           </h1>
           <p className="text-xs text-neutral-600 leading-relaxed">
@@ -429,7 +429,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
   if (!cart && items.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
-        <h1 className="text-2xl font-serif font-bold text-[#121212]">
+        <h1 className="text-2xl font-sans font-bold text-[#121212]">
           Your Shopping Bag is Empty
         </h1>
         <p className="text-xs text-neutral-500">
@@ -451,7 +451,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
         <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-neutral-500">
           Express Checkout
         </span>
-        <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+        <h1 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
           Delivery & Payment
         </h1>
       </div>
@@ -818,7 +818,7 @@ export function CheckoutView({ initialCustomer }: CheckoutViewProps = {}) {
             <button
               type="submit"
               disabled={isSubmitting || items.length === 0}
-              className="w-full py-4 rounded-xl bg-[#121212] text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99] flex items-center justify-center"
+              className="w-full py-4 rounded-xl bg-[#121212] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99] flex items-center justify-center"
             >
               {isSubmitting
                 ? "Initiating Order..."

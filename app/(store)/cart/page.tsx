@@ -13,7 +13,7 @@ export default function CartPage() {
         <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-neutral-500">
           Your Selection
         </span>
-        <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+        <h1 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
           Shopping Bag
         </h1>
       </div>

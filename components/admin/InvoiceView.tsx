@@ -365,7 +365,7 @@ export function InvoiceView({ orderId }: { orderId: string }) {
               <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 block">
                 Invoice Total in Words:
               </span>
-              <p className="font-serif italic font-bold text-neutral-800 text-xs mt-0.5">
+              <p className="font-sans italic font-bold text-neutral-800 text-xs mt-0.5">
                 {amountInWords}
               </p>
             </div>

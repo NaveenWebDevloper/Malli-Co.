@@ -39,11 +39,11 @@ export default async function LoginPage({
         <div className="text-center space-y-2">
           <Link
             href="/"
-            className="text-2xl font-serif font-black tracking-tight text-[#121212] hover:opacity-80 transition-opacity"
+            className="text-2xl font-sans font-black tracking-tight text-[#121212] hover:opacity-80 transition-opacity"
           >
             MALLI &amp; CO.
           </Link>
-          <p className="text-xs font-serif italic text-neutral-500">
+          <p className="text-xs font-sans italic text-neutral-500">
             Premium Clothing for Men &amp; Kids
           </p>
         </div>
@@ -62,7 +62,7 @@ export default async function LoginPage({
         <div className="pt-4 border-t border-[#EAE3D4] text-center">
           <Link
             href="/men"
-            className="text-xs font-serif text-[#8C7A58] hover:text-[#121212] transition-colors uppercase tracking-wider"
+            className="text-xs font-sans text-[#8C7A58] hover:text-[#121212] transition-colors uppercase tracking-wider"
           >
             ← Return to Collections
           </Link>

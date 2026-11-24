@@ -27,7 +27,7 @@ export function HeroPosterFallback() {
         <span className="text-[11px] uppercase tracking-[0.35em] text-[#D4AF37] font-medium mb-4">
           Autumn / Winter Collection
         </span>
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-light tracking-tight font-serif text-[#FBF9F5] mb-6 leading-[1.08]">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-light tracking-tight font-sans text-[#FBF9F5] mb-6 leading-[1.08]">
           The Art of <br />
           <VaporType
             words={[

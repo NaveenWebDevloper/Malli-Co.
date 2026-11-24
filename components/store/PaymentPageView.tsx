@@ -160,7 +160,7 @@ export function PaymentPageView({
               <span>/</span>
               <span className="text-[#121212]">Step 2 of 2: Payment</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+            <h1 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
               Complete Your UPI Payment
             </h1>
             <p className="text-xs font-mono text-neutral-500 mt-0.5">
@@ -225,7 +225,7 @@ export function PaymentPageView({
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58] block">
                   Scan &amp; Pay via UPI
                 </span>
-                <h2 className="text-lg sm:text-xl font-serif font-black uppercase text-[#121212]">
+                <h2 className="text-lg sm:text-xl font-sans font-black uppercase text-[#121212]">
                   Scan with GPay, PhonePe, Paytm, or BHIM
                 </h2>
                 <p className="text-xs text-neutral-500 max-w-md mx-auto">
@@ -336,7 +336,7 @@ export function PaymentPageView({
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
                   Final Step
                 </span>
-                <h3 className="text-lg font-serif font-black uppercase text-[#121212]">
+                <h3 className="text-lg font-sans font-black uppercase text-[#121212]">
                   Enter 12-Digit UTR or Transaction ID
                 </h3>
                 <p className="text-xs text-neutral-500">
@@ -372,7 +372,7 @@ export function PaymentPageView({
                   <button
                     type="submit"
                     disabled={isSubmitting || !utrNumber.trim()}
-                    className="w-full py-4 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white text-xs font-serif font-bold uppercase tracking-[0.2em] shadow-xl disabled:opacity-50 transition active:scale-[0.99] flex items-center justify-center gap-2"
+                    className="w-full py-4 rounded-xl bg-[#10264B] hover:bg-[#0B1B36] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-xl disabled:opacity-50 transition active:scale-[0.99] flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

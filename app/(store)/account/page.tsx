@@ -52,7 +52,7 @@ export default async function CustomerAccountPage() {
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8C7A58]">
             Client Portal
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight text-[#121212] mt-1">
+          <h1 className="text-3xl sm:text-4xl font-sans font-black uppercase tracking-tight text-[#121212] mt-1">
             My Account
           </h1>
           <p className="text-xs text-neutral-500 mt-1">
@@ -92,7 +92,7 @@ export default async function CustomerAccountPage() {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58]">
             Total Orders
           </span>
-          <div className="text-2xl font-serif font-bold text-[#121212]">
+          <div className="text-2xl font-sans font-bold text-[#121212]">
             {orders.length}
           </div>
           <p className="text-[11px] text-neutral-500">
@@ -104,7 +104,7 @@ export default async function CustomerAccountPage() {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58]">
             Total Investment
           </span>
-          <div className="text-2xl font-serif font-bold text-[#121212]">
+          <div className="text-2xl font-sans font-bold text-[#121212]">
             {formatCurrency(totalSpentPaise)}
           </div>
           <p className="text-[11px] text-neutral-500">Settled purchases</p>
@@ -114,7 +114,7 @@ export default async function CustomerAccountPage() {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7A58]">
             Active Orders
           </span>
-          <div className="text-2xl font-serif font-bold text-[#121212]">
+          <div className="text-2xl font-sans font-bold text-[#121212]">
             {activeOrdersCount}
           </div>
           <p className="text-[11px] text-neutral-500">In fulfillment &amp; transit</p>
@@ -126,7 +126,7 @@ export default async function CustomerAccountPage() {
         {/* Customer Details Card */}
         <div className="p-6 sm:p-8 rounded-2xl border border-[#EAE3D4] bg-white shadow-sm space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-[#EAE3D4]">
-            <h2 className="text-sm font-serif font-bold uppercase tracking-wider text-[#121212]">
+            <h2 className="text-sm font-sans font-bold uppercase tracking-wider text-[#121212]">
               Customer Details
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FBF9F5] text-[#8C7A58] border border-[#EAE3D4]">
@@ -176,7 +176,7 @@ export default async function CustomerAccountPage() {
         {/* Saved Shipping Addresses */}
         <div className="p-6 sm:p-8 rounded-2xl border border-[#EAE3D4] bg-white shadow-sm space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-[#EAE3D4]">
-            <h2 className="text-sm font-serif font-bold uppercase tracking-wider text-[#121212]">
+            <h2 className="text-sm font-sans font-bold uppercase tracking-wider text-[#121212]">
               Saved Delivery Addresses
             </h2>
             <span className="text-[10px] text-neutral-400 uppercase tracking-wider">
@@ -224,12 +224,12 @@ export default async function CustomerAccountPage() {
       {/* Complete Order History Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-serif font-bold uppercase tracking-wider text-[#121212]">
+          <h2 className="text-lg font-sans font-bold uppercase tracking-wider text-[#121212]">
             Order History ({orders.length})
           </h2>
           <Link
             href="/men"
-            className="text-xs font-serif font-bold uppercase tracking-wider text-[#8C7A58] hover:text-[#121212] transition-colors"
+            className="text-xs font-sans font-bold uppercase tracking-wider text-[#8C7A58] hover:text-[#121212] transition-colors"
           >
             Explore New Arrivals →
           </Link>
@@ -308,7 +308,7 @@ export default async function CustomerAccountPage() {
                 </div>
 
                 <div className="flex sm:flex-col md:items-end justify-between sm:justify-start gap-2 pt-4 md:pt-0 border-t md:border-t-0 border-[#EAE3D4]">
-                  <span className="font-serif text-lg font-bold text-[#121212]">
+                  <span className="font-sans text-lg font-bold text-[#121212]">
                     {formatCurrency(o.totals?.totalPaise || 0)}
                   </span>
                   <Link

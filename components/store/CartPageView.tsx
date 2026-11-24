@@ -23,7 +23,7 @@ export function CartPageView() {
     return (
       <div className="py-20 text-center space-y-4">
         <span className="text-3xl">🛍️</span>
-        <h2 className="text-lg font-serif font-bold text-[#121212]">
+        <h2 className="text-lg font-sans font-bold text-[#121212]">
           Your shopping bag is empty
         </h2>
         <p className="text-xs text-neutral-500 max-w-sm mx-auto">
@@ -187,7 +187,7 @@ export function CartPageView() {
 
               <Link
                 href="/checkout"
-                className="w-full py-4 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white font-serif font-bold uppercase tracking-[0.2em] text-xs shadow-lg transition-all text-center flex items-center justify-center active:scale-[0.99]"
+                className="w-full py-4 rounded-xl bg-[#121212] hover:bg-neutral-800 text-white font-sans font-bold uppercase tracking-[0.2em] text-xs shadow-lg transition-all text-center flex items-center justify-center active:scale-[0.99]"
               >
                 Proceed to Checkout
               </Link>
